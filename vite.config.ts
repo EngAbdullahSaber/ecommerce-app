@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
+import tailwindcss from "@tailwindcss/postcss";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -27,7 +28,7 @@ export default defineConfig({
   },
   css: {
     postcss: {
-      plugins: [],
+      plugins: [tailwindcss],
     },
   },
   // Disable type checking

@@ -14,13 +14,8 @@ import {
   Check,
   Calendar,
   Clock,
-  User,
   Mail,
   Phone,
-  MapPin,
-  CreditCard,
-  Package,
-  FileText,
   ExternalLink,
 } from "lucide-react";
 

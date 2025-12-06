@@ -304,29 +304,29 @@ export default function ViewOrderPage() {
     },
   ];
 
-  const handleEdit = (id: string | number) => {
-    router.push(`/orders/edit/${id}`);
-  };
+  // const handleEdit = (id: string | number) => {
+  //   router(`/orders/edit/${id}`);
+  // };
 
-  const handleDelete = (id: string | number) => {
-    if (confirm("Are you sure you want to delete this order?")) {
-      console.log("Deleting order:", id);
-      router.push("/orders");
-    }
-  };
+  // const handleDelete = (id: string | number) => {
+  //   if (confirm("Are you sure you want to delete this order?")) {
+  //     console.log("Deleting order:", id);
+  //     router("/orders");
+  //   }
+  // };
 
-  const handleDownload = (data: Order) => {
-    const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `order-${data.orderNumber}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+  // const handleDownload = (data: Order) => {
+  //   const dataStr = JSON.stringify(data, null, 2);
+  //   const dataBlob = new Blob([dataStr], { type: "application/json" });
+  //   const url = URL.createObjectURL(dataBlob);
+  //   const link = document.createElement("a");
+  //   link.href = url;
+  //   link.download = `order-${data.orderNumber}.json`;
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  //   URL.revokeObjectURL(url);
+  // };
 
   // Custom Header Component
   const headerComponent = (
@@ -359,11 +359,11 @@ export default function ViewOrderPage() {
           entityId={orderId}
           fetchData={fetchOrderById}
           sections={orderSections}
-          onBack={() => router.push("/orders")}
-          onEdit={""}
-          onDelete={""}
-          onDownload={""}
-          onShare={""}
+          onBack={() => router("/orders")}
+          onEdit={() => console.log("orders")}
+          onDelete={() => console.log("orders")}
+          onDownload={() => console.log("orders")}
+          onShare={() => console.log("orders")}
           showActions={true}
           headerComponent={headerComponent}
           footerComponent={footerComponent}

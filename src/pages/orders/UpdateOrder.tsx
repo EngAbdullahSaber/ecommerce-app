@@ -1,6 +1,4 @@
-// pages/update-order/[id].tsx - Fixed for Vite/React Router
 "use client";
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   GenericUpdateForm,
@@ -13,7 +11,6 @@ import {
   Package,
   DollarSign,
   CreditCard,
-  MapPin,
   ArrowLeft,
 } from "lucide-react";
 import { z } from "zod";

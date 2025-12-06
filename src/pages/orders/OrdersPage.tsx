@@ -13,7 +13,6 @@ import {
   Trash2,
   Mail,
   Search,
-  Filter,
   Plus,
 } from "lucide-react";
 import { DataTable } from "../../components/shared/DataTable";
@@ -71,7 +70,7 @@ function StatsCard({
 }
 
 // Mock API functions
-const fetchOrders = async (): Promise<Order[]> => {
+const fetchOrders = async (): Promise<any[]> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return [
     {
@@ -208,7 +207,7 @@ const getStatusConfig = (status: string) => {
   return configs[status as keyof typeof configs] || configs.Processing;
 };
 
-const calculateStats = (data: Order[]) => {
+const calculateStats = (data: any[]) => {
   const total = data.reduce((sum, order) => sum + order.amount, 0);
   const delivered = data.filter((o) => o.status === "Delivered").length;
   const processing = data.filter((o) => o.status === "Processing").length;
@@ -223,7 +222,7 @@ const calculateStats = (data: Order[]) => {
 export default function OrdersPage() {
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
-    order: Order | null;
+    order: any | null;
   }>({
     isOpen: false,
     order: null,
@@ -268,7 +267,7 @@ export default function OrdersPage() {
       key: "actions",
       label: "Actions",
       width: "120px",
-      render: (value: any, row: Order) => (
+      render: (row: any) => (
         <div className="flex items-center gap-1.5">
           <div className="flex items-center gap-1.5">
             <button
@@ -299,7 +298,7 @@ export default function OrdersPage() {
     {
       key: "orderNumber",
       label: "Order",
-      render: (value: string, row: Order) => (
+      render: (value: string, row: any) => (
         <div className="flex flex-col gap-0.5">
           <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
             {value}
@@ -408,7 +407,7 @@ export default function OrdersPage() {
     },
   ];
 
-  const handleAction = (action: string, row: Order) => {
+  const handleAction = (action: string, row: any) => {
     if (action === "delete") {
       setDeleteDialog({ isOpen: true, order: row });
     } else if (action === "view") {

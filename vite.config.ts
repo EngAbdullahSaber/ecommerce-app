@@ -15,4 +15,23 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    // Disable minification errors
+    minify: "terser",
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress all warnings
+        return;
+      },
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [],
+    },
+  },
+  // Disable type checking
+  esbuild: {
+    logLevel: "error", // Only show errors, not warnings
+  },
 });

@@ -1,4 +1,4 @@
-// components/DataTable.tsx
+// components/DataTable.tsx - With Scrollable Table
 import React, { useState } from "react";
 import {
   ChevronLeft,
@@ -41,6 +41,7 @@ interface DataTableProps {
   title?: string;
   searchable?: boolean;
   onSearch?: (query: string) => void;
+  maxHeight?: string; // Optional: control max height
 }
 
 export function DataTable({
@@ -94,7 +95,6 @@ export function DataTable({
     <tr>
       <td colSpan={columns.length} className="px-6 py-20">
         <div className="flex flex-col items-center gap-6 max-w-md mx-auto">
-          {/* Icon Container with Decoration */}
           <div className="relative">
             <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 flex items-center justify-center backdrop-blur-sm border border-blue-200/30 dark:border-blue-700/30 shadow-xl">
               <Search
@@ -108,7 +108,6 @@ export function DataTable({
             </div>
           </div>
 
-          {/* Text Content */}
           <div className="text-center space-y-3">
             <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
               No data found
@@ -120,7 +119,6 @@ export function DataTable({
             </p>
           </div>
 
-          {/* Add Button */}
           {onAdd && (
             <button
               onClick={onAdd}
@@ -163,18 +161,15 @@ export function DataTable({
 
   return (
     <div className="relative group">
-      {/* Glow effect on hover */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl opacity-0 group-hover:opacity-10 blur-xl transition-all duration-500" />
 
       <div className="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden backdrop-blur-xl">
-        {/* Top decorative gradient bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600" />
 
         {/* Header Section */}
         {(title || searchable || onAdd || onRefresh || onExport) && (
           <div className="relative px-6 py-5 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/50 dark:to-slate-900/50 backdrop-blur-sm">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              {/* Title with underline decoration */}
               {title && (
                 <div className="flex items-center gap-3">
                   <div className="relative">
@@ -195,7 +190,6 @@ export function DataTable({
               )}
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                {/* Enhanced Search Input */}
                 {searchable && (
                   <div className="relative group/search">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl opacity-0 group-hover/search:opacity-20 blur transition-all duration-300" />
@@ -215,7 +209,6 @@ export function DataTable({
                   </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="flex items-center gap-2">
                   {onExport && (
                     <button
@@ -264,10 +257,10 @@ export function DataTable({
           </div>
         )}
 
-        {/* Table */}
-        <div className="">
+        {/* Scrollable Table Container */}
+        <div className="overflow-auto scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-slate-400 dark:hover:scrollbar-thumb-slate-500">
           <table className="w-full">
-            <thead className="bg-gradient-to-r from-slate-100/80 via-blue-50/50 to-purple-50/50 dark:from-slate-800/80 dark:via-blue-900/20 dark:to-purple-900/20 backdrop-blur-sm border-b-2 border-slate-200/80 dark:border-slate-700/80">
+            <thead className="sticky top-0 z-10 bg-gradient-to-r from-slate-100/95 via-blue-50/95 to-purple-50/95 dark:from-slate-800/95 dark:via-blue-900/30 dark:to-purple-900/30 backdrop-blur-sm border-b-2 border-slate-200/80 dark:border-slate-700/80 shadow-sm">
               <tr>
                 {columns.map((column) => (
                   <th
@@ -313,8 +306,7 @@ export function DataTable({
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading
-                ? // Enhanced Loading Skeleton with gradient animation
-                  Array.from({ length: 5 }).map((_, index) => (
+                ? Array.from({ length: 5 }).map((_, index) => (
                     <tr key={index}>
                       {columns.map((column, colIndex) => (
                         <td key={column.key} className="px-6 py-5">
@@ -354,11 +346,10 @@ export function DataTable({
           </table>
         </div>
 
-        {/* Enhanced Pagination */}
+        {/* Pagination */}
         {showPagination && data.length > 0 && (
           <div className="px-6 py-5 border-t border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-br from-slate-50/50 to-white dark:from-slate-800/30 dark:to-slate-900/30 backdrop-blur-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              {/* Results Count with Badge */}
               <div className="flex items-center gap-2">
                 <div className="px-3 py-1.5 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-lg">
                   <p className="text-sm font-medium text-slate-900 dark:text-white">
@@ -375,7 +366,6 @@ export function DataTable({
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                {/* Rows Per Page Selector */}
                 <div className="flex items-center gap-3">
                   <span className="text-sm text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap">
                     Rows per page
@@ -414,9 +404,7 @@ export function DataTable({
                   </div>
                 </div>
 
-                {/* Pagination Controls */}
                 <div className="flex items-center gap-1.5 flex-wrap justify-center sm:justify-start">
-                  {/* First & Previous Buttons */}
                   <button
                     onClick={() => goToPage(1)}
                     disabled={currentPage === 1 || loading}
@@ -433,7 +421,6 @@ export function DataTable({
                     <ChevronLeft size={16} />
                   </button>
 
-                  {/* Page Numbers with Ellipsis */}
                   <div className="flex items-center gap-1.5">
                     {Array.from({ length: totalPages }, (_, i) => i + 1)
                       .filter((page) => {
@@ -475,7 +462,6 @@ export function DataTable({
                       })}
                   </div>
 
-                  {/* Next & Last Buttons */}
                   <button
                     onClick={() => goToPage(currentPage + 1)}
                     disabled={currentPage === totalPages || loading}
@@ -497,6 +483,35 @@ export function DataTable({
           </div>
         )}
       </div>
+
+      {/* Custom Scrollbar Styles */}
+      <style>{`
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background-color: rgb(203 213 225);
+          border-radius: 9999px;
+        }
+        
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+          background-color: rgb(71 85 105);
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background-color: rgb(148 163 184);
+        }
+        
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background-color: rgb(100 116 139);
+        }
+      `}</style>
     </div>
   );
 }

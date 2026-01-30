@@ -1,43 +1,176 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { CreateMethod } from "../../services/apis/ApiMethod";
+import { storeAuthInfo } from "../../services/utils";
+import { useToast } from "../../hooks/useToast";
 
-// Sign In Form Component
+interface FormData {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  data: {
+    token: string;
+    user: any;
+  };
+}
+
+// Constants
+const DEMO_CREDENTIALS = {
+  email: "john5.doe@example.com",
+  password: "12345678",
+} as const;
+
+const INITIAL_FORM_STATE: FormData = {
+  email: "",
+  password: "",
+};
+
 export default function SignInForm() {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  // State management
   const [showPassword, setShowPassword] = React.useState(false);
-  const [isChecked, setIsChecked] = React.useState(false);
+  const [rememberMe, setRememberMe] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [formData, setFormData] = React.useState<FormData>(INITIAL_FORM_STATE);
+
+  // Load remembered email on mount
+  React.useEffect(() => {
+    const rememberedEmail = localStorage.getItem("remembered_email");
+    if (rememberedEmail) {
+      setFormData((prev) => ({ ...prev, email: rememberedEmail }));
+      setRememberMe(true);
+    }
+  }, []);
+
+  // Handlers
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validateForm = (): boolean => {
+    if (!formData.email || !formData.password) {
+      toast.error(t("messages.required"));
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error(t("messages.invalidEmail"));
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleRememberMe = () => {
+    if (rememberMe) {
+      localStorage.setItem("remembered_email", formData.email);
+    } else {
+      localStorage.removeItem("remembered_email");
+    }
+  };
+
+  const handleSuccessfulLogin = (response: LoginResponse) => {
+    const { token, user } = response.data;
+
+    // Store authentication info
+    storeAuthInfo({ token, user, rememberMe });
+    handleRememberMe();
+
+    // Show success message
+    const message = rememberMe
+      ? t("auth.signInSuccess")
+      : t("auth.signInSuccess");
+
+    toast.success(message, { duration: 2000 });
+
+    // Navigate to dashboard
+    setTimeout(() => navigate("/dashboard"), 1500);
+  };
+
+  const handleLoginError = (error: any) => {
+    console.error("Login error:", error);
+
+    if (error.response) {
+      const { status, data } = error.response;
+      const errorMessages: Record<number, string> = {
+        404: t("messages.loadingError"),
+        401: t("messages.invalidEmail"),
+        400: data.message || t("messages.error"),
+        500: t("messages.error"),
+      };
+
+      toast.error(
+        errorMessages[status] ||
+          data.message ||
+          `${t("messages.error")} ${status}`,
+      );
+    } else if (error.request) {
+      toast.error(t("messages.loadingError"));
+    } else {
+      toast.error(`${t("messages.error")}: ${error.message}`);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) return;
+
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    const loadingToast = toast.loading("Signing in...");
+
+    try {
+      const response = await CreateMethod(
+        "/users/admin/login",
+        formData,
+        currentLang,
+      );
+
+      if (response?.data) {
+        toast.dismiss(loadingToast);
+        handleSuccessfulLogin(response);
+      } else {
+        toast.dismiss(loadingToast);
+        toast.error(t("messages.error"));
+      }
+    } catch (error: any) {
+      toast.dismiss(loadingToast);
+      handleLoginError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+    toast.custom(
+      `${t("common.password")} ${showPassword ? "hidden" : "visible"}`,
+    );
+  };
+
+  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setRememberMe(isChecked);
+
+    if (isChecked && formData.email) {
+      toast.success(t("messages.success"));
+    } else if (!isChecked) {
+      toast.info(t("messages.info"));
+    }
   };
 
   return (
-    <div className="flex items-center justify-center     w-2/3 py-8 ">
-      <div className="w-full ">
-        {/* Back Button */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 mb-8 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors group"
-        >
-          <svg
-            className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back to dashboard
-        </Link>
-
+    <div className="flex items-center justify-center w-2/3 py-8">
+      <div className="w-full">
         {/* Header */}
         <div className="mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 shadow-lg shadow-brand-500/30">
@@ -56,10 +189,10 @@ export default function SignInForm() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Welcome Back
+            {t("common.welcome")}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Sign in to access your ecommerce dashboard
+            {t("auth.signIn")} {t("common.dashboard")}
           </p>
         </div>
 
@@ -68,32 +201,44 @@ export default function SignInForm() {
           {/* Email Field */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              Email Address
+              {t("auth.email")}
             </label>
             <input
               type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="name@company.com"
               className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white"
-              required
+              disabled={isLoading}
+              autoComplete="email"
             />
           </div>
 
           {/* Password Field */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              Password
+              {t("auth.password")}
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
                 placeholder="••••••••"
                 className="w-full px-4 py-3 pr-12 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white"
-                required
+                disabled={isLoading}
+                autoComplete="current-password"
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
+                disabled={isLoading}
+                aria-label={
+                  showPassword ? t("auth.password") : t("auth.password")
+                }
               >
                 {showPassword ? (
                   <svg
@@ -126,24 +271,29 @@ export default function SignInForm() {
             </div>
           </div>
 
-          {/* Remember & Forgot */}
+          {/* Remember Me & Forgot Password */}
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={isChecked}
-                onChange={(e) => setIsChecked(e.target.checked)}
-                className="w-4 h-4 text-brand-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-brand-500"
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                className="w-4 h-4 text-brand-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-brand-500 cursor-pointer"
+                disabled={isLoading}
               />
               <span className="text-sm text-gray-700 dark:text-gray-300">
-                Remember me
+                {t("auth.rememberMe")}
+                <span className="text-xs text-gray-500 ml-1">
+                  ({rememberMe ? t("auth.signIn") : t("auth.logout")})
+                </span>
               </span>
             </label>
             <Link
               to="/reset-password"
               className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
+              onClick={() => toast.info(t("messages.info"))}
             >
-              Forgot password?
+              {t("auth.forgotPassword")}
             </Link>
           </div>
 
@@ -156,23 +306,12 @@ export default function SignInForm() {
             {isLoading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Signing in...</span>
+                <span>{t("common.loading")}</span>
               </>
             ) : (
-              <span>Sign In</span>
+              <span>{t("auth.signIn")}</span>
             )}
           </button>
-
-          {/* Sign Up Link */}
-          <p className="text-sm text-center text-gray-600 dark:text-gray-400 pt-2">
-            Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
-            >
-              Create account
-            </Link>
-          </p>
         </form>
 
         {/* Security Notice */}
@@ -191,10 +330,10 @@ export default function SignInForm() {
             </svg>
             <div>
               <p className="text-sm font-semibold text-green-900 dark:text-green-100">
-                Secure Connection
+                {t("messages.success")}
               </p>
               <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-                Your data is protected
+                {t("messages.success")}
               </p>
             </div>
           </div>

@@ -8,24 +8,66 @@ import {
   Calendar,
   Hash,
   Type,
+  ChevronDown,
+  CheckCircle2,
+  Loader2,
 } from "lucide-react";
 import { Input } from "./Input";
 import { Select } from "./Select";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 // React Date Range imports
 import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
 import { addDays, format } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { useTranslation } from "react-i18next";
+
+// Types for paginated select
+export interface FieldOption {
+  label: string;
+  value: string | number;
+  [key: string]: any;
+}
+
+export interface PaginatedSelectConfig {
+  endpoint: string;
+  searchParam?: string;
+  labelKey: string;
+  valueKey: string;
+  pageSize?: number;
+  debounceTime?: number;
+  additionalParams?: Record<string, any>;
+  transformResponse?: (data: any) => FieldOption[];
+}
+
+export interface PaginatedFilterField {
+  key: string;
+  label: string;
+  type: "paginatedSelect";
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  paginatedSelectConfig: PaginatedSelectConfig;
+  initialValue?: any;
+}
 
 interface FilterField {
   key: string;
   label: string;
-  type: "text" | "select" | "date" | "date-range" | "number" | "checkbox";
+  type:
+    | "text"
+    | "select"
+    | "date"
+    | "date-range"
+    | "number"
+    | "checkbox"
+    | "paginatedSelect";
   options?: { value: string; label: string }[];
   placeholder?: string;
+  paginatedSelectConfig?: PaginatedSelectConfig;
+  initialValue?: any;
 }
 
 interface TableFiltersProps {
@@ -34,6 +76,7 @@ interface TableFiltersProps {
   statusFilter: string;
   onStatusFilter: (status: string) => void;
   showFilters: boolean;
+  show: boolean;
   onShowFiltersChange: (show: boolean) => void;
   onClearFilters: () => void;
   searchPlaceholder?: string;
@@ -42,7 +85,324 @@ interface TableFiltersProps {
   additionalFilters?: FilterField[];
   filterValues?: Record<string, any>;
   onFilterChange?: (key: string, value: any) => void;
+  fetchOptions?: (endpoint: string, params: any) => Promise<any>;
 }
+
+// Custom hook for paginated select
+function usePaginatedSelect(
+  config: PaginatedSelectConfig,
+  fetchOptions?: TableFiltersProps["fetchOptions"]
+) {
+  const [options, setOptions] = useState<FieldOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [total, setTotal] = useState(0);
+
+  const fetchData = useCallback(
+    async (
+      pageNum: number,
+      searchQuery: string = "",
+      reset: boolean = false
+    ) => {
+      if (loading || (!hasMore && pageNum > 1 && !reset)) return;
+
+      setLoading(true);
+      try {
+        const params: any = {
+          page: pageNum,
+          pageSize: config.pageSize || 10,
+          ...config.additionalParams,
+        };
+
+        if (searchQuery && config.searchParam) {
+          params[config.searchParam] = searchQuery;
+        }
+
+        let response;
+        if (fetchOptions) {
+          response = await fetchOptions(config.endpoint, params);
+        } else {
+          // Default fetch implementation
+          const queryString = new URLSearchParams(params).toString();
+          const res = await fetch(`${config.endpoint}?${queryString}`);
+          response = await res.json();
+        }
+
+        const data = response.data || response.items || response;
+        const totalItems =
+          response.meta?.total || response.total || data.length;
+
+        let newOptions: FieldOption[];
+        if (config.transformResponse) {
+          newOptions = config.transformResponse(data);
+        } else {
+          newOptions = data.map((item: any) => ({
+            label: item[config.labelKey],
+            value: item[config.valueKey],
+            ...item,
+          }));
+        }
+
+        if (reset) {
+          setOptions(newOptions);
+        } else {
+          setOptions((prev) => [...prev, ...newOptions]);
+        }
+
+        setTotal(totalItems);
+        setHasMore(newOptions.length === (config.pageSize || 10));
+        setPage(pageNum);
+      } catch (error) {
+        console.error("Error fetching paginated select data:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [config, loading, hasMore, fetchOptions]
+  );
+
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      fetchData(page + 1, search);
+    }
+  };
+
+  const handleSearch = useCallback(
+    debounce((searchQuery: string) => {
+      setSearch(searchQuery);
+      setPage(1);
+      setOptions([]);
+      setHasMore(true);
+      fetchData(1, searchQuery, true);
+    }, config.debounceTime || 500),
+    [config, fetchData]
+  );
+
+  // Initial load
+  useEffect(() => {
+    fetchData(1, "", true);
+  }, []);
+
+  return {
+    options,
+    loading,
+    hasMore,
+    search,
+    setSearch: handleSearch,
+    loadMore,
+    total,
+    refresh: () => fetchData(1, search, true),
+  };
+}
+
+// Debounce utility function
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout;
+  return (...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
+// Paginated Select Component
+interface PaginatedSelectProps {
+  config: PaginatedSelectConfig;
+  value: any;
+  onChange: (value: any) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  fetchOptions?: TableFiltersProps["fetchOptions"];
+}
+
+const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
+  config,
+  value,
+  onChange,
+  placeholder = "Select an option",
+  disabled = false,
+  fetchOptions,
+}) => {
+  const { options, loading, hasMore, search, setSearch, loadMore, total } =
+    usePaginatedSelect(config, fetchOptions);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedLabel, setSelectedLabel] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Find selected option label
+  useEffect(() => {
+    const selectedOption = options.find((opt) => opt.value === value);
+    setSelectedLabel(selectedOption?.label || "");
+    if (selectedOption) {
+      setInputValue(selectedOption.label);
+    }
+  }, [value, options]);
+
+  // Handle click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Handle scroll for infinite loading
+  const handleScroll = useCallback(() => {
+    if (!listRef.current || !hasMore || loading) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = listRef.current;
+    if (scrollHeight - scrollTop - clientHeight < 100) {
+      loadMore();
+    }
+  }, [hasMore, loading, loadMore]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setInputValue(newValue);
+    setSearch(newValue);
+    setIsOpen(true);
+  };
+
+  const handleSelect = (option: FieldOption) => {
+    onChange(option.value);
+    setInputValue(option.label);
+    setSelectedLabel(option.label);
+    setIsOpen(false);
+  };
+
+  const clearSelection = () => {
+    onChange("");
+    setInputValue("");
+    setSelectedLabel("");
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <div className="relative">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleSearchChange}
+          onClick={() => setIsOpen(!isOpen)}
+          placeholder={placeholder}
+          disabled={disabled}
+          className="w-full px-4 py-2.5 text-sm bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 
+            focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 
+            disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
+            pr-12 hover:border-blue-500 dark:hover:border-blue-500"
+        />
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          {loading ? (
+            <Loader2 size={16} className="animate-spin text-gray-400" />
+          ) : (
+            <ChevronDown size={16} className="text-gray-400" />
+          )}
+        </div>
+        {value && (
+          <button
+            type="button"
+            onClick={clearSelection}
+            className="absolute inset-y-0 right-8 flex items-center pr-2 text-gray-400 hover:text-red-500 transition-colors"
+          >
+            <X size={14} />
+          </button>
+        )}
+      </div>
+
+      {isOpen && (
+        <div className="absolute z-50 w-full mt-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg shadow-2xl max-h-64">
+          {/* Search header */}
+          <div className="p-2 border-b border-gray-200 dark:border-slate-700">
+            <div className="relative">
+              <Search
+                size={16}
+                className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400"
+              />
+              <input
+                type="text"
+                value={inputValue}
+                onChange={handleSearchChange}
+                placeholder={`Search ${total} options...`}
+                className="w-full pl-9 pr-3 py-1.5 text-sm bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                autoFocus
+              />
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Showing {options.length} of {total} options
+            </div>
+          </div>
+
+          {/* Options list */}
+          <div
+            ref={listRef}
+            onScroll={handleScroll}
+            className="overflow-y-auto max-h-48"
+          >
+            {options.length === 0 && !loading ? (
+              <div className="py-3 text-center text-sm text-gray-500 dark:text-gray-400">
+                No options found
+              </div>
+            ) : (
+              options.map((option) => (
+                <div
+                  key={option.value}
+                  onClick={() => handleSelect(option)}
+                  className={`px-3 py-2 text-sm cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 ${
+                    value === option.value
+                      ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                      : "text-gray-700 dark:text-gray-300"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium truncate">{option.label}</span>
+                    {value === option.value && (
+                      <CheckCircle2
+                        size={14}
+                        className="text-blue-600 dark:text-blue-400 flex-shrink-0 ml-2"
+                      />
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+
+            {/* Loading indicator */}
+            {loading && (
+              <div className="py-2 text-center">
+                <Loader2
+                  size={16}
+                  className="animate-spin text-blue-500 mx-auto"
+                />
+              </div>
+            )}
+
+            {/* Load more indicator */}
+            {!loading && hasMore && options.length > 0 && (
+              <div className="py-2 text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-slate-700">
+                Scroll to load more...
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export function TableFilters({
   searchTerm,
@@ -50,6 +410,7 @@ export function TableFilters({
   statusFilter,
   onStatusFilter,
   showFilters,
+  show = true,
   onShowFiltersChange,
   onClearFilters,
   searchPlaceholder = "Search anything...",
@@ -58,10 +419,11 @@ export function TableFilters({
   additionalFilters = [],
   filterValues = {},
   onFilterChange,
+  fetchOptions,
 }: TableFiltersProps) {
   const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
-
+  const { t } = useTranslation();
   // Close date picker when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -100,6 +462,8 @@ export function TableFilters({
         return <Calendar size={16} />;
       case "number":
         return <Hash size={16} />;
+      case "paginatedSelect":
+        return <ChevronDown size={16} />;
       case "text":
       default:
         return <Type size={16} />;
@@ -159,6 +523,18 @@ export function TableFilters({
             }
             options={field.options || []}
             placeholder={field.placeholder}
+          />
+        );
+
+      case "paginatedSelect":
+        return (
+          <PaginatedSelectComponent
+            config={field.paginatedSelectConfig!}
+            value={value}
+            onChange={(newValue) => onFilterChange?.(field.key, newValue)}
+            placeholder={field.placeholder}
+            disabled={field.disabled}
+            fetchOptions={fetchOptions}
           />
         );
 
@@ -411,17 +787,18 @@ export function TableFilters({
           </motion.div>
 
           {/* Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex gap-2.5"
-          >
-            <motion.button
-              onClick={() => onShowFiltersChange(!showFilters)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`
+          {show && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="flex gap-2.5"
+            >
+              <motion.button
+                onClick={() => onShowFiltersChange(!showFilters)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`
                 relative px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2
                 transition-all duration-200
                 ${
@@ -430,40 +807,42 @@ export function TableFilters({
                     : "bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700"
                 }
               `}
-            >
-              <SlidersHorizontal size={18} />
-              <span>Filters</span>
+              >
+                <SlidersHorizontal size={18} />
+
+                <span> {t("common.Filters")}</span>
+                <AnimatePresence>
+                  {activeCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-white text-blue-600 rounded-full text-xs font-bold"
+                    >
+                      {activeCount}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+
               <AnimatePresence>
-                {activeCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-white text-blue-600 rounded-full text-xs font-bold"
+                {hasActiveFilters && (
+                  <motion.button
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={onClearFilters}
+                    className="px-4 py-2.5 rounded-lg font-semibold text-sm bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 hover:border-red-200 dark:hover:border-red-800 transition-all flex items-center gap-2"
                   >
-                    {activeCount}
-                  </motion.span>
+                    <X size={18} />
+                    <span>Clear</span>
+                  </motion.button>
                 )}
               </AnimatePresence>
-            </motion.button>
-
-            <AnimatePresence>
-              {hasActiveFilters && (
-                <motion.button
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={onClearFilters}
-                  className="px-4 py-2.5 rounded-lg font-semibold text-sm bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 hover:border-red-200 dark:hover:border-red-800 transition-all flex items-center gap-2"
-                >
-                  <X size={18} />
-                  <span>Clear</span>
-                </motion.button>
-              )}
-            </AnimatePresence>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
 
         {/* Filters Panel */}
@@ -525,7 +904,7 @@ export function TableFilters({
                       />
                     </div>
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
-                      Advanced Filters
+                      {t("common.AdvancedFilters")}
                     </h3>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

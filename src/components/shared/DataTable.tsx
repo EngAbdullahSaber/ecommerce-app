@@ -12,6 +12,8 @@ import {
   RefreshCw,
   Sparkles,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n/i18n";
 
 interface Column {
   key: string;
@@ -72,6 +74,8 @@ export function DataTable({
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, totalItems);
+  const { t } = useTranslation();
+  const currentLang = i18n.language;
 
   const handleSort = (key: string) => {
     if (!onSort) return;
@@ -265,18 +269,13 @@ export function DataTable({
                 {columns.map((column) => (
                   <th
                     key={column.key}
-                    className={`px-6 py-5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider ${getAlignmentClass(
-                      column.align
-                    )}`}
+                    className={`px-6 py-5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider  
+                      ${currentLang === "en" ? "text-left" : "text-right"}`}
                     style={{ width: column.width }}
                   >
                     <div
                       className={`flex items-center gap-2 ${
-                        column.align === "right"
-                          ? "justify-end"
-                          : column.align === "center"
-                          ? "justify-center"
-                          : "justify-start"
+                        currentLang === "ar" ? "justify-end" : "justify-start"
                       }`}
                     >
                       {column.label}
@@ -320,28 +319,28 @@ export function DataTable({
                     </tr>
                   ))
                 : data.length > 0
-                ? data.map((row, index) => (
-                    <tr
-                      key={row.id || index}
-                      className="group/row relative hover:bg-gradient-to-r hover:from-blue-50/30 hover:via-purple-50/20 hover:to-transparent dark:hover:from-blue-900/10 dark:hover:via-purple-900/10 dark:hover:to-transparent transition-all duration-300 border-l-4 border-l-transparent hover:border-l-blue-500"
-                    >
-                      {columns.map((column, colIndex) => (
-                        <td
-                          key={column.key}
-                          className={`px-6 py-5 text-sm text-slate-700 dark:text-slate-300 ${
-                            colIndex === 0
-                              ? "font-semibold text-slate-900 dark:text-white"
-                              : ""
-                          } ${getAlignmentClass(
-                            column.align
-                          )} transition-all duration-300 group-hover/row:translate-x-1`}
-                        >
-                          {renderCell(column, row)}
-                        </td>
-                      ))}
-                    </tr>
-                  ))
-                : emptyState || defaultEmptyState}
+                  ? data.map((row, index) => (
+                      <tr
+                        key={row.id || index}
+                        className="group/row relative hover:bg-gradient-to-r hover:from-blue-50/30 hover:via-purple-50/20 hover:to-transparent dark:hover:from-blue-900/10 dark:hover:via-purple-900/10 dark:hover:to-transparent transition-all duration-300 border-l-4 border-l-transparent  "
+                      >
+                        {columns.map((column, colIndex) => (
+                          <td
+                            key={column.key}
+                            className={`px-3 py-5 text-sm text-slate-700 dark:text-slate-300 ${
+                              colIndex === 0
+                                ? "font-semibold text-slate-900 dark:text-white"
+                                : ""
+                            } ${getAlignmentClass(
+                              column.align,
+                            )} transition-all duration-300 group-hover/row:translate-x-1`}
+                          >
+                            {renderCell(column, row)}
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                  : emptyState || defaultEmptyState}
             </tbody>
           </table>
         </div>
@@ -357,18 +356,18 @@ export function DataTable({
                   </p>
                 </div>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  of{" "}
+                  {t("common.of")}
                   <span className="font-semibold text-slate-900 dark:text-white">
                     {totalItems.toLocaleString()}
                   </span>{" "}
-                  results
+                  {t("common.results")}
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                   <span className="text-sm text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap">
-                    Rows per page
+                    {t("common.RowsPerPage")}
                   </span>
                   <div className="relative group/select">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl opacity-0 group-hover/select:opacity-20 blur transition-all duration-300" />

@@ -1,0 +1,1800 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "metadata": "metadata",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "isRequired": "is required",
+    "description": "Description",
+
+    "add": "Add",
+    "messages": {
+      "noResponse": "No response from server"
+    },
+    "view": "View",
+    "Filters": "Filters",
+    "AdvancedFilters": "Advanced Filters",
+    "results": "Results",
+    "of": "Of",
+    "RowsPerPage": "Rows Per Page",
+
+    "id": "ID",
+
+    "title": "Title",
+    "image": "Image",
+    "logo": "Logo",
+    "preview": "Preview",
+    "requirements": "Requirements",
+    "change": "Change",
+    "by": "By",
+    "created": "Created At",
+    "lastUpdated": "Last Updated",
+
+    "refresh": "Refresh",
+    "tryAgain": "Try Again",
+    "na": "N/A",
+    "notAvailable": "Not Available",
+
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "download": "Download",
+    "upload": "Upload",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "select": "Select",
+    "noData": "No data found",
+    "actions": "Actions",
+    "date": "Date",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "mainMenu": "Main Menu",
+    "profile": "Profile",
+    "products": "Products",
+    "filters": "Filters",
+    "ecommerce": "E-Commerce",
+    "orders": "Orders",
+    "countries": "Countries",
+    "cities": "Cities",
+    "areas": "Areas",
+    "events": "Events",
+    "stores": "Stores",
+    "brands": "Brands",
+    "merchants": "Merchants",
+    "categories": "Categories",
+    "banners": "Banners",
+    "users": "Users",
+    "charts": "Charts",
+    "forms": "Forms",
+    "tables": "Tables",
+    "uiElements": "UI Elements",
+    "calendar": "Calendar",
+    "others": "Others",
+    "documents": "Documents"
+  },
+  "header": {
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications",
+    "messages": "Messages",
+    "settings": "Settings",
+    "profile": "Profile",
+    "toggleLanguage": "Toggle Language"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "rememberMe": "Remember Me",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signUpHere": "Sign up here",
+    "signInHere": "Sign in here",
+    "invalidCredentials": "Invalid email or password",
+    "signUpSuccess": "Sign up successful! Please sign in.",
+    "signInSuccess": "Sign in successful!"
+  },
+  "orders": {
+    "title": "Orders",
+    "createOrder": "Create Order",
+    "updateOrder": "Update Order",
+    "viewOrder": "View Order",
+    "orders": "Orders",
+    "orderId": "Order ID",
+    "customer": "Customer",
+    "total": "Total",
+    "status": "Status",
+    "date": "Date",
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "noOrders": "No orders found"
+  },
+  "countries": {
+    "title": "Countries",
+    "createTitle": "Add New Country",
+    "createSubtitle": "Enter the country details in both English and Arabic",
+    "createCountry": "Create Country",
+    "updateCountry": "Update Country",
+    "countryName": "Country Name",
+    "countryCode": "Country Code",
+    "noCountries": "No countries found",
+    "backToList": "Back to Countries",
+    "subtitle": "Manage countries, flags, and localized names",
+    "addCountry": "Add Country",
+    "addFirstCountry": "Add First Country",
+    "loading": "Loading countries...",
+    "loadError": "Failed to load countries",
+    "loadErrorDesc": "An error occurred while fetching countries data",
+    "noCountriesFound": "No countries found",
+    "noCountriesYet": "No countries have been added yet",
+    "noSearchResults": "No results match your search",
+    "searchPlaceholder": "Search by country name",
+    "deleteTitle": "Delete Country",
+    "deleteDescription": "Are you sure you want to delete this country?",
+    "messages": {
+      "deleteSuccess": "Country deleted successfully",
+      "deleteFailed": "Failed to delete country"
+    },
+    "table": {
+      "flag": "Flag",
+      "englishName": "English Name",
+      "arabicName": "Arabic Name"
+    },
+
+    "form": {
+      "title": "Country Information",
+      "description": "Fill in the country details below",
+      "englishName": "Country Name (English)",
+      "arabicName": "اسم الدولة (Arabic)",
+      "countryFlag": "Country Flag",
+      "submitCreate": "Create Country",
+      "creating": "Creating country...",
+      "createSuccess": "Country created successfully!",
+      "createError": "Error creating country: {{message}}",
+      "updateSuccess": "Country updated successfully!",
+      "updateError": "Error updating country: {{message}}"
+    },
+    "validations": {
+      "nameMin": "Name must be at least 2 characters",
+      "flagRequired": "Flag image is required"
+    },
+    "stats": {
+      "totalCountries": "Total Countries",
+      "activeCountries": "Active Countries",
+      "newestCountry": "Newest Country",
+      "oldestCountry": "Oldest Country"
+    },
+    "common": {
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "refresh": "Refresh",
+      "tryAgain": "Try Again",
+      "status": "Status",
+      "unknown": "Unknown"
+    }
+  },
+  "cities": {
+    "title": "Cities",
+    "createTitle": "Add New City",
+    "createSubtitle": "Enter the city details with country association",
+    "createCity": "Create City",
+    "updateCity": "Update City",
+    "cityName": "City Name",
+    "country": "Country",
+    "noCities": "No cities found",
+    "backToList": "Back to Cities",
+    "form": {
+      "title": "City Information",
+      "description": "Fill in the city details below. The name must be provided in both English and Arabic.",
+      "englishName": "City Name (English)",
+      "arabicName": "اسم المدينة (Arabic)",
+      "selectCountry": "Select country",
+      "searchCountry": "Search for a country...",
+      "submitCreate": "Create City",
+      "creating": "Creating city...",
+      "createSuccess": "City created successfully!",
+      "createError": "Error creating city: {{message}}",
+      "updateSuccess": "City updated successfully!",
+      "updateError": "Error updating city: {{message}}"
+    },
+    "validations": {
+      "nameMin": "Name must be at least 2 characters",
+      "selectCountry": "Please select a country"
+    },
+    "stats": {
+      "totalCities": "Total Cities",
+      "uniqueCountries": "Countries",
+      "newestCity": "Newest City",
+      "oldestCity": "Oldest City"
+    }
+  },
+  "CITIES": {
+    "TITLE": "Cities Management",
+    "SUBTITLE": "Manage and view city information with country details",
+    "STATS": {
+      "TOTAL_CITIES": "Total Cities",
+      "UNIQUE_COUNTRIES": "Unique Countries",
+      "NEWEST_CITY": "Newest City",
+      "OLDEST_CITY": "Oldest City",
+      "CITIES_BADGE": "Cities",
+      "COUNTRIES_BADGE": "Countries"
+    },
+    "ACTIONS": {
+      "REFRESH": "Refresh",
+      "ADD_CITY": "Add City",
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "VIEW": "View",
+      "TRY_AGAIN": "Try Again",
+      "ADD_FIRST_CITY": "Add Your First City"
+    },
+    "COLUMNS": {
+      "ID": "ID",
+      "ENGLISH_NAME": "English Name",
+      "ARABIC_NAME": "Arabic Name",
+      "COUNTRY": "Country",
+      "CREATED": "Created",
+      "LAST_UPDATED": "Last Updated",
+      "ACTIONS": "Actions"
+    },
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Search cities by name or country...",
+      "SELECT_COUNTRY": "Select a country",
+      "COUNTRY": "Country",
+      "CLEAR_FILTERS": "Clear Filters",
+      "STATUS": "Status",
+      "ALL": "All",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive"
+    },
+    "MESSAGES": {
+      "LOADING": "Loading cities...",
+      "NO_CITIES": "No cities found",
+      "NO_CITIES_DESC": "There are no cities in the database yet.",
+      "NO_SEARCH_RESULTS": "No cities match your search criteria.",
+      "FAILED_TO_LOAD": "Failed to load cities",
+      "FAILED_TO_LOAD_DESC": "There was an error fetching the cities data.",
+      "DELETE_CONFIRM_TITLE": "Delete City",
+      "DELETE_CONFIRM_DESC": "Are you sure you want to delete this city? This action cannot be undone.",
+      "DELETE_SUCCESS": "City deleted successfully!",
+      "DELETE_ERROR": "Failed to delete city. Please try again.",
+      "NOT_AVAILABLE": "Not Available"
+    },
+    "PLACEHOLDERS": {
+      "ARABIC_NAME": "غير متوفر",
+      "ENGLISH_NAME": "N/A",
+      "COUNTRY": "Unknown",
+      "UNKNOWN_CITY": "Unknown City"
+    }
+  },
+  "GENERAL": {
+    "ID": "ID",
+    "UNKNOWN": "Unknown",
+    "N_A": "N/A",
+    "NO_DATA": "No data",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "YES": "Yes",
+    "NO": "No",
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "WARNING": "Warning",
+    "INFO": "Info",
+    "LOADING": "Loading..."
+  },
+  "areas": {
+    "title": "Areas",
+    "createTitle": "Add New Area",
+    "createSubtitle": "Enter the area details with city association",
+    "createArea": "Create Area",
+    "updateArea": "Update Area",
+    "areaName": "Area Name",
+    "city": "City",
+
+    "noAreas": "No areas found",
+    "subtitle": "Manage and organize geographical areas",
+    "addArea": "Add New Area",
+    "addFirstArea": "Add First Area",
+    "searchPlaceholder": "Search areas by name...",
+    "loading": "Loading areas...",
+    "loadError": "Failed to load areas",
+    "loadErrorDesc": "Unable to fetch areas data. Please try again.",
+    "noAreasFound": "No Areas Found",
+    "noAreasYet": "No areas have been added yet. Start by adding your first area.",
+    "noSearchResults": "No areas match your search criteria.",
+    "deleteTitle": "Delete Area",
+    "deleteDescription": "Are you sure you want to delete this area? This action cannot be undone.",
+    "unknownArea": "Unknown Area",
+    "unknownCity": "Unknown City",
+    "messages": {
+      "createSuccess": "Area created successfully",
+      "createFailed": "Failed to create area",
+      "creating": "Creating area...",
+      "noResponse": "No response from server",
+      "backToAreas": "Back to Areas"
+    },
+    "table": {
+      "englishName": "English Name",
+      "arabicName": "Arabic Name",
+      "city": "City"
+    },
+    "backToList": "Back to Areas",
+    "form": {
+      "title": "Area Information",
+      "description": "Fill in the area details below. The name must be provided in both English and Arabic.",
+      "englishName": "Area Name (English)",
+      "arabicName": "اسم المنطقة (Arabic)",
+      "selectCity": "Select city",
+      "basicInformation": "Basic Information",
+      "areaInformation": "Area Information",
+      "enterAreaDetails": "Enter basic information for the new area",
+      "addNewArea": "Add New Area",
+      "enterAreaDetailsWithCity": "Enter area details and select a city",
+      "fillAreaDetails": "Fill in the area details below",
+      "areaNameEnglish": "Area Name (English)",
+      "areaNameEnglishPlaceholder": "Manhattan",
+      "areaNameEnglishHelper": "Enter the area name in English",
+      "areaNameArabic": "Area Name (Arabic)",
+      "areaNameArabicPlaceholder": "مانهاتن",
+      "areaNameArabicHelper": "Enter the area name in Arabic",
+      "nameMinLength": "Name must be at least 2 characters",
+      "city": "City",
+      "selectCityRequired": "Please select a city",
+      "selectCityHelper": "Select the city where this area is located",
+      "createArea": "Create Area",
+      "searchCity": "Search for a city...",
+      "submitCreate": "Create Area",
+      "creating": "Creating area...",
+      "createSuccess": "Area created successfully!",
+      "createError": "Error creating area: {{message}}",
+      "updateSuccess": "Area updated successfully!",
+      "updateError": "Error updating area: {{message}}"
+    },
+    "validations": {
+      "nameMin": "Name must be at least 2 characters",
+      "selectCity": "Please select a city"
+    }
+  },
+  "events": {
+    "createTitle": "Create New Event",
+    "createSubtitle": "Organize and schedule your events",
+    "backToList": "Back to Events List",
+    "addEvent": "Add Event",
+    "form": {
+      "title": "Event Details",
+      "description": "Fill in the details to create a new event",
+      "titleEnglish": "Event Title (English)",
+      "placeholderTitleEnglish": "Enter event title in English",
+      "titleArabic": "Event Title (Arabic)",
+      "placeholderTitleArabic": "أدخل عنوان الحدث بالعربية",
+      "eventDate": "Event Date & Time",
+      "helper": {
+        "eventDate": "Select the date and time for your event",
+        "eventType": "Choose the type of event",
+        "visibility": "Public events are visible to all users",
+        "status": "Set event as active or inactive"
+      },
+      "eventType": "Event Type",
+      "placeholderEventType": "Select event type",
+      "visibility": "Visibility",
+      "public": "Public",
+      "private": "Private",
+      "status": "Status",
+      "submitCreate": "Create Event",
+      "creating": "Creating event...",
+      "createSuccess": "Event created successfully!",
+      "createError": "Failed to create event: {{message}}"
+    },
+    "validations": {
+      "titleMin": "Title must be at least 2 characters",
+      "titleMinAr": "العنوان يجب أن يكون على الأقل حرفين",
+      "selectDate": "Please select a date",
+      "selectType": "Please select an event type",
+      "selectVisibility": "Please select visibility",
+      "selectStatus": "Please select status"
+    },
+    "types": {
+      "Birthday": "Birthday",
+      "Party": "Party",
+      "Conference": "Conference",
+      "Meeting": "Meeting",
+      "Wedding": "Wedding",
+      "Concert": "Concert",
+      "Seminar": "Seminar",
+      "Workshop": "Workshop",
+      "Networking": "Networking",
+      "Festival": "Festival"
+    },
+    "columns": {
+      "eventTitle": "Event Title",
+      "arabicTitle": "Arabic Title",
+      "eventDateTime": "Event Date & Time",
+      "type": "Type",
+      "visibility": "Visibility",
+      "status": "Status",
+      "created": "Created"
+    },
+    "untitledEvent": "Untitled Event",
+    "untitledEventAr": "حدث بدون عنوان",
+    "unknownEvent": "Unknown Event",
+    "fetchError": "There was an error fetching the events data.",
+
+    "loading": "Loading events...",
+    "management": "Events Management",
+    "managementSubtitle": "Manage and organize your events efficiently",
+    "searchPlaceholder": "Search events by title...",
+    "allTypes": "All Types",
+    "allStatus": "All Status",
+    "allVisibility": "All Visibility",
+    "filter": "Filter",
+    "clearFilters": "Clear Filters",
+    "showFilters": "Show Filters",
+    "hideFilters": "Hide Filters",
+    "noEventsFound": "No events found",
+    "noEventsMatch": "No events match your search criteria.",
+    "noEventsInDB": "There are no events in the database yet.",
+    "createFirstEvent": "Create Your First Event",
+    "failedToLoad": "Failed to load events",
+    "tryAgain": "Try Again",
+    "deleteConfirmTitle": "Delete Event",
+    "deleteConfirmDescription": "Are you sure you want to delete this event? This action cannot be undone and all associated data will be lost.",
+    "deleteSuccess": "Event deleted successfully!",
+    "deleteError": "Failed to delete event. Please try again."
+  },
+  "stores": {
+    "create": {
+      "title": "Create New Store",
+      "subtitle": "Add a new store to your platform"
+    },
+    "management": "Stores Management",
+    "managementSubtitle": "Manage and view store information with descriptions and logos",
+    "backToList": "Back to Stores List",
+    "form": {
+      "title": "Store Details",
+      "description": "Fill in the store information",
+      "englishName": "Store Name (English)",
+      "arabicName": "Store Name (Arabic)",
+      "englishDescription": "Description (English)",
+      "arabicDescription": "Description (Arabic)",
+      "storeLogo": "Store Logo",
+      "uploadLogo": "Upload store logo image",
+      "clickToUploadLogo": "Click to upload logo",
+      "changeUploadedFile": "Change uploaded file",
+      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG up to 5MB",
+      "logoPreview": "Logo Preview",
+      "logoPreviewHere": "Logo preview will appear here",
+      "storeImage": "Store Image",
+      "uploadImage": "Upload store banner image (Optional)",
+      "JPGPNGUpTo10MB": "JPG, PNG up to 10MB",
+      "image": {
+        "click": "Click to upload store image",
+        "change": "Change store image"
+      },
+      "imagePreviewHere": "Store image preview will appear here",
+      "actions": {
+        "create": "Create Store",
+        "update": "Update Store"
+      }
+    },
+    "validations": {
+      "nameMin": "Name must be at least 2 characters",
+      "descriptionMin": "Description must be at least 10 characters"
+    },
+    "messages": {
+      "creating": "Creating store...",
+      "createSuccess": "Store created successfully!",
+      "createFailed": "Failed to create store: ",
+      "updating": "Updating store...",
+      "updateSuccess": "Store updated successfully!",
+      "updateFailed": "Failed to update store: ",
+      "deleting": "Deleting store...",
+      "deleteSuccess": "Store deleted successfully!",
+      "deleteFailed": "Failed to delete store. Please try again."
+    },
+    "columns": {
+      "logo": "Logo",
+      "englishName": "English Name",
+      "arabicName": "Arabic Name",
+      "englishDescription": "English Description",
+      "arabicDescription": "Arabic Description",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "searchPlaceholder": "Search stores by name or description...",
+    "allStatus": "All Status",
+    "filter": "Filter",
+    "clearFilters": "Clear Filters",
+    "showFilters": "Show Filters",
+    "hideFilters": "Hide Filters",
+    "noStoresFound": "No stores found",
+    "noStoresMatch": "No stores match your search criteria.",
+    "noStoresInDB": "There are no stores in the database yet.",
+    "createFirstStore": "Add Your First Store",
+    "failedToLoad": "Failed to load stores",
+    "fetchError": "There was an error fetching the stores data.",
+    "tryAgain": "Try Again",
+    "addStore": "Add Store",
+    "deleteConfirmTitle": "Delete Store",
+    "deleteConfirmDescription": "Are you sure you want to delete this store? This action cannot be undone.",
+    "unknownStore": "Unknown Store",
+    "untitledStore": "Untitled Store",
+    "noDescription": "No description available",
+    "noDescriptionAr": "لا يوجد وصف"
+  },
+
+  "brands": {
+    "create": {
+      "title": "Add New Brand",
+      "subtitle": "Enter brand details in both English and Arabic"
+    },
+    "management": "Brands Management",
+    "managementSubtitle": "Manage and view brand information with descriptions and logos",
+    "backToList": "Back to Brands",
+    "form": {
+      "title": "Brand Information",
+      "description": "Fill in the brand details below. All fields are required.",
+      "englishTitle": "Brand Title (English)",
+      "arabicTitle": "Brand Title (Arabic)",
+      "englishDescription": "Description (English)",
+      "arabicDescription": "Description (Arabic)",
+      "brandLogo": "Brand Logo",
+      "uploadLogo": "Upload a logo image (JPG, PNG, SVG, WEBP - max 5MB)",
+      "clickToUploadLogo": "Click to upload logo",
+      "changeUploadedFile": "Change uploaded file",
+      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG, WEBP up to 5MB",
+      "logoPreview": "Logo Preview",
+      "logoPreviewHere": "Logo preview will appear here",
+      "logoRequirements": {
+        "title": "Logo Requirements:",
+        "items": [
+          "Use transparent background (PNG format recommended)",
+          "Minimum dimensions: 200x200 pixels",
+          "Maximum file size: 5MB",
+          "Supported formats: JPG, PNG, SVG, WEBP",
+          "Square or landscape orientation preferred"
+        ]
+      },
+      "actions": {
+        "create": "Create Brand",
+        "update": "Update Brand"
+      }
+    },
+    "validations": {
+      "titleMin": "Title must be at least 2 characters",
+      "titleMinAr": "Title must be at least 2 characters",
+      "descriptionMin": "Description must be at least 10 characters",
+      "descriptionMinAr": "Description must be at least 10 characters"
+    },
+    "messages": {
+      "creating": "Creating brand...",
+      "createSuccess": "Brand created successfully!",
+      "createFailed": "Error creating brand: ",
+      "updating": "Updating brand...",
+      "updateSuccess": "Brand updated successfully!",
+      "updateFailed": "Failed to update brand: ",
+      "deleting": "Deleting brand...",
+      "deleteSuccess": "Brand deleted successfully!",
+      "deleteFailed": "Failed to delete brand. Please try again."
+    },
+    "columns": {
+      "logo": "Logo",
+      "englishTitle": "English Name",
+      "arabicTitle": "Arabic Name",
+      "englishDescription": "English Description",
+      "arabicDescription": "Arabic Description",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "searchPlaceholder": "Search brands by name or description...",
+    "allStatus": "All Status",
+    "filter": "Filter",
+    "clearFilters": "Clear Filters",
+    "showFilters": "Show Filters",
+    "hideFilters": "Hide Filters",
+    "noBrandsFound": "No brands found",
+    "noBrandsMatch": "No brands match your search criteria.",
+    "noBrandsInDB": "There are no brands in the database yet.",
+    "createFirstBrand": "Add Your First Brand",
+    "failedToLoad": "Failed to load brands",
+    "fetchError": "There was an error fetching the brands data.",
+    "tryAgain": "Try Again",
+    "addBrand": "Add Brand",
+    "deleteConfirmTitle": "Delete Brand",
+    "deleteConfirmDescription": "Are you sure you want to delete this brand? This action cannot be undone.",
+    "unknownBrand": "Unknown Brand",
+    "untitledBrand": "Untitled Brand",
+    "noDescription": "No description available",
+    "noDescriptionAr": "No description available"
+  },
+
+  "banners": {
+    "management": "Banners Management",
+    "managementSubtitle": "Manage and organize all banners across your platform",
+    "addBanner": "Add Banner",
+    "searchPlaceholder": "Search banners by alt text or ref...",
+    "allStatus": "All Status",
+    "allTypes": "All Types",
+    "columns": {
+      "image": "Image",
+      "altText": "Alt Text",
+      "status": "Status",
+      "type": "Type",
+      "order": "Order",
+      "placements": "Placements",
+      "dateRange": "Date Range",
+      "bannerImage": "Banner Image"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "expired": "Expired"
+    },
+    "types": {
+      "ads": "Ads",
+      "promotion": "Promotion",
+      "brand": "Brand",
+      "category": "Category",
+      "product": "Product",
+      "discount": "Discount"
+    },
+    "messages": {
+      "deleteSuccess": "Banner deleted successfully!",
+      "deleteFailed": "Failed to delete banner!",
+      "creating": "Creating banner...",
+      "createSuccess": "Banner created successfully!",
+      "createFailed": "Failed to create banner"
+    },
+    "noAltText": "No alt text",
+    "noPlacements": "No placements",
+    "failedToLoad": "Failed to load banners",
+    "fetchError": "An error occurred while fetching banners",
+    "tryAgain": "Try Again",
+    "noBannersFound": "No Banners Found",
+    "noBannersMatch": "No banners match your search criteria",
+    "noBannersInDB": "There are no banners in the database yet",
+    "createFirstBanner": "Create First Banner",
+    "deleteConfirmTitle": "Delete Banner",
+    "deleteConfirmDescription": "Are you sure you want to delete this banner? This action cannot be undone.",
+    "unknownBanner": "Unknown Banner",
+    "backToList": "Back to Banners List",
+    "create": {
+      "title": "Create New Banner",
+      "subtitle": "Design and configure a new promotional banner"
+    },
+    "form": {
+      "title": "Banner Information",
+      "description": "Fill in the details to create your banner",
+      "bannerImage": "Banner Image",
+      "uploadBanner": "Upload banner image file",
+      "changeUploadedFile": "Change uploaded file",
+      "clickToUploadBanner": "Click to upload banner image",
+      "JPGPNGWEBPUpTo5MB": "JPG, PNG, WEBP up to 5MB",
+      "bannerPreview": "Banner Preview",
+      "bannerPreviewHere": "Banner preview will appear here",
+      "bannerRequirements": {
+        "title": "Banner Requirements",
+        "items": [
+          "Recommended size: 1200x400 pixels",
+          "Max file size: 5MB",
+          "Supported formats: JPG, PNG, WEBP, GIF",
+          "Ensure text is clear and readable",
+          "Use high-quality images for best results"
+        ]
+      },
+      "altText": "Alt Text",
+      "type": "Banner Type",
+      "ref": "Reference",
+      "refId": "Reference ID",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "order": "Display Order",
+      "placements": "Placements",
+      "placementsDescription": "Select where this banner should appear",
+      "page": "Page",
+      "location": "Location",
+      "addPlacement": "Add Another Placement",
+      "placeholders": {
+        "altText": "Summer Sale Banner",
+        "ref": "summer-sale",
+        "refId": "1",
+        "order": "1"
+      },
+      "actions": {
+        "create": "Create Banner"
+      }
+    },
+    "pages": {
+      "home": "Home",
+      "productList": "Product List",
+      "productDetail": "Product Detail",
+      "category": "Category",
+      "cart": "Cart",
+      "checkout": "Checkout"
+    },
+    "locations": {
+      "startOfPage": "Start of Page",
+      "topSubcategories": "Top Subcategories",
+      "underSubCategories": "Under Sub Categories",
+      "endOfPage": "End of Page",
+      "beforeLastSection": "Before Last Section",
+      "middleOfPage": "Middle of Page",
+      "sidebar": "Sidebar",
+      "popup": "Popup"
+    },
+    "validations": {
+      "altTextMin": "Alt text must be at least 2 characters",
+      "typeRequired": "Banner type is required",
+      "refMin": "Reference must be at least 2 characters",
+      "refIdMin": "Reference ID must be at least 1",
+      "statusRequired": "Status is required",
+      "startDateRequired": "Start date is required",
+      "endDateRequired": "End date is required",
+      "orderMin": "Order must be 0 or higher",
+      "placementsRequired": "At least one placement is required"
+    }
+  },
+
+  "help": {
+    "brandTitles": {
+      "title": "Brand Titles",
+      "description": "Enter the brand name in both English and Arabic. Use the official brand name in each language."
+    },
+    "bannerTypes": {
+      "title": "Banner Types",
+      "description": "Choose the type that best fits your campaign: Ads for promotions, Brand for awareness, Category for product groups, or Discount for special offers."
+    },
+    "scheduling": {
+      "title": "Scheduling",
+      "description": "Set start and end dates to control when your banner appears. Banners are automatically activated/deactivated based on these dates."
+    },
+    "placements": {
+      "title": "Placements",
+      "description": "Place banners strategically across your site. You can add multiple placements for maximum visibility on different pages and locations."
+    },
+    "descriptions": {
+      "title": "Descriptions",
+      "description": "Provide detailed descriptions explaining what the brand does, its industry, and its market position."
+    },
+    "logoQuality": {
+      "title": "Logo Quality",
+      "description": "Upload a high-quality logo with transparent background. The logo will be displayed in product catalogs and brand pages."
+    }
+  },
+
+  "merchants": {
+    "page": {
+      "title": "Merchants Management",
+      "description": "Manage and view merchant accounts and information",
+      "refresh": "Refresh",
+      "addMerchant": "Add Merchant",
+      "searchPlaceholder": "Search merchants by name, email, or phone...",
+      "noMerchants": "No merchants found",
+      "noMatch": "No merchants match your search criteria.",
+      "emptyList": "There are no merchants in the database yet.",
+      "addFirstMerchant": "Add Your First Merchant",
+      "loading": "Loading merchants...",
+      "errorTitle": "Failed to load merchants",
+      "errorMessage": "There was an error fetching the merchants data.",
+      "tryAgain": "Try Again",
+      "delete": {
+        "title": "Delete Merchant",
+        "description": "Are you sure you want to delete this merchant? This action cannot be undone and will remove all associated data.",
+        "success": "Merchant deleted successfully!",
+        "error": "Failed to delete merchant. Please try again."
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "editTitle": "Edit merchant",
+        "deleteTitle": "Delete merchant"
+      },
+      "columns": {
+        "id": "ID",
+        "merchant": "Merchant",
+        "email": "Email",
+        "phone": "Phone",
+        "language": "Language",
+        "verification": "Verification",
+        "joined": "Joined",
+        "actions": "Actions"
+      },
+      "status": {
+        "verified": "Verified",
+        "pending": "Pending"
+      },
+      "language": {
+        "ar": "Arabic",
+        "en": "English",
+        "fr": "French"
+      },
+      "filters": {
+        "all": "All",
+        "status": {
+          "label": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "verification": {
+          "label": "Verification",
+          "all": "All Verification",
+          "verified": "Verified",
+          "pending": "Pending"
+        },
+        "language": {
+          "label": "Language",
+          "all": "All Languages",
+          "ar": "Arabic",
+          "en": "English"
+        },
+        "clear": "Clear Filters"
+      }
+    },
+    "create": {
+      "title": "Add New Merchant",
+      "description": "Create a new merchant account with contact information and security settings",
+      "back": "Back to Merchants",
+      "form": {
+        "title": "Merchant Account Setup",
+        "description": "Fill in all required fields to create a new merchant account. All information is required.",
+        "submit": "Create Merchant Account",
+        "cancel": "Cancel",
+        "loading": "Creating merchant account...",
+        "success": "Merchant created successfully!",
+        "error": "Failed to create merchant. Please try again."
+      },
+      "sections": {
+        "basicInfo": {
+          "title": "Basic Information",
+          "description": "Enter merchant personal details"
+        },
+        "contactInfo": {
+          "title": "Contact Information",
+          "description": "Enter merchant's contact information"
+        },
+        "securityInfo": {
+          "title": "Security Settings",
+          "description": "Set merchant's account password and preferences"
+        }
+      },
+      "fields": {
+        "firstName": {
+          "label": "First Name",
+          "placeholder": "Ahmed",
+          "validation": "First name must be at least 2 characters",
+          "helper": "Enter merchant's first name"
+        },
+        "lastName": {
+          "label": "Last Name",
+          "placeholder": "Ali",
+          "validation": "Last name must be at least 2 characters",
+          "helper": "Enter merchant's last name"
+        },
+        "email": {
+          "label": "Email Address",
+          "placeholder": "ahmed.ali@merchant.com",
+          "validation": "Please enter a valid email address",
+          "helper": "Enter merchant's email address"
+        },
+        "phone": {
+          "label": "Phone Number",
+          "placeholder": "+966501234568",
+          "validation": "Please enter a valid phone number",
+          "helper": "Format: +CountryCode Number"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "••••••••",
+          "validation": "Password must be at least 6 characters",
+          "helper": "Minimum 6 characters"
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "placeholder": "••••••••",
+          "validation": "Passwords do not match",
+          "helper": "Re-enter the password"
+        },
+        "language": {
+          "label": "Language Preference",
+          "helper": "Select merchant's preferred language",
+          "options": {
+            "ar": "Arabic",
+            "en": "English"
+          }
+        },
+        "terms": {
+          "label": "Terms & Conditions",
+          "validation": "You must accept the terms and conditions",
+          "text": "I agree to the",
+          "termsLink": "Terms of Service",
+          "and": "and",
+          "privacyLink": "Privacy Policy"
+        }
+      }
+    }
+  },
+  "categories": {
+    "parentCategory": "Parent Category",
+    "subCategory": "Sub Category",
+    "thirdCategory": "Third Category",
+
+    "parent": {
+      "page": {
+        "title": "Parent Categories",
+        "description": "Manage and view parent categories with images and status",
+        "refresh": "Refresh",
+        "addCategory": "Add Category",
+        "searchPlaceholder": "Search categories by title...",
+        "noCategories": "No categories found",
+        "noMatch": "No categories match your search criteria.",
+        "emptyList": "There are no parent categories in the database yet.",
+        "addFirstCategory": "Add Your First Category",
+        "loading": "Loading categories...",
+        "errorTitle": "Failed to load categories",
+        "errorMessage": "There was an error fetching the categories data.",
+        "tryAgain": "Try Again",
+        "delete": {
+          "title": "Delete Category",
+          "description": "Are you sure you want to delete this category? This action cannot be undone and may affect child categories.",
+          "success": "Category deleted successfully!",
+          "error": "Failed to delete category. Please try again."
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "editTitle": "Edit category",
+          "deleteTitle": "Delete category"
+        },
+        "columns": {
+          "id": "ID",
+          "englishTitle": "English Title",
+          "arabicTitle": "Arabic Title",
+          "status": "Status",
+          "type": "Type",
+          "created": "Created",
+          "lastUpdated": "Last Updated",
+          "actions": "Actions"
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "types": {
+          "PARENT": "Parent",
+          "SUB": "Sub"
+        },
+        "filters": {
+          "all": "All",
+          "status": {
+            "label": "Status",
+            "active": "Active",
+            "inactive": "Inactive"
+          },
+          "clear": "Clear Filters"
+        },
+        "imageAlt": {
+          "english": "Category image English",
+          "arabic": "Category image Arabic"
+        }
+      },
+      "create": {
+        "title": "Add New Parent Category",
+        "description": "Create a new parent category with bilingual naming and optional image",
+        "back": "Back to Parent Categories",
+        "form": {
+          "title": "Category Information",
+          "description": "Fill in all required fields to create a new parent category. Image upload is optional but recommended.",
+          "submit": "Create Category",
+          "cancel": "Cancel",
+          "loading": "Creating category...",
+          "success": "Category created successfully!",
+          "error": "Failed to create category. Please try again."
+        },
+        "sections": {
+          "basicInfo": {
+            "title": "Basic Information",
+            "description": "Enter parent category details"
+          }
+        },
+        "fields": {
+          "englishTitle": {
+            "label": "Category Name (English)",
+            "placeholder": "Electronics",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the category name in English"
+          },
+          "arabicTitle": {
+            "label": "Category Name (Arabic)",
+            "placeholder": "إلكترونيات",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the category name in Arabic"
+          },
+          "image": {
+            "label": "Category Image",
+            "title": "Category Image (Optional)",
+            "description": "Upload a category image (JPG, PNG, WebP, SVG - max 5MB)",
+            "upload": "Click to upload image",
+            "change": "Change image",
+            "fileTypes": "JPG, PNG, SVG, WebP up to 5MB",
+            "preview": "Image Preview",
+            "previewPlaceholder": "Image preview will appear here",
+            "invalidType": "Please upload a valid image file (JPEG, PNG, WebP, SVG)",
+            "sizeError": "Image size should be less than 5MB"
+          }
+        }
+      }
+    },
+    "sub": {
+      "page": {
+        "title": "Sub Categories",
+        "description": "Manage and view sub categories with images and status",
+        "refresh": "Refresh",
+        "addCategory": "Add Sub Category",
+        "searchPlaceholder": "Search categories by title...",
+        "noCategories": "No sub categories found",
+        "noMatch": "No sub categories match your search criteria.",
+        "emptyList": "There are no sub categories in the database yet.",
+        "addFirstCategory": "Add Your First Sub Category",
+        "loading": "Loading sub categories...",
+        "errorTitle": "Failed to load sub categories",
+        "errorMessage": "There was an error fetching the sub categories data.",
+        "tryAgain": "Try Again",
+        "delete": {
+          "title": "Delete Sub Category",
+          "description": "Are you sure you want to delete this sub category? This action cannot be undone and may affect associated products.",
+          "success": "Sub category deleted successfully!",
+          "error": "Failed to delete sub category. Please try again."
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "editTitle": "Edit sub category",
+          "deleteTitle": "Delete sub category"
+        },
+        "columns": {
+          "id": "ID",
+          "englishTitle": "English Title",
+          "arabicTitle": "Arabic Title",
+          "status": "Status",
+          "type": "Type",
+          "created": "Created",
+          "lastUpdated": "Last Updated",
+          "actions": "Actions"
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "filters": {
+          "all": "All",
+          "status": {
+            "label": "Status",
+            "active": "Active",
+            "inactive": "Inactive"
+          },
+          "clear": "Clear Filters"
+        },
+        "imageAlt": {
+          "subcategory": "Sub category image"
+        }
+      },
+      "create": {
+        "title": "Add New Sub Category",
+        "description": "Create a new sub category under a parent category",
+        "back": "Back to Sub Categories",
+        "form": {
+          "title": "Sub Category Information",
+          "description": "Fill in the sub category details below",
+          "submit": "Create Sub Category",
+          "cancel": "Cancel",
+          "loading": "Creating sub category...",
+          "success": "Sub category created successfully!",
+          "error": "Failed to create sub category. Please try again."
+        },
+        "sections": {
+          "basicInfo": {
+            "title": "Basic Information",
+            "description": "Enter sub category details"
+          }
+        },
+        "fields": {
+          "englishTitle": {
+            "label": "Sub Category Name (English)",
+            "placeholder": "Mobile Phones",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the sub category name in English"
+          },
+          "arabicTitle": {
+            "label": "Sub Category Name (Arabic)",
+            "placeholder": "هواتف محمولة",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the sub category name in Arabic"
+          },
+          "type": {
+            "label": "Category Type",
+            "value": "SUB"
+          },
+          "parentId": {
+            "label": "Parent Category",
+            "placeholder": "Search for a parent category...",
+            "validation": "Please select a parent category",
+            "helper": "Type to search parent categories. Scroll to load more options."
+          },
+          "image": {
+            "label": "Sub Category Image",
+            "title": "Sub Category Image *",
+            "description": "Upload an image (JPG, PNG, WEBP - max 5MB)",
+            "upload": "Click to upload image",
+            "change": "Change image",
+            "fileTypes": "JPG, PNG, WEBP up to 5MB",
+            "preview": "Image Preview",
+            "previewPlaceholder": "Image preview will appear here",
+            "requiredError": "Sub category image is required",
+            "invalidType": "Please upload a valid image file (JPEG, PNG, WebP)",
+            "sizeError": "Image size should be less than 5MB"
+          }
+        }
+      }
+    },
+    "third": {
+      "page": {
+        "title": "Third Categories",
+        "description": "Manage and view third categories with images and status",
+        "refresh": "Refresh",
+        "addCategory": "Add Third Category",
+        "searchPlaceholder": "Search categories by title...",
+        "noCategories": "No third categories found",
+        "noMatch": "No third categories match your search criteria.",
+        "emptyList": "There are no third categories in the database yet.",
+        "addFirstCategory": "Add Your First Third Category",
+        "loading": "Loading third categories...",
+        "errorTitle": "Failed to load third categories",
+        "errorMessage": "There was an error fetching the third categories data.",
+        "tryAgain": "Try Again",
+        "delete": {
+          "title": "Delete Third Category",
+          "description": "Are you sure you want to delete this third category? This action cannot be undone and may affect associated products.",
+          "success": "Third category deleted successfully!",
+          "error": "Failed to delete third category. Please try again."
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "editTitle": "Edit third category",
+          "deleteTitle": "Delete third category"
+        },
+        "columns": {
+          "id": "ID",
+          "englishTitle": "English Title",
+          "arabicTitle": "Arabic Title",
+          "status": "Status",
+          "type": "Type",
+          "created": "Created",
+          "lastUpdated": "Last Updated",
+          "actions": "Actions"
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "types": {
+          "PARENT": "Parent",
+          "SUB": "Sub",
+          "THIRD": "Third"
+        },
+        "filters": {
+          "all": "All",
+          "status": {
+            "label": "Status",
+            "active": "Active",
+            "inactive": "Inactive"
+          },
+          "clear": "Clear Filters"
+        },
+        "imageAlt": {
+          "thirdcategory": "Third category image"
+        }
+      },
+      "create": {
+        "title": "Add New Third Category",
+        "description": "Create a new third category under a sub category",
+        "back": "Back to Third Categories",
+        "form": {
+          "title": "Third Category Information",
+          "description": "Fill in the third category details below",
+          "submit": "Create Third Category",
+          "cancel": "Cancel",
+          "loading": "Creating third category...",
+          "success": "Third category created successfully!",
+          "error": "Failed to create third category. Please try again."
+        },
+        "sections": {
+          "basicInfo": {
+            "title": "Basic Information",
+            "description": "Enter third category details"
+          }
+        },
+        "fields": {
+          "englishTitle": {
+            "label": "Third Category Name (English)",
+            "placeholder": "Mobile Phones",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the third category name in English"
+          },
+          "arabicTitle": {
+            "label": "Third Category Name (Arabic)",
+            "placeholder": "هواتف محمولة",
+            "validation": "Name must be at least 2 characters",
+            "helper": "Enter the third category name in Arabic"
+          },
+          "type": {
+            "label": "Category Type",
+            "value": "THIRD"
+          },
+          "parentId": {
+            "label": "Sub Category",
+            "placeholder": "Search for a sub category...",
+            "validation": "Please select a sub category",
+            "helper": "Type to search sub categories. Scroll to load more options."
+          },
+          "image": {
+            "label": "Third Category Image",
+            "title": "Third Category Image *",
+            "description": "Upload an image (JPG, PNG, WEBP - max 5MB)",
+            "upload": "Click to upload image",
+            "change": "Change image",
+            "fileTypes": "JPG, PNG, WEBP up to 5MB",
+            "preview": "Image Preview",
+            "previewPlaceholder": "Image preview will appear here",
+            "requiredError": "Third category image is required",
+            "invalidType": "Please upload a valid image file (JPEG, PNG, WebP)",
+            "sizeError": "Image size should be less than 5MB"
+          }
+        }
+      }
+    }
+  },
+
+  "users": {
+    "title": "Users",
+    "userName": "Username",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "noUsers": "No users found"
+  },
+  "forms": {
+    "formElements": "Form Elements",
+    "inputFields": "Input Fields",
+    "selectOptions": "Select Options",
+    "checkboxes": "Checkboxes",
+    "radios": "Radio Buttons",
+    "datePicker": "Date Picker",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "charts": {
+    "lineChart": "Line Chart",
+    "barChart": "Bar Chart",
+    "title": "Charts"
+  },
+  "ecommerce": {
+    "customers": "Customers",
+    "revenue": "Revenue",
+    "sales": "Sales",
+    "growth": "Growth",
+    "recentOrders": "Recent Orders",
+    "monthlySales": "Monthly Sales",
+    "monthlyTarget": "Monthly Target",
+    "statistics": "Statistics",
+    "demographic": "Demographic"
+  },
+  "filters": {
+    "page": {
+      "title": "Filter Management",
+      "description": "Manage and organize your product filters and attributes",
+      "loading": "Loading filters...",
+      "errorTitle": "Error loading filters",
+      "errorMessage": "Failed to load filters. Please try again.",
+      "noFilters": "No filters found",
+      "noMatch": "No filters match your search criteria",
+      "emptyList": "Get started by creating your first filter attribute",
+      "addFirstFilter": "Create First Filter",
+      "tryAgain": "Try Again",
+      "refresh": "Refresh",
+      "addFilter": "Add Filter",
+      "searchPlaceholder": "Search filters by name or key...",
+      "delete": {
+        "title": "Delete Filter",
+        "description": "Are you sure you want to delete this filter? This action cannot be undone.",
+        "success": "Filter deleted successfully",
+        "error": "Failed to delete filter"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "columns": {
+        "id": "ID",
+        "filter": "Filter",
+        "key": "Key",
+        "status": "Status",
+        "options": "Options",
+        "optionsCount": "options",
+        "active": "active",
+        "usage": "Usage",
+        "categories": "Categories",
+        "values": "Values",
+        "actions": "Actions"
+      },
+      "actions": {
+        "editTitle": "Edit filter",
+        "viewOptionsTitle": "View options",
+        "deleteTitle": "Delete filter"
+      },
+      "filters": {
+        "all": "All",
+        "status": {
+          "label": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        }
+      }
+    },
+    "create": {
+      "back": "Back to Filters",
+      "title": "Create New Filter",
+      "description": "Add a new filter attribute with custom options",
+      "form": {
+        "title": "Filter Details",
+        "description": "Fill in the details for your new filter attribute",
+        "submit": "Create Filter",
+        "cancel": "Cancel",
+        "loading": "Creating filter...",
+        "success": "Filter created successfully",
+        "error": "Failed to create filter"
+      },
+      "sections": {
+        "basicInfo": {
+          "title": "Basic Information",
+          "description": "Define the filter key, name, and source path"
+        },
+        "options": {
+          "title": "Filter Options",
+          "description": "Add and configure filter options"
+        }
+      },
+      "fields": {
+        "key": {
+          "label": "Filter Key",
+          "placeholder": "e.g., color, size, material",
+          "validation": "Key must be at least 2 characters",
+          "format": "Key must be lowercase letters and numbers only (no spaces)",
+          "helper": "Unique identifier for the filter (used in API calls)"
+        },
+        "name": {
+          "label": "Display Name",
+          "placeholder": "e.g., Color, Size, Material",
+          "validation": "Name must be at least 2 characters",
+          "helper": "User-friendly name displayed in the interface"
+        },
+        "sourcePath": {
+          "label": "Source Path (Optional)",
+          "placeholder": "e.g., product.color, variant.size",
+          "helper": "Path to the data source for this filter"
+        },
+        "isActive": {
+          "label": "Active Status",
+          "helper": "Enable or disable this filter attribute"
+        },
+        "options": {
+          "label": "Filter Options",
+          "helper": "Define the available values for this filter",
+          "add": "Add Option",
+          "remove": "Remove",
+          "option": "Option",
+          "value": "Value",
+          "valuePlaceholder": "e.g., red, blue, green",
+          "name": "Display Name",
+          "namePlaceholder": "e.g., Red, Blue, Green",
+          "sortOrder": "Order",
+          "status": "Active",
+          "validation": {
+            "minimum": "At least one option is required",
+            "required": "Both value and name are required",
+            "duplicate": "Option values must be unique"
+          }
+        }
+      }
+    },
+    "edit": {
+      "back": "Back to Filters",
+      "title": "Edit Filter",
+      "description": "Modify filter attribute and options",
+      "form": {
+        "title": "Edit Filter Details",
+        "description": "Update the details for this filter attribute",
+        "submit": "Update Filter",
+        "cancel": "Cancel",
+        "loading": "Updating filter...",
+        "success": "Filter updated successfully",
+        "error": "Failed to update filter"
+      }
+    },
+    "view": {
+      "back": "Back to Filters",
+      "title": "View Filter",
+      "description": "View filter details and configuration",
+      "loading": "Loading Filter...",
+      "loadingMessage": "Please wait while we fetch the filter information",
+      "error": "Filter Not Found",
+      "errorMessage": "The requested filter could not be found or you don't have permission to view it.",
+      "retry": "Back to Filters",
+      "basicInfo": {
+        "title": "Basic Information",
+        "description": "Filter attributes and metadata"
+      },
+      "options": {
+        "title": "Filter Options",
+        "description": "{{count}} options available"
+      },
+      "statistics": {
+        "title": "Statistics",
+        "description": "Usage and activity data"
+      },
+      "metadata": {
+        "title": "System Information",
+        "description": "Filter metadata"
+      },
+      "fields": {
+        "key": "Filter Key",
+        "name": "Display Name",
+        "sourcePath": "Source Path",
+        "status": "Status",
+        "createdAt": "Created At",
+        "updatedAt": "Last Updated",
+        "filterId": "Filter ID",
+        "option": "Option",
+        "value": "Value",
+        "displayName": "Display Name",
+        "sort": "Sort",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "stats": {
+        "totalOptions": "Total Options",
+        "activeOptions": "Active Options",
+        "categoriesUsing": "Categories Using",
+        "productsUsing": "Products Using"
+      },
+      "buttons": {
+        "edit": "Edit Filter",
+        "backToList": "Back to List",
+        "copy": "Copy to clipboard",
+        "copyId": "Copy ID"
+      },
+      "messages": {
+        "copied": "Copied to clipboard!"
+      }
+    },
+    "options": {
+      "page": {
+        "title": "Filter Options",
+        "description": "Manage options for filter",
+        "back": "Back to Filter",
+        "addOption": "Add Option",
+        "noOptions": "No options found",
+        "loading": "Loading options..."
+      },
+      "fields": {
+        "value": {
+          "label": "Value",
+          "placeholder": "Enter option value",
+          "validation": "Value is required"
+        },
+        "name": {
+          "label": "Display Name",
+          "placeholder": "Enter display name",
+          "validation": "Display name is required"
+        },
+        "sortOrder": {
+          "label": "Sort Order",
+          "placeholder": "Enter sort order",
+          "helper": "Lower numbers appear first"
+        },
+        "isActive": {
+          "label": "Active",
+          "helper": "Enable or disable this option"
+        }
+      }
+    }
+  },
+  "imageUploader": {
+    "uploadedAlt": "Uploaded {{number}}",
+    "removeImage": "Remove image",
+    "removeAllImages": "Remove all images",
+    "status": {
+      "uploading": "Uploading...",
+      "compressing": "Compressing...",
+      "uploadingToServer": "Uploading to server...",
+      "compressingOptimizing": "Compressing and optimizing..."
+    },
+    "buttons": {
+      "browseFiles": "Browse Files",
+      "downloadZip": "Download as ZIP",
+      "downloadImage": "Download Image",
+      "downloadImages": "Download Images"
+    },
+    "dragDrop": {
+      "single": "Drag and drop an image, or click to browse",
+      "multiple": "Drag and drop images, or click to browse"
+    },
+    "stats": {
+      "totalFiles": "Total files",
+      "kb": "KB"
+    },
+    "download": {
+      "defaultFileName": "compressed_image.jpg"
+    },
+    "features": {
+      "title": "Features",
+      "compression": "Automatic image compression (max 1200px, 80% quality)",
+      "serverUpload": "Server upload with progress tracking",
+      "multipleFiles": "Multiple file support",
+      "singleFile": "Single file upload",
+      "zipDownload": "ZIP download includes compressed + original files",
+      "sizeOptimization": "Size optimization with compression ratio display",
+      "individualDownload": "Individual image download option"
+    },
+    "errors": {
+      "canvasContext": "Could not get canvas context",
+      "compressFailed": "Could not compress image",
+      "loadImage": "Could not load image",
+      "readFile": "Could not read file",
+      "noResponse": "Upload failed: No response from server",
+      "zipFailed": "Failed to create zip file. Please try again."
+    },
+    "zip": {
+      "readmeTitle": "Image Compression Details",
+      "totalFiles": "Total Files",
+      "generated": "Generated"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "DisplayOrder": "Display Order",
+    "subtitle": "Manage your product catalog",
+    "addProduct": "Add Product",
+    "loading": "Loading products...",
+    "loadError": "Failed to load products",
+    "loadErrorDesc": "Unable to load products. Please try again.",
+    "noProductsFound": "No products found",
+    "noSearchResults": "No products match your search criteria",
+    "noProductsYet": "No products yet. Create your first product!",
+    "addFirstProduct": "Add First Product",
+    "searchPlaceholder": "Search by name, SKU...",
+    "deleteTitle": "Delete Product",
+    "deleteDescription": "Are you sure you want to delete this product? This action cannot be undone.",
+    "lowStock": "Low",
+    "outOfStock": "Out of Stock",
+
+    "filters": {
+      "stockStatus": "Stock Status",
+      "all": "All Products",
+      "lowStock": "Low Stock (≤20)",
+      "outOfStock": "Out of Stock",
+      "highStock": "High Stock (>50)"
+    },
+
+    "table": {
+      "sku": "SKU",
+      "englishName": "English Name",
+      "arabicName": "Arabic Name",
+      "basePrice": "Price",
+      "offerPrice": "Offer",
+      "stock": "Stock",
+      "description": "Description"
+    },
+
+    "stats": {
+      "totalProducts": "Total Products",
+      "totalStock": "Total Stock",
+      "withOffers": "With Offers",
+      "totalValue": "Total Value"
+    },
+
+    "messages": {
+      "deleteSuccess": "Product deleted successfully",
+      "deleteFailed": "Failed to delete product",
+      "backToProducts": "Back to Products",
+      "updateSuccess": "Product updated successfully!",
+      "creating": "Creating product...",
+      "createSuccess": "Product created successfully!",
+      "createFailed": "Failed to create product",
+      "noResponse": "No response from server"
+    },
+
+    "form": {
+      "basicInformation": "Basic Information",
+      "addNewProduct": "Add New Product",
+      "enterProductDetailsComprehensive": "Enter comprehensive product details with variants, pricing, and shipping options",
+      "productInformation": "Product Information",
+      "enterProductDetails": "Enter basic product information",
+      "fillProductDetails": "Fill in all product details including variants and pricing",
+      "variantImages": "Variant Images",
+      "addImage": "Add Image",
+      "featurePreview": "Preview:",
+      "featureFormattingGuide": "Formatting Guide:",
+      "useBulletPoints": "Use bullet points for unordered lists",
+      "useNumberedLists": "Use numbered lists for ordered features",
+      "addDescriptions": "Add descriptions for each feature",
+      "htmlWillBePreserved": "HTML formatting will be preserved",
+      "featureRequired": "Please add at least one feature",
+      "image": "Image",
+      "sku": "SKU",
+      "updatedAtHelper": "Last updated at",
+      "createdAtHelper": "Created at",
+      "systemInformation": "System Information",
+      "option": "option",
+      "stockQuantityHelper": "Stock quantity for this variant",
+      "editProductDetails": "Edit Product Details",
+      "editProduct": "Edit Product",
+      "updateProduct": "Update Product",
+      "sku": "SKU",
+      "skuPlaceholder": "Enter SKU",
+      "skuHelper": "SKU Helper",
+      "skuMinLength": "SKU must be at least 2 characters long",
+      "imageUrl": "Image URL",
+      "uploadVariantImage": "Upload variant image",
+      "altText": "Alt Text",
+      "altTextPlaceholder": "Image description",
+      "primaryImage": "Primary Image",
+      "displayOrder": "Display Order",
+      "noVariantImages": "No variant images added",
+      "addFirstImage": "Add first image",
+      "productNameEnglish": "Product Name (English)",
+      "productNameEnglishPlaceholder": "Enter product name in English",
+      "productNameEnglishHelper": "Product name as shown to English-speaking customers",
+
+      "productNameArabic": "Product Name (Arabic)",
+      "productNameArabicPlaceholder": "Enter product name in Arabic",
+      "productNameArabicHelper": "Product name as shown to Arabic-speaking customers",
+
+      "nameMinLength": "Name must be at least 2 characters",
+
+      "descriptionEnglish": "Description (English)",
+      "descriptionEnglishPlaceholder": "Enter detailed description in English",
+      "descriptionEnglishHelper": "Detailed product description for English-speaking customers",
+
+      "descriptionArabic": "Description (Arabic)",
+      "descriptionArabicPlaceholder": "Enter detailed description in Arabic",
+      "descriptionArabicHelper": "Detailed product description for Arabic-speaking customers",
+
+      "descriptionMinLength": "Description must be at least 10 characters",
+
+      "features": "Features",
+      "featurePlaceholder": "Enter a feature",
+      "featuresHelper": "List product features separated by commas",
+
+      "brand": "Brand",
+      "searchBrand": "Search brand...",
+      "selectBrandRequired": "Please select a brand",
+      "selectBrandHelper": "Select the product brand",
+
+      "category": "Category",
+      "searchCategory": "Search category...",
+      "selectCategoryRequired": "Please select a category",
+      "selectCategoryHelper": "Select the product category",
+
+      "pricing": "Pricing",
+      "pricingInformation": "Pricing Information",
+      "enterPricingDetails": "Set product pricing and offers",
+
+      "basePrice": "Base Price",
+      "basePricePlaceholder": "Enter base price",
+      "basePriceHelper": "Original price before discount",
+
+      "offerPrice": "Offer Price",
+      "offerPricePlaceholder": "Enter offer price",
+      "offerPriceHelper": "Discounted price (optional)",
+
+      "priceMinValue": "Price must be 0 or higher",
+
+      "shippingOptions": "Shipping Options",
+      "selectShippingOptions": "Configure shipping and gift options",
+
+      "freeDelivery": "Free Delivery",
+      "freeDeliveryHelper": "Offer free delivery for this product",
+
+      "fastShipping": "Fast Shipping",
+      "fastShippingHelper": "Enable fast shipping option",
+
+      "ableToGift": "Gift Option",
+      "ableToGiftHelper": "Allow this product to be wrapped as a gift",
+
+      "isActive": "Active Product",
+      "isActiveHelper": "Make product available for purchase",
+
+      "mainImage": "Main Image",
+      "mainImageHelper": "Upload main product image",
+      "imageRequired": "Please upload a main image",
+
+      "filterValues": "Filter Values",
+      "filter": "Filter",
+      "attribute": "Attribute",
+      "selectAttribute": "Select attribute",
+      "options": "Options",
+      "selectOptions": "Select options",
+      "filterValuesHelper": "Set filter attributes for better product discovery",
+
+      "variants": "Variants",
+      "variant": "Variant",
+      "active": "Active",
+
+      "price": "Price",
+      "pricePlaceholder": "Enter variant price",
+
+      "stockQuantity": "Stock Quantity",
+      "stockQuantityPlaceholder": "Enter stock quantity",
+
+      "variantAttributes": "Variant Attributes",
+      "selectOption": "Select option",
+      "variantsHelper": "Add product variants with different attributes and pricing",
+
+      "createProduct": "Create Product"
+    }
+  },
+  "messages": {
+    "confirmDelete": "Are you sure you want to delete this item?",
+    "deleteSuccess": "Item deleted successfully",
+    "saveSuccess": "Item saved successfully",
+    "updateSuccess": "Item updated successfully",
+    "createSuccess": "Item created successfully",
+    "error": "An error occurred",
+    "loadingError": "Failed to load data",
+    "noPermission": "You don't have permission to perform this action",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordMismatch": "Passwords do not match"
+  }
+}

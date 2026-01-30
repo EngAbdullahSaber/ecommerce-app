@@ -1,5 +1,3 @@
-// components/DeleteDialog.tsx
-import React from "react";
 import { AlertTriangle, X } from "lucide-react";
 
 interface DeleteDialogProps {
@@ -10,6 +8,7 @@ interface DeleteDialogProps {
   description?: string;
   itemName?: string;
   isLoading?: boolean;
+  error?: string; // Add error prop
 }
 
 export function DeleteDialog({
@@ -20,6 +19,7 @@ export function DeleteDialog({
   description = "Are you sure you want to delete this item? This action cannot be undone.",
   itemName,
   isLoading = false,
+  error, // Add error prop
 }: DeleteDialogProps) {
   if (!isOpen) return null;
 
@@ -103,19 +103,35 @@ export function DeleteDialog({
             </div>
           </div>
 
-          {/* Warning Notice */}
-          <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 rounded-xl">
-            <div className="flex-shrink-0 mt-0.5">
-              <div className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-red-600 dark:bg-red-400"></div>
+          {/* Error Message */}
+          {error && (
+            <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 rounded-xl animate-in fade-in duration-200">
+              <div className="flex-shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                  <X className="w-3 h-3 text-red-600 dark:text-red-400" />
+                </div>
               </div>
+              <p className="text-sm text-red-700 dark:text-red-400 leading-relaxed">
+                <span className="font-semibold">Error:</span> {error}
+              </p>
             </div>
-            <p className="text-xs text-red-700 dark:text-red-400 leading-relaxed">
-              <span className="font-semibold">Warning:</span> This action is
-              permanent and cannot be undone. All associated data will be
-              permanently deleted.
-            </p>
-          </div>
+          )}
+
+          {/* Warning Notice */}
+          {!error && (
+            <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 rounded-xl">
+              <div className="flex-shrink-0 mt-0.5">
+                <div className="w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-red-600 dark:bg-red-400"></div>
+                </div>
+              </div>
+              <p className="text-xs text-red-700 dark:text-red-400 leading-relaxed">
+                <span className="font-semibold">Warning:</span> This action is
+                permanent and cannot be undone. All associated data will be
+                permanently deleted.
+              </p>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 pt-2">
@@ -125,102 +141,29 @@ export function DeleteDialog({
               disabled={isLoading}
               className="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Cancel
+              {error ? "Close" : "Cancel"}
             </button>
 
-            {/* Delete Button */}
-            <button
-              onClick={handleConfirm}
-              disabled={isLoading}
-              className="flex-1 px-4 py-3 bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-            >
-              {isLoading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Deleting...</span>
-                </>
-              ) : (
-                <span>Delete</span>
-              )}
-            </button>
+            {/* Delete Button - Only show if no error */}
+            {!error && (
+              <button
+                onClick={handleConfirm}
+                disabled={isLoading}
+                className="flex-1 px-4 py-3 bg-gradient-to-br from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <span>Delete</span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-// Updated orders.tsx - Add these changes to your existing file
-/*
-// Add this state at the top of your component:
-const [deleteDialog, setDeleteDialog] = useState<{
-  isOpen: boolean;
-  order: Order | null;
-}>({
-  isOpen: false,
-  order: null,
-});
-
-// Add delete mutation:
-const deleteMutation = useMutation({
-  mutationFn: async (orderId: number) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // Replace with your actual API call:
-    // return await deleteOrder(orderId);
-  },
-  onSuccess: () => {
-    // Invalidate and refetch orders
-    queryClient.invalidateQueries({ queryKey: ['orders'] });
-    // Close dialog
-    setDeleteDialog({ isOpen: false, order: null });
-    // Show success message (add your toast notification here)
-    console.log('Order deleted successfully!');
-  },
-  onError: (error) => {
-    console.error('Delete failed:', error);
-    // Show error message (add your toast notification here)
-  },
-});
-
-// Update handleAction function to open dialog:
-const handleAction = async (action: string, row: Order) => {
-  console.log("Action:", action, "Row:", row);
-
-  switch (action) {
-    case "view":
-      alert(`View order: ${row.orderNumber}`);
-      break;
-    case "edit":
-      alert(`Edit order: ${row.orderNumber}`);
-      break;
-    case "delete":
-      // Open delete dialog instead of window.confirm
-      setDeleteDialog({ isOpen: true, order: row });
-      break;
-    case "track":
-      alert(`Track order: ${row.orderNumber}`);
-      break;
-    case "email":
-      window.open(`mailto:${row.customer.email}`, "_blank");
-      break;
-    default:
-      break;
-  }
-};
-
-// Add the dialog component before the closing </div> of your main container:
-<DeleteDialog
-  isOpen={deleteDialog.isOpen}
-  onClose={() => setDeleteDialog({ isOpen: false, order: null })}
-  onConfirm={() => {
-    if (deleteDialog.order) {
-      deleteMutation.mutate(deleteDialog.order.id);
-    }
-  }}
-  title="Delete Order"
-  description="Are you sure you want to delete this order? This action cannot be undone and all order data will be permanently removed."
-  itemName={deleteDialog.order?.orderNumber}
-  isLoading={deleteMutation.isPending}
-/>
-*/

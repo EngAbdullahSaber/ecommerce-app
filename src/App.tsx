@@ -71,6 +71,9 @@ import ProductsPage from "./pages/Products/ProductsPage";
 import ViewProductPage from "./pages/Products/ViewProductPage";
 import CreateProductPage from "./pages/Products/CreateProductPage";
 import UpdateProductPage from "./pages/Products/UpdateProductPage";
+import PromoRulesPage from "./pages/PromoRules/PromoRulesPage";
+import CreatePromoRules from "./pages/PromoRules/CreatePromoRules";
+import UpdatePromoRules from "./pages/PromoRules/UpdatePromoRules";
 
 export default function App() {
   useLanguage();
@@ -191,6 +194,11 @@ export default function App() {
             <Route path="products/create" element={<CreateProductPage />} />
             <Route path="products/edit/:id" element={<UpdateProductPage />} />
             <Route path="products/view/:id" element={<ViewProductPage />} />
+
+            <Route path="promo-rules" element={<PromoRulesPage />} />
+            <Route path="promo-rules/create" element={<CreatePromoRules />} />
+            <Route path="promo-rules/edit/:id" element={<UpdatePromoRules />} />
+            {/* <Route path="promo-rules/view/:id" element={<ViewPromoRulePage />} /> */}
 
             <Route path="create-order" element={<CreateOrderPage />} />
             <Route path="update-order/:id" element={<UpdateOrderPage />} />

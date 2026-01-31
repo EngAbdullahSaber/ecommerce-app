@@ -219,6 +219,11 @@ const AppSidebar: React.FC = () => {
       name: t("sidebar.products"),
       path: "/products",
     },
+    {
+      icon: <FiShoppingBag className="w-5 h-5" />,
+      name: t("sidebar.promoRules"),
+      path: "/promo-rules",
+    },
   ];
 
   const categoryItems: CategoryItem[] = [

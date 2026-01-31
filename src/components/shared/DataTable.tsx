@@ -45,7 +45,6 @@ interface DataTableProps {
   onSearch?: (query: string) => void;
   maxHeight?: string; // Optional: control max height
 }
-
 export function DataTable({
   columns,
   data,
@@ -94,6 +93,10 @@ export function DataTable({
     setSearchQuery(query);
     onSearch?.(query);
   };
+  console.log(totalItems);
+  console.log(totalPages);
+  console.log(startIndex);
+  console.log(endIndex);
 
   const defaultEmptyState = (
     <tr>

@@ -1,4 +1,5 @@
- import { X } from "lucide-react";
+import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 export const Input = ({
   value,
   onChange,
@@ -6,7 +7,10 @@ export const Input = ({
   type = "text",
   className = "",
   clearable,
- }: any) => {
+}: any) => {
+  const { t, i18n } = useTranslation();
+
+  const lang = i18n.language || "en";
   return (
     <div className="relative">
       <input
@@ -22,7 +26,7 @@ export const Input = ({
       {clearable && value && (
         <button
           onClick={() => onChange("")}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+          className={`absolute ${lang === "ar" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors`}
         >
           <X size={16} className="text-gray-400" />
         </button>

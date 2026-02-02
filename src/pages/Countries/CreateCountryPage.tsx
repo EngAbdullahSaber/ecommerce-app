@@ -47,34 +47,12 @@ export default function CreateCountryPage() {
     {
       name: "flag",
       label: t("countries.form.countryFlag"),
-      type: "image", // or "image"
+      type: "image",
       required: true,
-      cols: 12,
-      accept: ".jpg,.jpeg,.png,.svg,.webp",
-      maxSize: 5 * 1024 * 1024, // 5MB in bytes
-      allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp"],
-      // You can also add a custom validation function
-      validate: (value) => {
-        if (value instanceof File) {
-          // Validate size
-          if (value.size > 5 * 1024 * 1024) {
-            return t("countries.validations.flagRequired");
-          }
-
-          // Validate type
-          const allowedTypes = [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/svg+xml",
-            "image/webp",
-          ];
-
-          if (!allowedTypes.includes(value.type.toLowerCase())) {
-            return t("countries.validations.flagRequired");
-          }
-        }
-        return true;
+      helperText: t("countries.form.countryFlag"),
+      imageUploadConfig: {
+        maxSize: 5 * 1024 * 1024,
+        accept: "image/jpeg,image/png,image",
       },
     },
   ];
@@ -122,7 +100,7 @@ export default function CreateCountryPage() {
         }, 1500);
       } else {
         throw new Error(
-          t("countries.form.createError", { message: "No response" })
+          t("countries.form.createError", { message: "No response" }),
         );
       }
     } catch (error: any) {
@@ -134,7 +112,7 @@ export default function CreateCountryPage() {
         t("countries.form.createError", {
           message: error.message || t("common.error"),
         }),
-        { duration: 3000 }
+        { duration: 3000 },
       );
 
       // Re-throw to show form error
@@ -147,19 +125,6 @@ export default function CreateCountryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-purple-950/30 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/countries")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("countries.backToList")}
-        </button>
-
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

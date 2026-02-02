@@ -427,7 +427,273 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
     </div>
   );
 };
+const ImageInputComponent: React.FC<ImageInputProps> = ({
+  name,
+  value,
+  onChange,
+  disabled = false,
+  readOnly = false,
+  config = {},
+  errors,
+  fullWidth = false,
+  currentImage,
+}) => {
+  const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const {
+    maxSize = 5 * 1024 * 1024,
+    accept = "image/*",
+    multiple = false,
+    maxFiles = multiple ? 10 : 1,
+    preview = true,
+    currentImageLabel = "Current image",
+    newImageLabel = "New image",
+  } = config;
+
+  // Initialize preview URL
+  useEffect(() => {
+    if (value instanceof File) {
+      // New file uploaded
+      const url = URL.createObjectURL(value);
+      setPreviewUrl(url);
+    } else if (typeof value === "string") {
+      // URL string (could be current image)
+      setPreviewUrl(value);
+    } else {
+      // No image
+      setPreviewUrl(null);
+    }
+
+    // Cleanup function
+    return () => {
+      if (previewUrl && previewUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [value, currentImage]);
+
+  const validateFile = (file: File): boolean => {
+    if (file.size > maxSize) {
+      setError(`File size exceeds ${maxSize / (1024 * 1024)}MB limit`);
+      return false;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setError("Only image files are allowed");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled || readOnly) return;
+
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    // Validate file
+    const file = files[0];
+    if (!validateFile(file)) {
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+
+    try {
+      onChange(file);
+    } catch (err) {
+      setError("Failed to process image");
+      console.error("Error:", err);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleRemove = () => {
+    if (disabled || readOnly) return;
+
+    // Clear the file
+    onChange(null);
+
+    // Revoke blob URL if it exists
+    if (previewUrl && previewUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    setPreviewUrl(currentImage || null);
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current && !disabled && !readOnly) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const displayImage = previewUrl || currentImage;
+  const isNewImage = value instanceof File;
+
+  // For read-only mode
+  if (readOnly) {
+    return (
+      <div className="space-y-3 w-full">
+        <div className="text-sm text-slate-600 dark:text-slate-400">
+          {displayImage ? "Image" : "No image"}
+        </div>
+        {displayImage && (
+          <div className="relative rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800">
+            <img
+              src={displayImage}
+              alt="Preview"
+              className="w-full h-64 object-contain"
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3 w-full">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        multiple={multiple}
+        onChange={handleFileChange}
+        className="hidden"
+        disabled={disabled || uploading}
+      />
+
+      {/* Main Upload/Preview Box */}
+      <div
+        onClick={triggerFileInput}
+        className={`
+          relative border-2 border-dashed rounded-2xl p-6 cursor-pointer w-full
+          transition-all duration-300 hover:shadow-lg min-h-[300px]
+          ${
+            disabled || uploading
+              ? "border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 cursor-not-allowed opacity-60"
+              : errors || error
+                ? "border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-950/20 hover:border-red-400 dark:hover:border-red-600"
+                : "border-slate-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-600 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800/80"
+          }
+        `}
+      >
+        {displayImage ? (
+          // Show image preview
+          <div className="flex flex-col items-center justify-center h-full space-y-4">
+            <div className="relative w-full h-64 rounded-lg overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <img
+                src={displayImage}
+                alt={isNewImage ? newImageLabel : currentImageLabel}
+                className="w-full h-full object-contain"
+              />
+
+              {/* Image label */}
+              <div className="absolute top-2 left-2">
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium ${
+                    isNewImage
+                      ? "bg-blue-500/90 text-white"
+                      : "bg-slate-500/90 text-white"
+                  }`}
+                >
+                  {isNewImage ? "New" : "Current"}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  triggerFileInput();
+                }}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center gap-2"
+              >
+                <Upload size={16} />
+                Change Image
+              </button>
+
+              {value && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemove();
+                  }}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <XCircle size={16} />
+                  Remove
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          // Show upload prompt
+          <div className="flex flex-col items-center justify-center h-full space-y-4">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 flex items-center justify-center">
+              {uploading ? (
+                <Loader2
+                  size={32}
+                  className="animate-spin text-blue-600 dark:text-blue-400"
+                />
+              ) : (
+                <ImageIcon
+                  size={32}
+                  className="text-blue-600 dark:text-blue-400"
+                />
+              )}
+            </div>
+            <div className="text-center">
+              <div className="font-medium text-slate-800 dark:text-slate-200">
+                {uploading ? "Uploading..." : "Click to upload image"}
+              </div>
+              <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Drag & drop or click to upload
+              </div>
+              <div className="text-xs text-slate-400 dark:text-slate-500 mt-2">
+                Supported: JPG, PNG, GIF, WEBP • Max: {maxSize / (1024 * 1024)}
+                MB
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Error Messages */}
+      {(errors || error) && (
+        <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 w-full">
+          <AlertCircle size={16} />
+          <span>{error || (errors?.message as string)}</span>
+        </div>
+      )}
+
+      {/* Helper Text */}
+      {!errors && !error && (
+        <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2 w-full">
+          <Upload size={14} />
+          <span>
+            {currentImage
+              ? "Click the box to change the current image. Leave empty to keep current image."
+              : "Upload an image by clicking above or dragging and dropping"}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
 export function GenericUpdateForm<T = any>({
   title,
   description,
@@ -999,33 +1265,21 @@ export function GenericUpdateForm<T = any>({
           <Controller
             name={field.name}
             control={control}
-            render={({ field: controllerField }) => (
-              <div>
-                <input
-                  type="file"
-                  accept={field.accept}
-                  multiple={field.multiple}
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files && files.length > 0) {
-                      if (field.multiple) {
-                        controllerField.onChange(Array.from(files));
-                      } else {
-                        controllerField.onChange(files[0]);
-                      }
-                    }
+            render={({ field: controllerField, fieldState }) => (
+              <div style={{ width: field.fullWidth ? "100%" : "auto" }}>
+                <ImageInputComponent
+                  name={field.name}
+                  value={controllerField.value}
+                  onChange={(value) => {
+                    controllerField.onChange(value);
                   }}
                   disabled={field.disabled || isSubmitting || field.readOnly}
-                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  readOnly={field.readOnly}
+                  config={field.imageUploadConfig}
+                  errors={fieldState.error}
+                  fullWidth={field.fullWidth}
+                  currentImage={originalData?.[field.name]}
                 />
-                {controllerField.value && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                    Selected:{" "}
-                    {field.multiple
-                      ? `${(controllerField.value as File[]).length} files`
-                      : (controllerField.value as File).name}
-                  </p>
-                )}
               </div>
             )}
           />

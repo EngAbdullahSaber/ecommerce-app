@@ -293,7 +293,7 @@ export default function CountriesPage() {
       key: "name",
       label: t("countries.table.englishName"),
       render: (value: CountryName) => (
-        <div className="font-semibold text-slate-900 dark:text-white">
+        <div className="font-semibold text-center text-slate-900 dark:text-white">
           {value.english?.trim() || "N/A"}
         </div>
       ),
@@ -302,10 +302,7 @@ export default function CountriesPage() {
       key: "name",
       label: t("countries.table.arabicName"),
       render: (value: CountryName) => (
-        <div
-          className="font-semibold text-slate-900 dark:text-white text-right"
-          dir="rtl"
-        >
+        <div className="font-semibold text-center text-slate-900 dark:text-white  ">
           {value.arabic?.trim() || "غير متوفر"}
         </div>
       ),
@@ -453,6 +450,19 @@ export default function CountriesPage() {
           </div>
         </div>
 
+        <TableFilters
+          searchTerm={searchTerm}
+          show={false}
+          onSearchChange={setSearchTerm}
+          statusFilter={statusFilter}
+          onStatusFilter={setStatusFilter}
+          showFilters={showFilters}
+          onShowFiltersChange={setShowFilters}
+          onClearFilters={clearFilters}
+          searchPlaceholder={t("countries.searchPlaceholder")}
+          filterOptions={[]}
+          filterLabel={t("common.status")}
+        />
         {/* Loading State */}
         {isLoading && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 text-center">
@@ -462,7 +472,6 @@ export default function CountriesPage() {
             </p>
           </div>
         )}
-
         {/* Error State */}
         {isError && !isLoading && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 text-center">
@@ -483,19 +492,6 @@ export default function CountriesPage() {
             </button>
           </div>
         )}
-        <TableFilters
-          searchTerm={searchTerm}
-          show={false}
-          onSearchChange={setSearchTerm}
-          statusFilter={statusFilter}
-          onStatusFilter={setStatusFilter}
-          showFilters={showFilters}
-          onShowFiltersChange={setShowFilters}
-          onClearFilters={clearFilters}
-          searchPlaceholder={t("countries.searchPlaceholder")}
-          filterOptions={[]}
-          filterLabel={t("common.status")}
-        />
         {/* Empty State */}
         {!isLoading && !isError && countriesResponse.data.length === 0 && (
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 text-center">

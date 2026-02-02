@@ -1,4 +1,4 @@
-// components/shared/GenericForm.tsx - UPDATED WITH PAGINATED SELECT
+// components/shared/GenericForm.tsx - UPDATED WITH FULL-WIDTH IMAGE INPUT
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
@@ -17,6 +17,9 @@ import {
   Plus,
   Trash2,
   Check,
+  Image as ImageIcon,
+  Eye,
+  XCircle,
 } from "lucide-react";
 
 // Field Types
@@ -65,6 +68,18 @@ export interface PaginatedSelectConfig {
   transformResponse?: (data: any) => FieldOption[];
 }
 
+// Image upload configuration
+export interface ImageUploadConfig {
+  uploadEndpoint?: string; // API endpoint for image upload
+  maxSize?: number; // Max file size in bytes (default: 5MB)
+  accept?: string; // Acceptable file types (default: image/*)
+  multiple?: boolean; // Allow multiple images
+  maxFiles?: number; // Max number of files (only for multiple)
+  preview?: boolean; // Show image preview
+  onUpload?: (file: File) => Promise<string>; // Custom upload function
+  onRemove?: (url: string) => Promise<void>; // Custom remove function
+}
+
 // Extended FormField to include render prop
 export interface FormField {
   name: string;
@@ -95,6 +110,10 @@ export interface FormField {
   paginatedSelectConfig?: PaginatedSelectConfig;
   initialValue?: any;
   readOnly?: boolean;
+  // Image specific props
+  imageUploadConfig?: ImageUploadConfig;
+  // New prop to force full width for specific fields
+  fullWidth?: boolean;
 }
 
 export interface GenericFormProps {
@@ -234,6 +253,424 @@ function usePaginatedSelect(
   };
 }
 
+// Image Input Component - UPDATED WITH FULL WIDTH
+interface ImageInputProps {
+  name: string;
+  value: any;
+  onChange: (value: any) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
+  config?: ImageUploadConfig;
+  errors?: any;
+  fullWidth?: boolean;
+}
+
+const ImageInputComponent: React.FC<ImageInputProps> = ({
+  name,
+  value,
+  onChange,
+  disabled = false,
+  readOnly = false,
+  config = {},
+  errors,
+  fullWidth = false,
+}) => {
+  const [uploading, setUploading] = useState(false);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [error, setError] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    uploadEndpoint,
+    maxSize = 5 * 1024 * 1024, // 5MB default
+    accept = "image/*",
+    multiple = false,
+    maxFiles = multiple ? 10 : 1,
+    preview = true,
+    onUpload,
+    onRemove,
+  } = config;
+
+  // Initialize preview URLs from value
+  useEffect(() => {
+    if (value) {
+      if (Array.isArray(value)) {
+        setPreviewUrls(value);
+      } else if (typeof value === "string") {
+        setPreviewUrls([value]);
+      } else if (value instanceof File) {
+        const url = URL.createObjectURL(value);
+        setPreviewUrls([url]);
+      }
+    } else {
+      setPreviewUrls([]);
+    }
+  }, [value]);
+
+  // Cleanup preview URLs
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [previewUrls]);
+
+  const validateFile = (file: File): boolean => {
+    // Check file size
+    if (file.size > maxSize) {
+      setError(`File size exceeds ${maxSize / (1024 * 1024)}MB limit`);
+      return false;
+    }
+
+    // Check file type
+    if (!file.type.startsWith("image/")) {
+      setError("Only image files are allowed");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
+
+  const handleFileUpload = async (file: File): Promise<File | string> => {
+    if (onUpload) {
+      return await onUpload(file);
+    }
+
+    if (uploadEndpoint) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(uploadEndpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      return data.url || data.path || data.imageUrl;
+    }
+
+    // If no upload endpoint provided, return as base64
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled || readOnly) return;
+
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    // Validate number of files
+    const currentCount = Array.isArray(value) ? value.length : value ? 1 : 0;
+    if (currentCount + files.length > maxFiles) {
+      setError(`Maximum ${maxFiles} file(s) allowed`);
+      return;
+    }
+
+    // Validate each file
+    for (const file of files) {
+      if (!validateFile(file)) {
+        return;
+      }
+    }
+
+    setUploading(true);
+    setError("");
+
+    try {
+      // Don't upload immediately, just pass the File objects
+      if (multiple) {
+        const newValue = Array.isArray(value) ? [...value, ...files] : files;
+        onChange(newValue);
+      } else {
+        onChange(files[0]);
+      }
+
+      // Create preview URLs
+      const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
+      setPreviewUrls((prev) => [...prev, ...newPreviewUrls]);
+    } catch (err) {
+      setError("Failed to process image(s)");
+      console.error("Error:", err);
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleRemove = async (index: number) => {
+    if (disabled || readOnly) return;
+
+    const urlToRemove = previewUrls[index];
+    const isBlobUrl = urlToRemove.startsWith("blob:");
+
+    // Call custom remove function if provided
+    if (onRemove && !isBlobUrl) {
+      try {
+        await onRemove(urlToRemove);
+      } catch (err) {
+        console.error("Remove error:", err);
+      }
+    }
+
+    // Update value
+    if (multiple) {
+      const newValue = Array.isArray(value)
+        ? value.filter((_, i) => i !== index)
+        : [];
+      onChange(newValue);
+    } else {
+      onChange("");
+    }
+
+    // Update preview URLs
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+
+    // Revoke blob URL if it's a temporary preview
+    if (isBlobUrl) {
+      URL.revokeObjectURL(urlToRemove);
+    }
+  };
+
+  const handleClearAll = () => {
+    if (disabled || readOnly) return;
+
+    // Revoke all blob URLs
+    previewUrls.forEach((url) => {
+      if (url.startsWith("blob:")) {
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    // Call remove for each non-blob URL
+    if (onRemove) {
+      previewUrls.forEach((url) => {
+        if (!url.startsWith("blob:")) {
+          onRemove(url).catch(console.error);
+        }
+      });
+    }
+
+    onChange(multiple ? [] : "");
+    setPreviewUrls([]);
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current && !disabled && !readOnly) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // For read-only mode
+  if (readOnly) {
+    return (
+      <div className="space-y-3 w-full">
+        <div className="text-sm text-slate-600 dark:text-slate-400">
+          {previewUrls.length === 0
+            ? "No images"
+            : `${previewUrls.length} image(s)`}
+        </div>
+        {preview && previewUrls.length > 0 && (
+          <div
+            className={`grid gap-2 ${fullWidth ? "grid-cols-1" : "grid-cols-3 sm:grid-cols-4 md:grid-cols-5"}`}
+          >
+            {previewUrls.map((url, index) => (
+              <div
+                key={index}
+                className={`relative rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 ${
+                  fullWidth ? "w-full" : "aspect-square"
+                }`}
+                style={fullWidth ? { height: "300px" } : {}}
+              >
+                <img
+                  src={url}
+                  alt={`Preview ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => window.open(url, "_blank")}
+                  className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/20 transition-colors group"
+                >
+                  <Eye
+                    size={20}
+                    className="text-white/0 group-hover:text-white/80 transition-colors"
+                  />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3 w-full">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        multiple={multiple}
+        onChange={handleFileChange}
+        className="hidden"
+        disabled={disabled || uploading}
+      />
+
+      {/* Upload Area - UPDATED FOR FULL WIDTH */}
+      <div
+        onClick={triggerFileInput}
+        className={`
+          relative border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer w-full
+          transition-all duration-300 hover:shadow-lg
+          ${
+            disabled || uploading
+              ? "border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 cursor-not-allowed opacity-60"
+              : errors || error
+                ? "border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-950/20 hover:border-red-400 dark:hover:border-red-600"
+                : "border-slate-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-600 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800/80"
+          }
+        `}
+        style={fullWidth ? { width: "100%" } : {}}
+      >
+        <div className="flex flex-col items-center justify-center space-y-3 w-full">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 flex items-center justify-center">
+            {uploading ? (
+              <Loader2
+                size={24}
+                className="animate-spin text-blue-600 dark:text-blue-400"
+              />
+            ) : (
+              <ImageIcon
+                size={24}
+                className="text-blue-600 dark:text-blue-400"
+              />
+            )}
+          </div>
+          <div className="w-full">
+            <div className="font-medium text-slate-800 dark:text-slate-200">
+              {uploading ? "Uploading..." : "Click to upload images"}
+            </div>
+            <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              {multiple
+                ? `Drag & drop or click to upload (max ${maxFiles} files)`
+                : "Drag & drop or click to upload"}
+            </div>
+            <div className="text-xs text-slate-400 dark:text-slate-500 mt-2">
+              Supported: {accept || "image/*"} • Max: {maxSize / (1024 * 1024)}
+              MB
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Error Messages */}
+      {(errors || error) && (
+        <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 w-full">
+          <AlertCircle size={16} />
+          <span>{error || (errors?.message as string)}</span>
+        </div>
+      )}
+
+      {/* Preview Section - UPDATED FOR FULL WIDTH */}
+      {preview && previewUrls.length > 0 && (
+        <div className="space-y-3 w-full">
+          <div className="flex items-center justify-between w-full">
+            <div className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              Uploaded Images ({previewUrls.length}/{maxFiles})
+            </div>
+            {!disabled && previewUrls.length > 0 && (
+              <button
+                type="button"
+                onClick={handleClearAll}
+                className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+              >
+                <XCircle size={14} />
+                Clear All
+              </button>
+            )}
+          </div>
+
+          <div
+            className={`grid gap-3 ${fullWidth ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"}`}
+          >
+            {previewUrls.map((url, index) => (
+              <div
+                key={index}
+                className={`relative group rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 ${
+                  fullWidth ? "w-full" : ""
+                }`}
+                style={fullWidth ? { height: "400px" } : { height: "200px" }}
+              >
+                <img
+                  src={url}
+                  alt={`Preview ${index + 1}`}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                />
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => window.open(url, "_blank")}
+                      className="p-1.5 bg-white/90 dark:bg-slate-900/90 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition-colors"
+                    >
+                      <Eye
+                        size={14}
+                        className="text-slate-700 dark:text-slate-300"
+                      />
+                    </button>
+                    {!disabled && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemove(index)}
+                        className="p-1.5 bg-red-500/90 rounded-lg hover:bg-red-600 transition-colors"
+                      >
+                        <Trash2 size={14} className="text-white" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Loading Indicator */}
+                {uploading && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <Loader2 size={20} className="animate-spin text-white" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Helper Text */}
+      {!errors && !error && previewUrls.length === 0 && (
+        <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2 w-full">
+          <Upload size={14} />
+          <span>Upload images by clicking above or dragging and dropping</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Paginated Select Component
 interface PaginatedSelectProps {
   config: PaginatedSelectConfig;
@@ -337,7 +774,7 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
           onClick={() => !disabled && setIsOpen(!isOpen)}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full px-4 py-3 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 
+          className="w-full px-4  py-3 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 
             focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 
             disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
             border-slate-300 dark:border-slate-600 pr-12"
@@ -373,13 +810,10 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
                 type="text"
                 value={inputValue}
                 onChange={handleSearchChange}
-                placeholder={`Search ${total} options...`}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                placeholder={`${placeholder}`}
+                className="w-full pl-10 text-black dark:text-white pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 autoFocus
               />
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-              Showing {options.length} of {total} options
             </div>
           </div>
 
@@ -551,7 +985,9 @@ const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
                       subField.cols
                         ? `md:col-span-${subField.cols}`
                         : "md:col-span-6"
-                    } ${subField.className || ""}`}
+                    } ${subField.className || ""} ${
+                      subField.fullWidth ? "md:col-span-12" : ""
+                    }`}
                   >
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                       {subField.label}
@@ -621,6 +1057,19 @@ const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
                                   {subField.label}
                                 </span>
                               </label>
+                            );
+                          case "image":
+                            return (
+                              <ImageInputComponent
+                                name={fieldName}
+                                value={controllerField.value}
+                                onChange={controllerField.onChange}
+                                disabled={subField.disabled || disabled}
+                                readOnly={subField.readOnly}
+                                config={subField.imageUploadConfig}
+                                errors={fieldError}
+                                fullWidth={subField.fullWidth}
+                              />
                             );
                           case "custom":
                             return subField.render
@@ -692,7 +1141,6 @@ export function GenericForm({
   const [errorMessage, setErrorMessage] = useState("");
 
   // Generate Zod schema from fields
-
   const generateSchema = () => {
     const schemaFields: Record<string, z.ZodType<any>> = {};
 
@@ -736,11 +1184,18 @@ export function GenericForm({
               case "radio": // Also skip validation for nested radio buttons
                 subFieldSchema = z.any().optional();
                 break;
+              case "image":
+                subFieldSchema = z.any().optional();
+                break;
               default:
                 subFieldSchema = z.string();
             }
 
-            if (subField.required && subField.type !== "radio") {
+            if (
+              subField.required &&
+              subField.type !== "radio" &&
+              subField.type !== "image"
+            ) {
               if (subField.type === "checkbox") {
                 subFieldSchema = subFieldSchema.refine(
                   (val) => val === true,
@@ -810,6 +1265,21 @@ export function GenericForm({
           // Optional custom field
           schemaFields[field.name] = z.any().optional();
         }
+      } else if (field.type === "image") {
+        // Image field validation
+        if (field.required) {
+          schemaFields[field.name] = z.any().refine(
+            (val) => {
+              if (!val) return false;
+              if (Array.isArray(val)) return val.length > 0;
+              if (typeof val === "string") return val.trim().length > 0;
+              return true;
+            },
+            { message: `${field.label} is required` },
+          );
+        } else {
+          schemaFields[field.name] = z.any().optional();
+        }
       } else {
         let fieldSchema: z.ZodType<any>;
 
@@ -838,7 +1308,6 @@ export function GenericForm({
             fieldSchema = z.array(z.string());
             break;
           case "file":
-          case "image":
             fieldSchema = z.any();
             break;
           case "paginatedSelect":
@@ -916,7 +1385,7 @@ export function GenericForm({
     }
   };
 
-  // In GenericForm.tsx, update the renderField function for custom fields:
+  // Render field function
   const renderField = (field: FormField) => {
     if (field.type === "custom" && field.render) {
       return (
@@ -988,6 +1457,49 @@ export function GenericForm({
                 readOnly={field.readOnly}
                 fetchOptions={fetchOptions}
               />
+            )}
+          />
+        );
+
+      case "image":
+        return (
+          <Controller
+            name={field.name}
+            control={control}
+            defaultValue={
+              field.initialValue ||
+              (field.imageUploadConfig?.multiple ? [] : "")
+            }
+            render={({ field: controllerField, fieldState }) => (
+              <div style={{ width: field.fullWidth ? "100%" : "auto" }}>
+                <ImageInputComponent
+                  name={field.name}
+                  value={controllerField.value}
+                  onChange={(value) => {
+                    controllerField.onChange(value);
+                    if (onFieldChange) {
+                      onFieldChange(field.name, value);
+                    }
+                  }}
+                  disabled={field.disabled || isLoading}
+                  readOnly={field.readOnly}
+                  config={field.imageUploadConfig}
+                  errors={fieldState.error}
+                  fullWidth={field.fullWidth}
+                />
+                {field.imageUploadConfig && (
+                  <div
+                    style={{
+                      marginTop: "8px",
+                      fontSize: "12px",
+                      color: "#666",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "4px",
+                    }}
+                  ></div>
+                )}
+              </div>
             )}
           />
         );
@@ -1314,73 +1826,71 @@ export function GenericForm({
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6">
           <div className="grid grid-cols-12 gap-6">
-            {fields.map((field) => (
-              <div
-                key={field.name}
-                className={`col-span-12 ${
-                  field.cols ? `md:col-span-${field.cols}` : "md:col-span-6"
-                } ${field.className || ""}`}
-              >
-                {field.type !== "checkbox" &&
-                  field.type !== "array" &&
-                  field.type !== "custom" && (
-                    <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                      {field.label}
-                      {field.required && !field.readOnly && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                      {field.readOnly && (
-                        <span className="ml-2 text-xs font-normal text-slate-500">
-                          (Read-only)
-                        </span>
-                      )}
-                    </label>
-                  )}
+            {fields.map((field) => {
+              // Determine column span for the field
+              let colSpan = "md:col-span-6"; // default
 
-                {renderField(field)}
+              if (field.cols) {
+                colSpan = `md:col-span-${field.cols}`;
+              }
 
-                {field.helperText &&
-                  !errors[field.name] &&
-                  field.type !== "array" &&
-                  field.type !== "checkbox" && (
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                      {field.helperText}
-                    </p>
-                  )}
+              // Override for fullWidth fields
+              if (field.fullWidth || field.type === "image") {
+                colSpan = "md:col-span-12";
+              }
 
-                {errors[field.name] && field.type !== "array" && (
-                  <p className="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center gap-1">
-                    <AlertCircle size={12} />
-                    {errors[field.name]?.message as string}
-                  </p>
-                )}
-              </div>
-            ))}
+              return (
+                <div
+                  key={field.name}
+                  className={`col-span-12 ${colSpan} ${field.className || ""} ${
+                    field.fullWidth ? "w-full" : ""
+                  }`}
+                >
+                  {field.type !== "checkbox" &&
+                    field.type !== "array" &&
+                    field.type !== "custom" &&
+                    field.type !== "image" && (
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                        {field.label}
+                        {field.required && !field.readOnly && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                        {field.readOnly && (
+                          <span className="ml-2 text-xs font-normal text-slate-500">
+                            (Read-only)
+                          </span>
+                        )}
+                      </label>
+                    )}
+
+                  {renderField(field)}
+
+                  {field.helperText &&
+                    !errors[field.name] &&
+                    field.type !== "array" &&
+                    field.type !== "checkbox" &&
+                    field.type !== "image" && (
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                        {field.helperText}
+                      </p>
+                    )}
+
+                  {errors[field.name] &&
+                    field.type !== "array" &&
+                    field.type !== "image" && (
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center gap-1">
+                        <AlertCircle size={12} />
+                        {errors[field.name]?.message as string}
+                      </p>
+                    )}
+                </div>
+              );
+            })}
           </div>
 
-          {submitStatus === "success" && (
-            <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center gap-3">
-              <CheckCircle2
-                size={20}
-                className="text-green-600 dark:text-green-400"
-              />
-              <p className="text-sm text-green-700 dark:text-green-400 font-medium">
-                {mode === "create" ? "Created" : "Updated"} successfully!
-              </p>
-            </div>
-          )}
+      
 
-          {submitStatus === "error" && (
-            <div className="mt-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3">
-              <AlertCircle
-                size={20}
-                className="text-red-600 dark:text-red-400"
-              />
-              <p className="text-sm text-red-700 dark:text-red-400 font-medium">
-                {errorMessage}
-              </p>
-            </div>
-          )}
+        
 
           <div className="flex items-center gap-3 mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
             {onCancel && (

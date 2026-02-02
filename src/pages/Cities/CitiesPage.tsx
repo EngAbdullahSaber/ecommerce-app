@@ -500,46 +500,15 @@ export default function CitiesPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
-          show={true}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("CITIES.FILTERS.SEARCH_PLACEHOLDER")}
           filterLabel={t("CITIES.FILTERS.STATUS")}
-          filterOptions={[
-            { value: "all", label: t("CITIES.FILTERS.ALL") },
-            { value: "active", label: t("CITIES.FILTERS.ACTIVE") },
-            { value: "inactive", label: t("CITIES.FILTERS.INACTIVE") },
-          ]}
-          additionalFilters={[
-            {
-              key: "countryId",
-              label: t("CITIES.FILTERS.COUNTRY"),
-              type: "paginatedSelect",
-              placeholder: t("CITIES.FILTERS.SELECT_COUNTRY"),
-              paginatedSelectConfig: {
-                endpoint: "/api/countries",
-                searchParam: "search",
-                labelKey: "name",
-                valueKey: "id",
-                pageSize: 10,
-                debounceTime: 500,
-                transformResponse: (data) =>
-                  data.map((country: any) => ({
-                    label: `${
-                      country.name?.english ||
-                      t("CITIES.PLACEHOLDERS.ENGLISH_NAME")
-                    } - ${
-                      country.name?.arabic ||
-                      t("CITIES.PLACEHOLDERS.ARABIC_NAME")
-                    }`,
-                    value: country.id,
-                    ...country,
-                  })),
-              },
-            },
-          ]}
+          filterOptions={[]}
+          additionalFilters={[]}
         />
 
         {/* Loading State */}

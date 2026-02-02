@@ -67,8 +67,6 @@ export default function UpdateCountryPage() {
       }
 
       const country = response.data as Country;
-      console.log(country);
-      // Transform the data for the form
       const transformedData = {
         id: country.id,
         nameEnglish: country?.name?.english,
@@ -112,58 +110,6 @@ export default function UpdateCountryPage() {
       required: true,
       cols: 6,
       validation: z.string().min(2, "الاسم يجب أن يكون على الأقل حرفين"),
-    },
-
-    // Current Flag Display (Read-only)
-    {
-      name: "currentFlag",
-      label: "Current Flag",
-      type: "custom",
-      cols: 12,
-      render: (value, data) => {
-        console.log("Current flag render:", value, data);
-        const currentFlagUrl = data?.flag ? formatImageUrl(data.flag) : null;
-
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-lg">
-                <Flag size={20} className="text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                  Current Flag
-                </label>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  This is the current flag image. Upload a new one to change it.
-                </p>
-              </div>
-            </div>
-
-            <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center p-4">
-              {currentFlagUrl ? (
-                <img
-                  src={currentFlagUrl}
-                  alt="Current flag"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div className="text-center p-4">
-                  <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                    <Flag
-                      size={20}
-                      className="text-slate-400 dark:text-slate-500"
-                    />
-                  </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    No flag available
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      },
     },
 
     // Flag Upload Field

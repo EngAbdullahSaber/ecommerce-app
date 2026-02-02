@@ -91,7 +91,7 @@ interface TableFiltersProps {
 // Custom hook for paginated select
 function usePaginatedSelect(
   config: PaginatedSelectConfig,
-  fetchOptions?: TableFiltersProps["fetchOptions"]
+  fetchOptions?: TableFiltersProps["fetchOptions"],
 ) {
   const [options, setOptions] = useState<FieldOption[]>([]);
   const [loading, setLoading] = useState(false);
@@ -104,7 +104,7 @@ function usePaginatedSelect(
     async (
       pageNum: number,
       searchQuery: string = "",
-      reset: boolean = false
+      reset: boolean = false,
     ) => {
       if (loading || (!hasMore && pageNum > 1 && !reset)) return;
 
@@ -160,7 +160,7 @@ function usePaginatedSelect(
         setLoading(false);
       }
     },
-    [config, loading, hasMore, fetchOptions]
+    [config, loading, hasMore, fetchOptions],
   );
 
   const loadMore = () => {
@@ -177,7 +177,7 @@ function usePaginatedSelect(
       setHasMore(true);
       fetchData(1, searchQuery, true);
     }, config.debounceTime || 500),
-    [config, fetchData]
+    [config, fetchData],
   );
 
   // Initial load
@@ -200,7 +200,7 @@ function usePaginatedSelect(
 // Debounce utility function
 function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -317,7 +317,7 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
           <button
             type="button"
             onClick={clearSelection}
-            className="absolute inset-y-0 right-8 flex items-center pr-2 text-gray-400 hover:text-red-500 transition-colors"
+            className={`absolute inset-y-0 flex items-center pr-2 text-gray-400 hover:text-red-500 transition-colors`}
           >
             <X size={14} />
           </button>
@@ -423,8 +423,9 @@ export function TableFilters({
 }: TableFiltersProps) {
   const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
-  // Close date picker when clicking outside
+  const { t, i18n } = useTranslation();
+
+  const lang = i18n.language || "en";
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -550,7 +551,7 @@ export function TableFilters({
               whileTap={{ scale: 0.99 }}
               onClick={() =>
                 setShowDatePicker(
-                  showDatePicker === field.key ? null : field.key
+                  showDatePicker === field.key ? null : field.key,
                 )
               }
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg text-left hover:border-blue-500 dark:hover:border-blue-500 transition-colors flex items-center justify-between group"
@@ -628,7 +629,7 @@ export function TableFilters({
               whileTap={{ scale: 0.99 }}
               onClick={() =>
                 setShowDatePicker(
-                  showDatePicker === field.key ? null : field.key
+                  showDatePicker === field.key ? null : field.key,
                 )
               }
               className="w-full px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-lg text-left hover:border-blue-500 dark:hover:border-blue-500 transition-colors flex items-center justify-between group"
@@ -773,7 +774,9 @@ export function TableFilters({
             className="flex-1 w-full max-w-xl"
           >
             <div className="relative group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+              <Search
+                className={`absolute ${lang === "ar" ? "left-8" : "right-8"} left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors`}
+              />
               <Input
                 value={searchTerm}
                 onChange={onSearchChange}

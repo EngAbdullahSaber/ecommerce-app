@@ -235,10 +235,7 @@ export default function AreasPage() {
       key: "name",
       label: t("areas.table.arabicName"),
       render: (value: Name) => (
-        <div
-          className="font-semibold text-slate-900 dark:text-white text-right"
-          dir="rtl"
-        >
+        <div className="font-semibold text-center text-slate-900 dark:text-white">
           {value.arabic?.trim() || t("common.notAvailable")}
         </div>
       ),
@@ -248,14 +245,14 @@ export default function AreasPage() {
       label: t("areas.table.city"),
       width: "250px",
       render: (value: City) => (
-        <div className="flex items-center gap-3">
+        <div className="flex justify-center items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-500/10 dark:to-pink-500/10 rounded-lg">
             <Building
               size={18}
               className="text-purple-600 dark:text-purple-400"
             />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="  min-w-0">
             <div className="font-medium text-slate-900 dark:text-white truncate">
               {value.name?.english?.trim() || t("areas.unknownCity")}
             </div>
@@ -271,7 +268,7 @@ export default function AreasPage() {
       label: t("common.created"),
       width: "150px",
       render: (value: string) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center justify-center">
           <span className="font-medium text-slate-900 dark:text-white text-sm">
             {new Date(value).toLocaleDateString()}
           </span>
@@ -289,7 +286,7 @@ export default function AreasPage() {
       label: t("common.lastUpdated"),
       width: "150px",
       render: (value: string) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center justify-center">
           <span className="font-medium text-slate-900 dark:text-white text-sm">
             {new Date(value).toLocaleDateString()}
           </span>
@@ -410,17 +407,13 @@ export default function AreasPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
-          show={true}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("areas.searchPlaceholder")}
-          filterOptions={[
-            { value: "all", label: t("common.all") },
-            { value: "active", label: t("common.active") },
-            { value: "inactive", label: t("common.inactive") },
-          ]}
+          filterOptions={[]}
           filterLabel={t("common.status")}
         />
 

@@ -405,7 +405,7 @@ export default function ViewFilterPage() {
                             <label className="text-xs text-slate-500 dark:text-slate-400 mb-1">
                               {t("filters.view.fields.value")}
                             </label>
-                            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-sm">
+                            <div className="px-3 py-2 bg-slate-50  text-black dark:text-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg font-mono text-sm">
                               {option.value}
                             </div>
                           </div>
@@ -413,7 +413,7 @@ export default function ViewFilterPage() {
                             <label className="text-xs text-slate-500 dark:text-slate-400 mb-1">
                               {t("filters.view.fields.displayName")}
                             </label>
-                            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm">
+                            <div className="px-3 py-2 bg-slate-50 text-black dark:text-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm">
                               {option.name}
                             </div>
                           </div>

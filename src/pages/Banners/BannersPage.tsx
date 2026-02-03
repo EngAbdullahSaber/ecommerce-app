@@ -487,13 +487,6 @@ export default function BannersPage() {
         return (
           <div className="flex items-center justify-center gap-2">
             <button
-              onClick={() => handleAction("view", row)}
-              className="p-2 bg-gradient-to-br from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 dark:from-green-500/10 dark:to-emerald-500/10 dark:hover:from-green-500/20 dark:hover:to-emerald-500/20 text-green-600 dark:text-green-400 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-md border border-green-200/50 dark:border-green-500/20"
-              title={t("common.view")}
-            >
-              <Eye size={16} />
-            </button>
-            <button
               onClick={() => handleAction("edit", row)}
               className="p-2 bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 dark:from-blue-500/10 dark:to-indigo-500/10 dark:hover:from-blue-500/20 dark:hover:to-indigo-500/20 text-blue-600 dark:text-blue-400 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-md border border-blue-200/50 dark:border-blue-500/20"
               title={t("common.edit")}
@@ -613,19 +606,13 @@ export default function BannersPage() {
           statusFilter={statusFilter}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
+          show={false}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("banners.searchPlaceholder")}
           filterLabel={t("banners.columns.status")}
           filterOptions={statusOptions}
-          additionalFilters={[
-            {
-              label: t("banners.columns.type"),
-              value: typeFilter,
-              onChange: setTypeFilter,
-              options: typeOptions,
-            },
-          ]}
+          additionalFilters={[]}
         />
 
         {/* Loading State */}

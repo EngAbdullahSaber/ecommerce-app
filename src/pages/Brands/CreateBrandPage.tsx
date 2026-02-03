@@ -9,6 +9,7 @@ import { CreateMethodFormData } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateBrandPage() {
   const navigate = useNavigate();
@@ -233,7 +234,7 @@ export default function CreateBrandPage() {
         formData.append("image", data.image);
       } else {
         throw new Error(
-          t("brands.form.brandLogo") + " " + t("common.isRequired")
+          t("brands.form.brandLogo") + " " + t("common.isRequired"),
         );
       }
 
@@ -263,7 +264,7 @@ export default function CreateBrandPage() {
         `${t("brands.messages.createFailed")} ${
           error.message || t("messages.error")
         }`,
-        { duration: 3000 }
+        { duration: 3000 },
       );
 
       // Re-throw to show form error
@@ -307,7 +308,7 @@ export default function CreateBrandPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("brands.form.title")}
           description={t("brands.form.description")}
           fields={brandFields}

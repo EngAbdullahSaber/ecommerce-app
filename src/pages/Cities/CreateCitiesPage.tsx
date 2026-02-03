@@ -16,6 +16,7 @@ import {
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateCitiesPage() {
   const navigate = useNavigate();
@@ -228,7 +229,7 @@ export default function CreateCitiesPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("cities.form.title")}
           description={t("cities.form.description")}
           fields={cityFields}

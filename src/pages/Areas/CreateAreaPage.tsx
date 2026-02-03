@@ -16,6 +16,7 @@ import {
 } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateAreaPage() {
   const navigate = useNavigate();
@@ -229,7 +230,7 @@ export default function CreateAreaPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("areas.form.areaInformation")}
           description={t("areas.form.fillAreaDetails")}
           fields={areaFields}

@@ -430,17 +430,11 @@ export default function FiltersPage() {
           statusFilter={statusFilter}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
+          show={false}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("filters.page.searchPlaceholder")}
-          filterOptions={[
-            { value: "all", label: t("filters.page.filters.all") },
-            { value: "active", label: t("filters.page.filters.status.active") },
-            {
-              value: "inactive",
-              label: t("filters.page.filters.status.inactive"),
-            },
-          ]}
+          filterOptions={[]}
           filterLabel={t("filters.page.filters.status.label")}
         />
 

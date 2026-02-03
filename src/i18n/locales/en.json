@@ -1,6 +1,7 @@
 {
   "common": {
     "welcome": "Welcome",
+    "remove": "Remove",
     "metadata": "metadata",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
@@ -705,6 +706,12 @@
     },
     "form": {
       "title": "Banner Information",
+      "selectCategory": "Select Category",
+      "dateRange": "Date Range",
+      "selectBrand": "Select Brand",
+      "placeholdersRefId": "Reference ID",
+      "selectBrandPlaceholder": "Select Brand",
+      "selectCategoryPlaceholder": "Select Category",
       "description": "Fill in the details to create your banner",
       "bannerImage": "Banner Image",
       "uploadBanner": "Upload banner image file",
@@ -748,6 +755,9 @@
     },
     "pages": {
       "home": "Home",
+      "store": "Store",
+      "brand": "Brand",
+      "subcategory": "Sub Category",
       "productList": "Product List",
       "productDetail": "Product Detail",
       "category": "Category",

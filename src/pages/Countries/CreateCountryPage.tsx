@@ -9,6 +9,7 @@ import { CreateMethodFormData } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast"; // Import useToast hook
 import { useQueryClient } from "@tanstack/react-query"; // Import query client
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateCountryPage() {
   const navigate = useNavigate();
@@ -143,7 +144,7 @@ export default function CreateCountryPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("countries.form.title")}
           description={t("countries.form.description")}
           fields={countryFields}

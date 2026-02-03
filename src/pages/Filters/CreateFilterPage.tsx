@@ -8,6 +8,7 @@ import { CreateMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateFilterPage() {
   const { t } = useTranslation();
@@ -286,7 +287,7 @@ export default function CreateFilterPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("filters.create.form.title")}
           description={t("filters.create.form.description")}
           fields={filterFields}

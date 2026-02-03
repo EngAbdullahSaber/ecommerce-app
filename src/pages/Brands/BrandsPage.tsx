@@ -458,6 +458,7 @@ export default function BrandsPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}

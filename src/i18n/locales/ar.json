@@ -1,6 +1,8 @@
 {
   "common": {
     "welcome": "أهلا وسهلا",
+    "remove": "إزالة",
+
     "dashboard": "لوحة التحكم",
     "profile": "الملف الشخصي",
     "view": "عرض",
@@ -162,6 +164,12 @@
       "title": "معلومات البانر",
       "description": "املأ التفاصيل لإنشاء البانر الخاص بك",
       "bannerImage": "صورة البانر",
+      "dateRange": "نطاق التاريخ",
+      "selectCategory": "اختر الفئة",
+      "selectBrand": "اختر العلامة التجارية",
+      "placeholdersRefId": "معرف المرجع",
+      "selectBrandPlaceholder": "اختر العلامة التجارية",
+      "selectCategoryPlaceholder": "اختر الفئة",
       "uploadBanner": "رفع ملف صورة البانر",
       "changeUploadedFile": "تغيير الملف المرفوع",
       "clickToUploadBanner": "انقر لرفع صورة البانر",
@@ -206,6 +214,9 @@
       "productList": "قائمة المنتجات",
       "productDetail": "تفاصيل المنتج",
       "category": "الفئة",
+      "store": "متجر",
+      "brand": "علامة تجارية",
+      "subcategory": "فئة فرعية",
       "cart": "عربة التسوق",
       "checkout": "الدفع"
     },

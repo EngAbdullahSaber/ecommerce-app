@@ -35,7 +35,7 @@ export default function CreateParentCategoryPage() {
       label: t("categories.parent.create.fields.englishTitle.label"),
       type: "text",
       placeholder: t(
-        "categories.parent.create.fields.englishTitle.placeholder"
+        "categories.parent.create.fields.englishTitle.placeholder",
       ),
       required: true,
       icon: <Globe size={18} />,
@@ -105,8 +105,8 @@ export default function CreateParentCategoryPage() {
                         if (!validTypes.includes(file.type)) {
                           toast.error(
                             t(
-                              "categories.parent.create.fields.image.invalidType"
-                            )
+                              "categories.parent.create.fields.image.invalidType",
+                            ),
                           );
                           return;
                         }
@@ -114,7 +114,9 @@ export default function CreateParentCategoryPage() {
                         const maxSize = 5 * 1024 * 1024;
                         if (file.size > maxSize) {
                           toast.error(
-                            t("categories.parent.create.fields.image.sizeError")
+                            t(
+                              "categories.parent.create.fields.image.sizeError",
+                            ),
                           );
                           return;
                         }
@@ -187,7 +189,7 @@ export default function CreateParentCategoryPage() {
                     </div>
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                       {t(
-                        "categories.parent.create.fields.image.previewPlaceholder"
+                        "categories.parent.create.fields.image.previewPlaceholder",
                       )}
                     </p>
                   </div>
@@ -211,7 +213,7 @@ export default function CreateParentCategoryPage() {
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
     const loadingToast = toast.loading(
-      t("categories.parent.create.form.loading")
+      t("categories.parent.create.form.loading"),
     );
 
     try {
@@ -272,20 +274,7 @@ export default function CreateParentCategoryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/parent-categories")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("categories.parent.create.back")}
-        </button>
-
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

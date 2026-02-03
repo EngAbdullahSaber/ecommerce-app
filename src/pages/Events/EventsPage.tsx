@@ -147,7 +147,7 @@ export default function EventsPage() {
         pageSize,
         lang,
         searchTerm,
-        queryParams
+        queryParams,
       )) as EventsResponse;
 
       const events = response.data?.events || [];
@@ -181,7 +181,7 @@ export default function EventsPage() {
         "/events",
         1,
         10,
-        lang
+        lang,
       )) as EventsResponse;
 
       const events = response.data?.events || [];
@@ -437,7 +437,7 @@ export default function EventsPage() {
         <div className="flex flex-col">
           <span className="font-medium text-slate-900 dark:text-white text-sm">
             {new Date(value).toLocaleDateString(
-              lang === "ar" ? "ar-SA" : "en-US"
+              lang === "ar" ? "ar-SA" : "en-US",
             )}
           </span>
           <span className="text-xs text-slate-500 dark:text-slate-400">
@@ -446,7 +446,7 @@ export default function EventsPage() {
               {
                 hour: "2-digit",
                 minute: "2-digit",
-              }
+              },
             )}
           </span>
         </div>
@@ -525,7 +525,7 @@ export default function EventsPage() {
     const publicEvents = events.filter((e) => e.isPublic).length;
     const now = new Date();
     const upcomingEvents = events.filter(
-      (e) => new Date(e.eventDate) > now
+      (e) => new Date(e.eventDate) > now,
     ).length;
 
     return {
@@ -609,28 +609,12 @@ export default function EventsPage() {
           statusFilter={statusFilter}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
+          show={false}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("events.searchPlaceholder")}
           filterLabel={t("events.form.status")}
-          additionalFilters={[
-            {
-              key: "eventType",
-              label: t("events.form.eventType"),
-              type: "select",
-              options: typeOptions,
-              value: typeFilter,
-              onChange: setTypeFilter,
-            },
-            {
-              key: "visibility",
-              label: t("events.form.visibility"),
-              type: "select",
-              options: visibilityOptions,
-              value: visibilityFilter,
-              onChange: setVisibilityFilter,
-            },
-          ]}
+          additionalFilters={[]}
         />
 
         {/* Loading State */}

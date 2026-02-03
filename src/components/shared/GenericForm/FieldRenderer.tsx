@@ -5,6 +5,7 @@ import { FormField } from "./types";
 import { DateRangeInputComponent } from "./DateRangeInput";
 import { ImageInputComponent } from "./ImageInput";
 import { PaginatedSelectComponent } from "./PaginatedSelect";
+import DateTimePicker from "./DateTimePicker";
 
 interface FieldRendererProps {
   field: FormField;
@@ -110,7 +111,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
             {...controllerField}
             {...commonProps}
             onChange={(e) => {
-              controllerField.onChange(e);
+              controllerField.onChange(e.target.value);
               if (onFieldChange) {
                 onFieldChange(field.name, e.target.value);
               }
@@ -164,14 +165,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
       const currentValue = controllerField.value;
       return (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 mb-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              {field.required && !field.readOnly && (
-                <span className="text-red-500 ml-1">*</span>
-              )}
-            </label>
-          </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {field.options?.map((option) => {
               const optionValue = String(option.value);
@@ -256,41 +249,16 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
 
     case "date":
       return (
-        <div className="relative">
-          <Calendar
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-          />
-          <input
-            type="date"
-            {...controllerField}
-            {...commonProps}
-            min={field.min as string}
-            max={field.max as string}
-            className={inputClassName}
-            readOnly={field.readOnly}
-          />
-        </div>
-      );
-
-    case "datetime":
-      return (
-        <div className="relative">
-          <Calendar
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
-          />
-          <input
-            type="datetime-local"
-            {...controllerField}
-            {...commonProps}
-            className={inputClassName}
-            readOnly={field.readOnly}
-          />
-        </div>
+        <DateTimePicker
+          field={field}
+          controllerField={controllerField}
+          inputClassName={inputClassName}
+          readOnly={field.readOnly}
+        />
       );
 
     default:
+      // For regular inputs (text, number, email, password, etc.)
       return (
         <div className="relative">
           {field.icon && (
@@ -304,6 +272,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
             {...commonProps}
             min={field.min}
             max={field.max}
+            step={field.step}
             className={inputClassName}
             readOnly={field.readOnly}
           />

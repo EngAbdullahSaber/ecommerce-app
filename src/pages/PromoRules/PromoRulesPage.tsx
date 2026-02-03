@@ -581,6 +581,7 @@ export default function PromoRulesPage() {
               statusFilter={statusFilter}
               onStatusFilter={setStatusFilter}
               showFilters={showFilters}
+              show={false}
               onShowFiltersChange={setShowFilters}
               onClearFilters={clearFilters}
               searchPlaceholder={t("promos.searchPlaceholder")}

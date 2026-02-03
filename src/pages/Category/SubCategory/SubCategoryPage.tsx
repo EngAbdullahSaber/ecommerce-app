@@ -133,13 +133,13 @@ export default function SubCategoriesPage() {
         pageSize,
         "en",
         searchTerm,
-        additionalParams
+        additionalParams,
       )) as CategoriesResponse;
 
       if (!response || response.code !== 200) {
         console.error("API response error:", response);
         throw new Error(
-          response?.message?.english || t("categories.sub.page.errorMessage")
+          response?.message?.english || t("categories.sub.page.errorMessage"),
         );
       }
 
@@ -484,23 +484,13 @@ export default function SubCategoriesPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
-          show={true}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("categories.sub.page.searchPlaceholder")}
-          filterOptions={[
-            { value: "all", label: t("categories.sub.page.filters.all") },
-            {
-              value: "active",
-              label: t("categories.sub.page.filters.status.active"),
-            },
-            {
-              value: "inactive",
-              label: t("categories.sub.page.filters.status.inactive"),
-            },
-          ]}
+          filterOptions={[]}
           filterLabel={t("categories.sub.page.filters.status.label")}
         />
 

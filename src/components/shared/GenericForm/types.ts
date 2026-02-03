@@ -14,6 +14,7 @@ export type FieldType =
   | "date"
   | "datetime"
   | "daterange"
+  | "date"
   | "checkbox"
   | "radio"
   | "file"
@@ -79,6 +80,8 @@ export interface FormField {
   rows?: number;
   accept?: string;
   multiple?: boolean;
+  datePickerConfig?: DatePickerConfig;
+
   min?: number | string;
   max?: number | string;
   validation?: z.ZodType<any>;
@@ -116,4 +119,13 @@ export interface GenericFormProps {
   fetchOptions?: (endpoint: string, params: any) => Promise<any>;
   onFieldChange?: (fieldName: string, value: any) => void;
   customValidation?: (data: any) => Record<string, string>;
+}
+export interface DatePickerConfig {
+  minDate?: Date;
+  maxDate?: Date;
+  showTimePicker?: boolean;
+  timeFormat?: string;
+  timeIntervals?: number;
+  dateFormat?: string;
+  displayFormat?: string;
 }

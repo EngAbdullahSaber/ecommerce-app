@@ -136,13 +136,14 @@ export default function ParentCategoriesPage() {
         pageSize,
         "en",
         searchTerm,
-        additionalParams
+        additionalParams,
       )) as CategoriesResponse;
 
       if (!response || response.code !== 200) {
         console.error("API response error:", response);
         throw new Error(
-          response?.message?.english || t("categories.parent.page.errorMessage")
+          response?.message?.english ||
+            t("categories.parent.page.errorMessage"),
         );
       }
 
@@ -492,7 +493,7 @@ export default function ParentCategoriesPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
-          show={true}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
@@ -503,10 +504,6 @@ export default function ParentCategoriesPage() {
             {
               value: "active",
               label: t("categories.parent.page.filters.status.active"),
-            },
-            {
-              value: "inactive",
-              label: t("categories.parent.page.filters.status.inactive"),
             },
           ]}
           filterLabel={t("categories.parent.page.filters.status.label")}

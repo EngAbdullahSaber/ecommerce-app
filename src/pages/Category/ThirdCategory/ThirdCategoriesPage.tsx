@@ -491,23 +491,13 @@ export default function ThirdCategoriesPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
-          show={true}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
           searchPlaceholder={t("categories.third.page.searchPlaceholder")}
-          filterOptions={[
-            { value: "all", label: t("categories.third.page.filters.all") },
-            {
-              value: "active",
-              label: t("categories.third.page.filters.status.active"),
-            },
-            {
-              value: "inactive",
-              label: t("categories.third.page.filters.status.inactive"),
-            },
-          ]}
+          filterOptions={[]}
           filterLabel={t("categories.third.page.filters.status.label")}
         />
 

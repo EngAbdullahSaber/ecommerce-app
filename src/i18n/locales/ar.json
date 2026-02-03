@@ -2,7 +2,17 @@
   "common": {
     "welcome": "أهلا وسهلا",
     "remove": "إزالة",
-
+    "Error": "خطأ",
+    "deleteMessage1": "هذا الإجراء دائم ولا يمكن التراجع عنه. سيتم حذف جميع البيانات المرتبطة بشكل دائم.",
+    "deleteMessage": "دائم ولا يمكن التراجع عنه. سيتم حذف جميع البيانات المرتبطة بشكل دائم.",
+    "Warning": "تحذير",
+    "Delete": "حذف",
+    "selectDate": "اختر التاريخ",
+    "clear": "مسح",
+    "apply": "تطبيق",
+    "Cancel": "إلغاء",
+    "Close": "إغلاق",
+    "Deleting": "جاري الحذف",
     "dashboard": "لوحة التحكم",
     "profile": "الملف الشخصي",
     "view": "عرض",
@@ -545,9 +555,9 @@
       "placeholderTitleEnglish": "أدخل عنوان الحدث بالإنجليزية",
       "titleArabic": "عنوان الحدث (العربية)",
       "placeholderTitleArabic": "أدخل عنوان الحدث بالعربية",
-      "eventDate": "تاريخ ووقت الحدث",
+      "eventDate": "تاريخ الحدث",
       "helper": {
-        "eventDate": "حدد التاريخ والوقت للحدث",
+        "eventDate": "حدد التاريخ  للحدث",
         "eventType": "اختر نوع الحدث",
         "visibility": "الأحداث العامة مرئية لجميع المستخدمين",
         "status": "تعيين الحدث كنشط أو غير نشط"
@@ -567,7 +577,7 @@
     "columns": {
       "eventTitle": "عنوان الحدث",
       "arabicTitle": "العنوان العربي",
-      "eventDateTime": "تاريخ ووقت الحدث",
+      "eventDateTime": "تاريخ الحدث",
       "type": "النوع",
       "visibility": "الرؤية",
       "status": "الحالة",
@@ -629,6 +639,9 @@
     "backToList": "العودة إلى قائمة المتاجر",
     "form": {
       "title": "تفاصيل المتجر",
+      "selectMerchantHelper": "اختر تاجرًا من القائمة",
+      "searchMerchant": "البحث عن تاجر",
+      "selectMerchant": "اختيار التاجر",
       "description": "املأ معلومات المتجر",
       "englishName": "اسم المتجر (الإنجليزية)",
       "arabicName": "اسم المتجر (العربية)",
@@ -1194,6 +1207,9 @@
     "form": {
       "basicInformation": "المعلومات الأساسية",
       "promoInformation": "معلومات العرض الترويجي",
+      "promoDates": "تواريخ العرض الترويجي",
+      "endDateAfterStart": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البداية",
+      "dateRangeHelper": "حدد تاريخ البداية ونهاية قاعدة العرض الترويجي",
       "enterPromoDetails": "أدخل تفاصيل قاعدة العرض الترويجي",
       "addNewPromo": "إضافة قاعدة عرض ترويجي جديدة",
       "createNewPromoRule": "إنشاء قاعدة أو قسيمة عرض ترويجي جديدة",
@@ -1274,6 +1290,8 @@
     "messages": {
       "backToPromos": "العودة إلى قواعد العروض الترويجية",
       "creating": "جارٍ إنشاء قاعدة العرض الترويجي...",
+      "deleteSuccess": "تم حذف قاعدة العرض الترويجي بنجاح",
+
       "createSuccess": "تم إنشاء قاعدة العرض الترويجي بنجاح",
       "createFailed": "فشل إنشاء قاعدة العرض الترويجي",
       "promoNotFound": "لم يتم العثور على قاعدة العرض الترويجي",
@@ -1460,6 +1478,11 @@
         },
         "clear": "مسح الفلاتر"
       }
+    },
+    "form": {
+      "selectMerchantHelper": "اختر تاجرًا من القائمة",
+      "searchMerchant": "البحث عن تاجر",
+      "selectMerchant": "اختيار التاجر"
     },
     "create": {
       "title": "إضافة تاجر جديد",

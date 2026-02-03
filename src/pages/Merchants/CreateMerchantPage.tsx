@@ -8,6 +8,7 @@ import { CreateMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateMerchantPage() {
   const { t } = useTranslation();
@@ -121,7 +122,7 @@ export default function CreateMerchantPage() {
     {
       name: "phone",
       label: t("merchants.create.fields.phone.label"),
-      type: "tel",
+      type: "phone",
       placeholder: t("merchants.create.fields.phone.placeholder"),
       required: true,
       icon: <Phone size={18} />,
@@ -129,8 +130,8 @@ export default function CreateMerchantPage() {
       validation: z
         .string()
         .regex(
-          /^\+?[1-9]\d{1,14}$/,
-          t("merchants.create.fields.phone.validation")
+          /^\+?[1-9]\d{1,11}$/,
+          t("merchants.create.fields.phone.validation"),
         ),
       helperText: t("merchants.create.fields.phone.helper"),
     },
@@ -208,40 +209,6 @@ export default function CreateMerchantPage() {
       validation: z.enum(["ar", "en"]),
       helperText: t("merchants.create.fields.language.helper"),
     },
-
-    // Terms and Conditions
-    {
-      name: "terms",
-      label: t("merchants.create.fields.terms.label"),
-      type: "checkbox",
-      cols: 12,
-      validation: z.boolean().refine((val) => val === true, {
-        message: t("merchants.create.fields.terms.validation"),
-      }),
-      options: [
-        {
-          label: (
-            <span className="text-sm text-slate-600 dark:text-slate-400">
-              {t("merchants.create.fields.terms.text")}{" "}
-              <a
-                href="#"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
-              >
-                {t("merchants.create.fields.terms.termsLink")}
-              </a>{" "}
-              {t("merchants.create.fields.terms.and")}{" "}
-              <a
-                href="#"
-                className="text-blue-600 dark:text-blue-400 hover:underline"
-              >
-                {t("merchants.create.fields.terms.privacyLink")}
-              </a>
-            </span>
-          ),
-          value: "agree",
-        },
-      ],
-    },
   ];
 
   // Default values for the form
@@ -253,7 +220,6 @@ export default function CreateMerchantPage() {
     password: "",
     confirmPassword: "",
     language: "ar",
-    terms: false,
   };
 
   // Handle form submission with correct data structure
@@ -265,7 +231,7 @@ export default function CreateMerchantPage() {
       // Validate passwords match
       if (data.password !== data.confirmPassword) {
         throw new Error(
-          t("merchants.create.fields.confirmPassword.validation")
+          t("merchants.create.fields.confirmPassword.validation"),
         );
       }
 
@@ -328,19 +294,6 @@ export default function CreateMerchantPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/merchants")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("merchants.create.back")}
-        </button>
-
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -359,7 +312,7 @@ export default function CreateMerchantPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("merchants.create.form.title")}
           description={t("merchants.create.form.description")}
           fields={merchantFields}
@@ -376,7 +329,7 @@ export default function CreateMerchantPage() {
             if (data.password !== data.confirmPassword) {
               return {
                 confirmPassword: t(
-                  "merchants.create.fields.confirmPassword.validation"
+                  "merchants.create.fields.confirmPassword.validation",
                 ),
               };
             }

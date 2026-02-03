@@ -1,4 +1,5 @@
 import { AlertTriangle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DeleteDialogProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function DeleteDialog({
   error, // Add error prop
 }: DeleteDialogProps) {
   if (!isOpen) return null;
+  const { t, i18n } = useTranslation();
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && !isLoading) {
@@ -112,7 +114,8 @@ export function DeleteDialog({
                 </div>
               </div>
               <p className="text-sm text-red-700 dark:text-red-400 leading-relaxed">
-                <span className="font-semibold">Error:</span> {error}
+                <span className="font-semibold">{t("common.Error")}:</span>{" "}
+                {error}
               </p>
             </div>
           )}
@@ -126,9 +129,8 @@ export function DeleteDialog({
                 </div>
               </div>
               <p className="text-xs text-red-700 dark:text-red-400 leading-relaxed">
-                <span className="font-semibold">Warning:</span> This action is
-                permanent and cannot be undone. All associated data will be
-                permanently deleted.
+                <span className="font-semibold">{t("common.Warning")}:</span>{" "}
+                {t("common.deleteMessage1")}
               </p>
             </div>
           )}
@@ -141,7 +143,7 @@ export function DeleteDialog({
               disabled={isLoading}
               className="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              {error ? "Close" : "Cancel"}
+              {error ? t("common.Close") : t("common.Cancel")}
             </button>
 
             {/* Delete Button - Only show if no error */}
@@ -154,10 +156,10 @@ export function DeleteDialog({
                 {isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Deleting...</span>
+                    <span>{t("common.Deleting")}...</span>
                   </>
                 ) : (
-                  <span>Delete</span>
+                  <span>{t("common.Delete")}</span>
                 )}
               </button>
             )}

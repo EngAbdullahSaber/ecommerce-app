@@ -3,6 +3,17 @@
     "welcome": "Welcome",
     "remove": "Remove",
     "metadata": "metadata",
+    "Error": "Error",
+    "deleteMessage1": "This action is permanent and cannot be undone. All associated data will be permanently deleted.",
+    "deleteMessage": "permanent and cannot be undone. All associated data will be permanently deleted.",
+    "Warning": "Warning",
+    "Cancel": "Cancel",
+    "Close": "Close",
+    "Deleting": "Deleting",
+    "Delete": "Delete",
+    "selectDate": "Select Date",
+    "clear": "clear",
+    "apply": "Apply",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
     "isRequired": "is required",
@@ -411,7 +422,7 @@
       "placeholderTitleArabic": "أدخل عنوان الحدث بالعربية",
       "eventDate": "Event Date & Time",
       "helper": {
-        "eventDate": "Select the date and time for your event",
+        "eventDate": "Select the date for your event",
         "eventType": "Choose the type of event",
         "visibility": "Public events are visible to all users",
         "status": "Set event as active or inactive"
@@ -493,6 +504,9 @@
     "backToList": "Back to Stores List",
     "form": {
       "title": "Store Details",
+      "selectMerchantHelper": "Select a merchant from the list",
+      "searchMerchant": "Search Merchant",
+      "selectMerchant": "Select Merchant",
       "description": "Fill in the store information",
       "englishName": "Store Name (English)",
       "arabicName": "Store Name (Arabic)",
@@ -881,6 +895,11 @@
         },
         "clear": "Clear Filters"
       }
+    },
+    "form": {
+      "selectMerchantHelper": "Select a merchant from the list",
+      "searchMerchant": "Search Merchant",
+      "selectMerchant": "Select Merchant"
     },
     "create": {
       "title": "Add New Merchant",
@@ -1850,6 +1869,9 @@
       "selectPromoTypeRequired": "Please select a promo type",
       "promoTypeHelper": "RULE: Applies automatically, COUPON: Requires coupon code",
       "rule": "Rule",
+      "promoDates": "Promo Dates",
+      "endDateAfterStart": "End date must be after start date",
+      "dateRangeHelper": "Set the start and end dates for the promo rule",
       "updatePromoDetails": "Update promotional rule details",
       "updatePromo": "Update Promo Rule",
       "editPromoDetails": "Edit promo rule details",
@@ -1916,6 +1938,7 @@
     },
     "messages": {
       "backToPromos": "Back to Promo Rules",
+      "deleteSuccess": "Promo rule deleted successfully",
       "creating": "Creating promo rule...",
       "createSuccess": "Promo rule created successfully",
       "createFailed": "Failed to create promo rule",

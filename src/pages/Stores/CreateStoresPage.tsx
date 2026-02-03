@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
-import { GenericForm, FormField } from "../../components/shared/GenericForm";
+import {
+  GenericForm,
+  FormField,
+  PaginatedSelectConfig,
+} from "../../components/shared/GenericForm";
 import { z } from "zod";
 import {
   Store,
@@ -10,12 +14,17 @@ import {
   FileText,
   Globe,
   Building,
-} from "lucide-react";
+  Users, // Added Users icon for merchants
+} from "lucide-react"; // Added Users import
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { CreateMethodFormData } from "../../services/apis/ApiMethod";
+import {
+  CreateMethodFormData,
+  GetPanigationMethod,
+} from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateStorePage() {
   const navigate = useNavigate();
@@ -29,6 +38,72 @@ export default function CreateStorePage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  // Define the paginated select configuration for merchants using GetPanigationMethod
+  const merchantSelectConfig: PaginatedSelectConfig = {
+    endpoint: "/merchants", // Changed from /countries to /merchants
+    searchParam: "name", // This will be used for search
+    labelKey: "name.english",
+    valueKey: "id",
+    pageSize: 10,
+    debounceTime: 300,
+    additionalParams: {},
+    transformResponse: (data: any) => {
+      // Transform API response to FieldOption format
+      console.log(data.merchants || data.data); // Updated to merchants
+      const merchants = data.merchants || data.data || [];
+      return merchants.map((merchant: any) => ({
+        label: `${merchant.firstName || merchant.englishName || "N/A"}  ${
+          merchant.lastName || merchant.arabicName || "N/A"
+        }`,
+        value: merchant.id.toString(), // Convert to string for select
+        rawData: merchant, // Keep raw data for reference
+      }));
+    },
+  };
+
+  // Custom fetch function for paginated select using GetPanigationMethod
+  const fetchMerchantsOptions = async (endpoint: string, params: any) => {
+    try {
+      // Extract parameters
+      const page = params.page || 1;
+      const pageSize = params.pageSize || 10;
+      const searchTerm = params.name || params.search || ""; // Get search term
+
+      // Use GetPanigationMethod with the correct parameters
+      const response = await GetPanigationMethod(
+        endpoint, // URL
+        page, // Page number
+        pageSize, // Page size
+        lang, // Language
+        searchTerm, // Search term (name parameter)
+      );
+
+      if (!response) {
+        throw new Error("No response from server");
+      }
+
+      // Return data in the format expected by paginated select
+      return {
+        data: response.data || response.merchants || [], // Handle both response formats
+        meta: response.meta || {
+          total: response.total || response.meta?.total || 0,
+          last_page: response.last_page || response.meta?.last_page || 1,
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching merchants:", error);
+
+      // Return empty data on error
+      return {
+        data: [],
+        meta: {
+          total: 0,
+          last_page: 1,
+        },
+      };
+    }
+  };
 
   // Define form fields for creating a store
   const storeFields: FormField[] = [
@@ -51,6 +126,20 @@ export default function CreateStorePage() {
       required: true,
       cols: 6,
       validation: z.string().min(2, t("stores.validations.nameMin")),
+    },
+
+    // Merchants Paginated Select (changed from countryId to merchantId)
+    {
+      name: "merchantId", // Changed from countryId to merchantId
+      label: t("stores.form.selectMerchant"), // Updated translation key
+      type: "paginatedSelect",
+      required: true,
+      placeholder: t("stores.form.searchMerchant"), // Updated translation key
+      icon: <Users size={18} />, // Changed from Flag to Users icon
+      cols: 12,
+      paginatedSelectConfig: merchantSelectConfig, // Changed config
+      validation: z.string().min(1, t("stores.validations.selectMerchant")), // Updated validation message
+      helperText: t("stores.form.selectMerchantHelper"), // Updated helper text
     },
 
     // Store Descriptions
@@ -81,110 +170,6 @@ export default function CreateStorePage() {
       type: "image",
       required: true,
       cols: 12,
-      renderCustom: ({ onChange, value, disabled }) => (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-lg">
-              <Store size={20} className="text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                {t("stores.form.storeLogo")} *
-              </label>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t("stores.form.uploadLogo")}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* File Upload */}
-            <div>
-              <label className="block mb-2">
-                <div className="relative cursor-pointer">
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.svg,.webp"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setLogoFile(file);
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setLogoPreview(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                        onChange(file);
-                      }
-                    }}
-                    className="sr-only"
-                    id="logo-upload"
-                    required={true}
-                    disabled={disabled}
-                  />
-                  <div
-                    className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl transition-colors bg-gradient-to-br from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50 ${
-                      disabled
-                        ? "border-slate-200 dark:border-slate-700 opacity-50"
-                        : "border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer"
-                    }`}
-                  >
-                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full mb-3">
-                      <Upload
-                        size={24}
-                        className="text-blue-600 dark:text-blue-400"
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-slate-900 dark:text-white mb-1">
-                      {logoFile
-                        ? t("stores.form.changeUploadedFile")
-                        : t("stores.form.clickToUploadLogo")}
-                    </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
-                      {t("stores.form.JPGPNGSVGUpTo5MB")}
-                    </span>
-                    {logoFile && (
-                      <div className="mt-3 px-3 py-1 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-full">
-                        <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                          ✓ {logoFile.name}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* Logo Preview */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                {t("stores.form.logoPreview")}
-              </label>
-              <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center">
-                {logoPreview ? (
-                  <img
-                    src={logoPreview}
-                    alt="Logo preview"
-                    className="w-full h-full object-contain p-4"
-                  />
-                ) : (
-                  <div className="text-center p-4">
-                    <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                      <Store
-                        size={20}
-                        className="text-slate-400 dark:text-slate-500"
-                      />
-                    </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {t("stores.form.logoPreviewHere")}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
     },
 
     // Store Image Upload
@@ -194,112 +179,6 @@ export default function CreateStorePage() {
       type: "image",
       required: false,
       cols: 12,
-      renderCustom: ({ onChange, value, disabled }) => (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-lg">
-              <ImageIcon
-                size={20}
-                className="text-amber-600 dark:text-amber-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                {t("stores.form.storeImage")}
-              </label>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t("stores.form.uploadImage")}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* File Upload */}
-            <div>
-              <label className="block mb-2">
-                <div className="relative cursor-pointer">
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setImageFile(file);
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setImagePreview(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                        onChange(file);
-                      }
-                    }}
-                    className="sr-only"
-                    id="image-upload"
-                    disabled={disabled}
-                  />
-                  <div
-                    className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl transition-colors bg-gradient-to-br from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50 ${
-                      disabled
-                        ? "border-slate-200 dark:border-slate-700 opacity-50"
-                        : "border-slate-300 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 cursor-pointer"
-                    }`}
-                  >
-                    <div className="p-3 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-full mb-3">
-                      <Upload
-                        size={24}
-                        className="text-amber-600 dark:text-amber-400"
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-slate-900 dark:text-white mb-1">
-                      {imageFile
-                        ? t("stores.form.image.change")
-                        : t("stores.form.image.click")}
-                    </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
-                      {t("stores.form.JPGPNGUpTo10MB")}
-                    </span>
-                    {imageFile && (
-                      <div className="mt-3 px-3 py-1 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-full">
-                        <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                          ✓ {imageFile.name}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* Image Preview */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                {t("stores.form.imagePreview")}
-              </label>
-              <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center">
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt="Store image preview"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="text-center p-4">
-                    <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                      <ImageIcon
-                        size={20}
-                        className="text-slate-400 dark:text-slate-500"
-                      />
-                    </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {t("stores.form.imagePreviewHere")}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
     },
   ];
 
@@ -309,6 +188,7 @@ export default function CreateStorePage() {
     arabicName: "",
     englishDescription: "",
     arabicDescription: "",
+    merchantId: "", // Changed from countryId to merchantId
     logo: null,
     image: null,
   };
@@ -327,6 +207,11 @@ export default function CreateStorePage() {
       formData.append("englishName", data.englishName);
       formData.append("arabicDescription", data.arabicDescription);
       formData.append("englishDescription", data.englishDescription);
+
+      // Add merchantId (changed from countryId)
+      if (data.merchantId) {
+        formData.append("merchantId", data.merchantId); // Changed parameter name
+      }
 
       // Add logo file (required)
       if (data.logo) {
@@ -363,7 +248,7 @@ export default function CreateStorePage() {
 
       toast.error(
         `${t("stores.messages.createFailed")} ${error.message || ""}`,
-        { duration: 3000 }
+        { duration: 3000 },
       );
 
       throw error;
@@ -375,19 +260,6 @@ export default function CreateStorePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-orange-50/30 dark:from-slate-950 dark:via-amber-950/30 dark:to-orange-950/30 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/Stores")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("stores.backToList")}
-        </button>
-
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -406,7 +278,7 @@ export default function CreateStorePage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("stores.form.title")}
           description={t("stores.form.description")}
           fields={storeFields}
@@ -418,6 +290,7 @@ export default function CreateStorePage() {
           isLoading={isLoading}
           mode="create"
           className="group"
+          fetchOptions={fetchMerchantsOptions} // Pass custom fetch function using GetPanigationMethod
         />
       </div>
     </div>

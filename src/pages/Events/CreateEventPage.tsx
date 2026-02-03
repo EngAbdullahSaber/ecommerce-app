@@ -6,7 +6,8 @@ import { z } from "zod";
 import {
   Calendar,
   Clock,
-  Users,
+  ShieldBan,
+  ShieldCheck,
   Globe,
   Lock,
   ArrowLeft,
@@ -17,6 +18,7 @@ import { CreateMethod } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../components/shared/GenericForm/CreateForm";
 
 export default function CreateEventPage() {
   const navigate = useNavigate();
@@ -70,13 +72,11 @@ export default function CreateEventPage() {
     {
       name: "eventDate",
       label: t("events.form.eventDate"),
-      type: "datetime-local",
-      required: true,
+      type: "date",
+      required: false,
       icon: <Clock size={18} />,
       cols: 6,
-      validation: z.string().min(1, t("events.validations.selectDate")),
       helperText: t("events.form.helper.eventDate"),
-      min: new Date().toISOString().slice(0, 16),
     },
 
     // Event Type
@@ -125,11 +125,15 @@ export default function CreateEventPage() {
       required: false,
       cols: 6,
       options: [
-        { value: "true", label: t("common.active"), icon: <Globe size={16} /> },
+        {
+          value: "true",
+          label: t("common.active"),
+          icon: <ShieldCheck size={16} />,
+        },
         {
           value: "false",
           label: t("common.inactive"),
-          icon: <Lock size={16} />,
+          icon: <ShieldBan size={16} />,
         },
       ],
       validation: z.string().min(1, t("events.validations.selectStatus")),
@@ -141,7 +145,7 @@ export default function CreateEventPage() {
   const defaultValues = {
     titleEnglish: "",
     titleArabic: "",
-    eventDate: "",
+    eventDate: new Date().toISOString().split("T")[0],
     eventType: "",
     isPublic: true,
     isActive: true,
@@ -151,7 +155,7 @@ export default function CreateEventPage() {
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
     const loadingToast = toast.loading(t("events.form.creating"));
-
+    console.log(data.isPublic, data.isActive);
     try {
       const requestData: any = {
         title: {
@@ -160,15 +164,15 @@ export default function CreateEventPage() {
         },
         eventDate: new Date(data.eventDate).toISOString(),
         eventType: data.eventType,
-        isPublic: data.isPublic == "true" ? true : false,
-        isActive: data.isActive == "true" ? true : false,
+        isPublic: data.isPublic,
+        isActive: data.isActive,
       };
 
       const result = await CreateMethod("/events", requestData, lang);
 
       if (!result) {
         throw new Error(
-          t("events.form.createError", { message: "No response from server" })
+          t("events.form.createError", { message: "No response from server" }),
         );
       }
 
@@ -209,19 +213,6 @@ export default function CreateEventPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-pink-50/30 dark:from-slate-950 dark:via-purple-950/30 dark:to-pink-950/30 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/events")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("events.backToList")}
-        </button>
-
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -242,7 +233,7 @@ export default function CreateEventPage() {
         {/* Form Container */}
         <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden">
           <div className="p-8">
-            <GenericForm
+            <CreateForm
               title={t("events.form.title")}
               description={t("events.form.description")}
               fields={eventFields}

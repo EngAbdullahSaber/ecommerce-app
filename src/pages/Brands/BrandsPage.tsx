@@ -258,9 +258,11 @@ export default function BrandsPage() {
     {
       key: "title",
       label: t("brands.columns.englishTitle"),
+      width: "150px",
+
       render: (value: Title, row: Brand) => (
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-lg">
+          <div className=" bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-lg">
             <Tag size={18} className="text-amber-600 dark:text-amber-400" />
           </div>
           <div>
@@ -282,11 +284,10 @@ export default function BrandsPage() {
     {
       key: "title",
       label: t("brands.columns.arabicTitle"),
+      width: "100px",
+
       render: (value: Title) => (
-        <div
-          className="font-semibold text-slate-900 dark:text-white text-right"
-          dir="rtl"
-        >
+        <div className="font-semibold text-slate-900 dark:text-white text-center">
           {value.arabic?.trim() || t("brands.untitledBrand")}
         </div>
       ),
@@ -296,7 +297,7 @@ export default function BrandsPage() {
       label: t("brands.columns.englishDescription"),
       width: "300px",
       render: (value: Description) => (
-        <div className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+        <div className="text-sm text-slate-700 dark:text-slate-300 text-center line-clamp-2">
           {value.english?.trim() || t("brands.noDescription")}
         </div>
       ),
@@ -307,7 +308,7 @@ export default function BrandsPage() {
       width: "300px",
       render: (value: Description) => (
         <div
-          className="text-sm text-slate-700 dark:text-slate-300 text-right line-clamp-2"
+          className="text-sm text-slate-700 dark:text-slate-300 text-center line-clamp-2"
           dir="rtl"
         >
           {value.arabic?.trim() || t("brands.noDescriptionAr")}

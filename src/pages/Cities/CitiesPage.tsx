@@ -313,7 +313,7 @@ export default function CitiesPage() {
       label: t("CITIES.COLUMNS.ARABIC_NAME"),
       render: (value: CityName) => (
         <div
-          className="font-semibold text-slate-900 dark:text-white text-right"
+          className="font-semibold text-slate-900 dark:text-white text-center"
           dir="rtl"
         >
           {value.arabic?.trim() || t("CITIES.PLACEHOLDERS.ARABIC_NAME")}

@@ -268,11 +268,9 @@ export default function StoresPage() {
     {
       key: "name",
       label: t("stores.columns.arabicName"),
+      width: "150px",
       render: (value: Name) => (
-        <div
-          className="font-semibold text-slate-900 dark:text-white text-right"
-          dir="rtl"
-        >
+        <div className="font-semibold text-slate-900 dark:text-white text-center">
           {value.arabic?.trim() || t("stores.untitledStore")}
         </div>
       ),
@@ -282,7 +280,7 @@ export default function StoresPage() {
       label: t("stores.columns.englishDescription"),
       width: "300px",
       render: (value: Description) => (
-        <div className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2">
+        <div className="text-sm text-slate-700 text-center dark:text-slate-300 line-clamp-2">
           {value.english?.trim() || t("stores.noDescription")}
         </div>
       ),
@@ -293,7 +291,7 @@ export default function StoresPage() {
       width: "300px",
       render: (value: Description) => (
         <div
-          className="text-sm text-slate-700 dark:text-slate-300 text-right line-clamp-2"
+          className="text-sm text-slate-700 dark:text-slate-300 text-center line-clamp-2"
           dir="rtl"
         >
           {value.arabic?.trim() || t("stores.noDescriptionAr")}
@@ -305,7 +303,7 @@ export default function StoresPage() {
       label: t("common.created"),
       width: "150px",
       render: (value: string) => (
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center items-center">
           <span className="font-medium text-slate-900 dark:text-white text-sm">
             {new Date(value).toLocaleDateString(
               lang === "ar" ? "ar-SA" : "en-US",
@@ -438,6 +436,7 @@ export default function StoresPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           statusFilter={statusFilter}
+          show={false}
           onStatusFilter={setStatusFilter}
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}

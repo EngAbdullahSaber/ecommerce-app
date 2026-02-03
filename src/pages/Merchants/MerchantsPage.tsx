@@ -107,7 +107,7 @@ export default function MerchantsPage() {
         page,
         pageSize,
         "en",
-        searchTerm
+        searchTerm,
       )) as MerchantsResponse;
 
       const merchants = response.data?.merchants || [];
@@ -123,13 +123,13 @@ export default function MerchantsPage() {
       if (verificationFilter !== "all") {
         const isVerified = verificationFilter === "verified";
         filteredMerchants = filteredMerchants.filter(
-          (merchant) => merchant.isVerified === isVerified
+          (merchant) => merchant.isVerified === isVerified,
         );
       }
 
       if (languageFilter !== "all") {
         filteredMerchants = filteredMerchants.filter(
-          (merchant) => merchant.language === languageFilter
+          (merchant) => merchant.language === languageFilter,
         );
       }
 
@@ -294,7 +294,7 @@ export default function MerchantsPage() {
       render: (value: string) => (
         <div
           className={`px-3 py-1 rounded-full text-xs font-medium text-white bg-gradient-to-r ${getLanguageColor(
-            value
+            value,
           )}`}
         >
           {getLanguageLabel(value)}
@@ -465,18 +465,9 @@ export default function MerchantsPage() {
           showFilters={showFilters}
           onShowFiltersChange={setShowFilters}
           onClearFilters={clearFilters}
+          show={false}
           searchPlaceholder={t("merchants.page.searchPlaceholder")}
-          filterOptions={[
-            { value: "all", label: t("merchants.page.filters.all") },
-            {
-              value: "active",
-              label: t("merchants.page.filters.status.active"),
-            },
-            {
-              value: "inactive",
-              label: t("merchants.page.filters.status.inactive"),
-            },
-          ]}
+          filterOptions={[]}
           filterLabel={t("merchants.page.filters.status.label")}
           additionalFilters={[
             {

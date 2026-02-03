@@ -429,31 +429,38 @@ export default function CreatePromoRules() {
       placeholder: t("promos.form.promoNamePlaceholder"),
       required: true,
       icon: <Tag size={18} />,
-      cols: 12,
+      cols: 6,
       validation: z.string().min(2, t("promos.form.nameMinLength")),
       helperText: t("promos.form.promoNameHelper"),
     },
 
+    // Replace separate startDate and endDate fields with dateRange
     {
-      name: "startDate",
-      label: t("promos.form.startDate"),
-      type: "date",
+      name: "dateRange",
+      label: t("promos.form.promoDates"),
+      type: "daterange",
       required: true,
       icon: <Calendar size={18} />,
       cols: 6,
-      validation: z.string().min(1, t("promos.form.startDateRequired")),
-      helperText: t("promos.form.startDateHelper"),
-    },
-
-    {
-      name: "endDate",
-      label: t("promos.form.endDate"),
-      type: "date",
-      required: true,
-      icon: <Calendar size={18} />,
-      cols: 6,
-      validation: z.string().min(1, t("promos.form.endDateRequired")),
-      helperText: t("promos.form.endDateHelper"),
+      dateRangeConfig: {
+        range: true,
+        minDate: new Date(),
+        numberOfMonths: 2,
+      },
+      validation: z
+        .object({
+          startDate: z.date({
+            required_error: t("promos.form.startDateRequired"),
+          }),
+          endDate: z.date({
+            required_error: t("promos.form.endDateRequired"),
+          }),
+        })
+        .refine(
+          (data) => data.endDate >= data.startDate,
+          t("promos.form.endDateAfterStart"),
+        ),
+      helperText: t("promos.form.dateRangeHelper"),
     },
 
     {
@@ -686,8 +693,8 @@ export default function CreatePromoRules() {
     name: "",
     type: "RULE",
     status: "ACTIVE",
-    startDate: "",
-    endDate: "",
+    // Remove separate startDate and endDate from default values
+    // They will be handled by dateRange
   };
 
   const handleSubmit = async (data: any) => {
@@ -705,6 +712,18 @@ export default function CreatePromoRules() {
       const validActions = actions.filter((action) => action.actionType);
       if (validActions.length === 0) {
         throw new Error(t("promos.form.atLeastOneActionRequired"));
+      }
+
+      // Extract dates from dateRange
+      let startDate, endDate;
+      if (data.dateRange) {
+        startDate = data.dateRange.startDate;
+        endDate = data.dateRange.endDate;
+      } else {
+        // Fallback for backward compatibility
+        startDate = new Date();
+        endDate = new Date();
+        endDate.setDate(endDate.getDate() + 30); // Default to 30 days from now
       }
 
       // Process rules
@@ -741,8 +760,8 @@ export default function CreatePromoRules() {
         name: data.name,
         type: "RULE",
         status: "ACTIVE",
-        startDate: new Date(data.startDate).toISOString(),
-        endDate: new Date(data.endDate).toISOString(),
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
         rules: processedRules,
         actions: processedActions,
       };

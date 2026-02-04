@@ -22,6 +22,7 @@ import {
   GenericUpdateForm,
 } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../components/shared/GenericUpdateForm/UpdateForm";
 
 // Store Interface
 interface StoreData {
@@ -52,7 +53,7 @@ const fetchStoreById = async (id: string, lang: string): Promise<any> => {
     const response = await GetSpecifiedMethod(`/stores/${id}`, lang);
 
     if (!response || !response.data) {
-      throw new Error("Store not found");
+      throw new Error(t("stores.messages.storeNotFound"));
     }
 
     const store = response.data as StoreData;
@@ -117,20 +118,22 @@ export default function UpdateStorePage() {
       name: "englishName",
       label: t("stores.form.englishName"),
       type: "text",
-      placeholder: "Electronics Store",
+      placeholder: t("stores.form.placeholderEnglishName"),
       required: true,
       icon: <Building size={18} />,
       cols: 6,
       validation: z.string().min(2, t("stores.validations.nameMin")),
+      helperText: t("stores.form.englishNameHelper"),
     },
     {
       name: "arabicName",
       label: t("stores.form.arabicName"),
       type: "text",
-      placeholder: "متجر الإلكترونيات",
+      placeholder: t("stores.form.placeholderArabicName"),
       required: true,
       cols: 6,
       validation: z.string().min(2, t("stores.validations.nameMin")),
+      helperText: t("stores.form.arabicNameHelper"),
     },
 
     // Store Descriptions (Editable)
@@ -138,449 +141,44 @@ export default function UpdateStorePage() {
       name: "englishDescription",
       label: t("stores.form.englishDescription"),
       type: "textarea",
-      placeholder: "Specialized store for electronic devices",
+      placeholder: t("stores.form.placeholderEnglishDescription"),
       required: true,
       icon: <FileText size={18} />,
       cols: 6,
       validation: z.string().min(10, t("stores.validations.descriptionMin")),
+      helperText: t("stores.form.englishDescriptionHelper"),
     },
     {
       name: "arabicDescription",
       label: t("stores.form.arabicDescription"),
       type: "textarea",
-      placeholder: "متجر متخصص في بيع الأجهزة الإلكترونية",
+      placeholder: t("stores.form.placeholderArabicDescription"),
       required: true,
       cols: 6,
       validation: z.string().min(10, t("stores.validations.descriptionMin")),
-    },
-
-    // Current Logo Display (Read-only)
-    {
-      name: "currentLogo",
-      label: t("stores.form.currentLogo"),
-      type: "custom",
-      cols: 12,
-      render: (value, data) => {
-        const currentLogoUrl = data?.logo ? formatImageUrl(data.logo) : null;
-
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-lg">
-                <Store
-                  size={20}
-                  className="text-amber-600 dark:text-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                  {t("stores.form.currentLogo")}
-                </label>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  {t("stores.form.currentLogoMsg")}
-                </p>
-              </div>
-            </div>
-
-            <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center p-4">
-              {currentLogoUrl ? (
-                <img
-                  src={currentLogoUrl}
-                  alt="Current logo"
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div className="text-center p-4">
-                  <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                    <Store
-                      size={20}
-                      className="text-slate-400 dark:text-slate-500"
-                    />
-                  </div>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {t("stores.form.logo.noLogo")}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      },
+      helperText: t("stores.form.arabicDescriptionHelper"),
     },
 
     // Logo Upload Field
     {
       name: "logo",
       label: t("stores.form.newLogoOptional"),
-      type: "file",
+      type: "image",
       required: false,
       cols: 12,
       accept: ".jpg,.jpeg,.png,.svg,.webp",
-      helperText: t("stores.form.leaveEmptyKeepcurrent"),
-      renderCustom: ({ onChange, value, disabled, data, error }) => {
-        const currentLogoUrl = data?.logo ? formatImageUrl(data.logo) : null;
-        const isFile = value instanceof File;
-
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-lg">
-                <ImageIcon
-                  size={20}
-                  className="text-amber-600 dark:text-amber-400"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                  Update Logo (Optional)
-                </label>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Upload a new logo to replace the current one
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* File Upload */}
-              <div>
-                <label className="block mb-2">
-                  <div className="relative cursor-pointer">
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png,.svg,.webp"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        console.log("Logo file selected:", file);
-                        if (file) {
-                          // Validate file size (5MB max)
-                          if (file.size > 5 * 1024 * 1024) {
-                            toast.error(
-                              t("stores.form.logo.errors.maxSize5MB"),
-                            );
-                            return;
-                          }
-
-                          // Validate file type
-                          const validTypes = [
-                            "image/jpeg",
-                            "image/png",
-                            "image/svg+xml",
-                            "image/webp",
-                          ];
-                          if (!validTypes.includes(file.type)) {
-                            toast.error(
-                              t("stores.form.logo.errors.invalidType"),
-                            );
-                            return;
-                          }
-
-                          onChange(file);
-                        }
-                      }}
-                      className="sr-only"
-                      id="logo-upload-update"
-                      disabled={disabled}
-                    />
-                    <div
-                      className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl transition-colors bg-gradient-to-br from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50 ${
-                        disabled
-                          ? "border-slate-200 dark:border-slate-700 opacity-50"
-                          : isFile
-                            ? "border-green-500 dark:border-green-400"
-                            : "border-slate-300 dark:border-slate-700 hover:border-amber-500 dark:hover:border-amber-400 cursor-pointer"
-                      }`}
-                      onClick={() => {
-                        if (!disabled) {
-                          document
-                            .getElementById("logo-upload-update")
-                            ?.click();
-                        }
-                      }}
-                    >
-                      <div className="p-3 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-500/10 dark:to-orange-500/10 rounded-full mb-3">
-                        <Upload
-                          size={24}
-                          className="text-amber-600 dark:text-amber-400"
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white mb-1">
-                        {isFile
-                          ? t("stores.form.changeUploadedFile")
-                          : t("stores.form.clickToUploadLogo")}
-                      </span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        JPG, PNG, SVG up to 5MB
-                      </span>
-                      {isFile && (
-                        <div className="mt-3 px-3 py-1 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-full">
-                          <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                            ✓ {value.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </label>
-                {error && (
-                  <p className="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center gap-1">
-                    <AlertCircle size={12} />
-                    {error.message as string}
-                  </p>
-                )}
-              </div>
-
-              {/* Preview */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Preview
-                </label>
-                <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center">
-                  {isFile ? (
-                    <img
-                      src={URL.createObjectURL(value)}
-                      alt="Logo preview"
-                      className="w-full h-full object-contain p-4"
-                    />
-                  ) : currentLogoUrl ? (
-                    <div className="text-center w-full h-full">
-                      <p className="text-sm text-slate-500 dark:text-slate-400 mb-2 pt-2">
-                        {t("stores.form.noChanges")}
-                      </p>
-                      <img
-                        src={currentLogoUrl}
-                        alt="Current logo"
-                        className="w-full h-full object-contain p-4"
-                      />
-                    </div>
-                  ) : (
-                    <div className="text-center p-4">
-                      <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                        <Store
-                          size={20}
-                          className="text-slate-400 dark:text-slate-500"
-                        />
-                      </div>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        {t("stores.form.logoPreviewHere")}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      },
-    },
-
-    // Current Image Display (Read-only)
-    {
-      name: "currentImage",
-      label: "Current Store Image",
-      type: "custom",
-      cols: 12,
-      render: (value, data) => {
-        const currentImageUrl = data?.image ? formatImageUrl(data.image) : null;
-
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10 rounded-lg">
-                <ImageIcon
-                  size={20}
-                  className="text-blue-600 dark:text-blue-400"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                  Current Store Image
-                </label>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  {currentImageUrl
-                    ? "This is the current store image. Upload a new one to change it."
-                    : "No store image has been uploaded yet."}
-                </p>
-              </div>
-            </div>
-
-            {currentImageUrl && (
-              <div className="w-full h-64 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30">
-                <img
-                  src={currentImageUrl}
-                  alt="Current store image"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-          </div>
-        );
-      },
+      helperText: t("stores.form.leaveEmptyKeepCurrent"),
     },
 
     // Store Image Upload Field
     {
       name: "image",
-      label: "New Store Image (Optional)",
-      type: "file",
+      label: t("stores.form.newStoreImageOptional"),
+      type: "image",
       required: false,
       cols: 12,
       accept: ".jpg,.jpeg,.png,.webp",
-      helperText: "Upload a new store image. JPG, PNG up to 10MB",
-      renderCustom: ({ onChange, value, disabled, data, error }) => {
-        const currentImageUrl = data?.image ? formatImageUrl(data.image) : null;
-        const isFile = value instanceof File;
-
-        return (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10 rounded-lg">
-                <ImageIcon
-                  size={20}
-                  className="text-blue-600 dark:text-blue-400"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                  Update Store Image (Optional)
-                </label>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Upload a new store image or banner
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* File Upload */}
-              <div>
-                <label className="block mb-2">
-                  <div className="relative cursor-pointer">
-                    <input
-                      type="file"
-                      accept=".jpg,.jpeg,.png,.webp"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        console.log("Image file selected:", file);
-                        if (file) {
-                          // Validate file size (10MB max)
-                          if (file.size > 10 * 1024 * 1024) {
-                            toast.error(
-                              t("stores.form.image.errors.maxSize10MB"),
-                            );
-                            return;
-                          }
-
-                          // Validate file type
-                          const validTypes = [
-                            "image/jpeg",
-                            "image/png",
-                            "image/webp",
-                          ];
-                          if (!validTypes.includes(file.type)) {
-                            toast.error(
-                              t("stores.form.image.errors.invalidType"),
-                            );
-                            return;
-                          }
-
-                          onChange(file);
-                        }
-                      }}
-                      className="sr-only"
-                      id="image-upload-update"
-                      disabled={disabled}
-                    />
-                    <div
-                      className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl transition-colors bg-gradient-to-br from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50 ${
-                        disabled
-                          ? "border-slate-200 dark:border-slate-700 opacity-50"
-                          : isFile
-                            ? "border-green-500 dark:border-green-400"
-                            : "border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer"
-                      }`}
-                      onClick={() => {
-                        if (!disabled) {
-                          document
-                            .getElementById("image-upload-update")
-                            ?.click();
-                        }
-                      }}
-                    >
-                      <div className="p-3 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-500/10 dark:to-cyan-500/10 rounded-full mb-3">
-                        <Upload
-                          size={24}
-                          className="text-blue-600 dark:text-blue-400"
-                        />
-                      </div>
-                      <span className="text-sm font-medium text-slate-900 dark:text-white mb-1">
-                        {isFile
-                          ? t("stores.form.changeUploadedFile")
-                          : currentImageUrl
-                            ? t("stores.form.updateImageMsg")
-                            : t("stores.form.clickToUploadImage")}
-                      </span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400">
-                        {t("stores.form.JPGPNGUpTo10MB")}
-                      </span>
-                      {isFile && (
-                        <div className="mt-3 px-3 py-1 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-full">
-                          <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                            ✓ {value.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </label>
-                {error && (
-                  <p className="text-xs text-red-600 dark:text-red-400 mt-2 flex items-center gap-1">
-                    <AlertCircle size={12} />
-                    {error.message as string}
-                  </p>
-                )}
-              </div>
-
-              {/* Preview */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Preview
-                </label>
-                <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center">
-                  {isFile ? (
-                    <img
-                      src={URL.createObjectURL(value)}
-                      alt="Store image preview"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : currentImageUrl ? (
-                    <div className="text-center w-full h-full">
-                      <p className="text-sm text-slate-500 dark:text-slate-400 mb-2 pt-2">
-                        Current image (no changes)
-                      </p>
-                      <img
-                        src={currentImageUrl}
-                        alt="Current store image"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="text-center p-4">
-                      <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                        <ImageIcon
-                          size={20}
-                          className="text-slate-400 dark:text-slate-500"
-                        />
-                      </div>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
-                        Upload a new image to see preview
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      },
+      helperText: t("stores.form.imageUploadHelper"),
     },
   ];
 
@@ -639,13 +237,17 @@ export default function UpdateStorePage() {
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("stores.messages.noResponse"));
       }
 
       if (response.code !== 200) {
-        throw new Error(
-          response.message?.english || response.message || "Update failed",
-        );
+        const errorMessage =
+          lang === "ar"
+            ? response.message?.arabic
+            : response.message?.english ||
+              response.message ||
+              t("stores.messages.updateFailed");
+        throw new Error(errorMessage);
       }
 
       return response;
@@ -728,8 +330,8 @@ export default function UpdateStorePage() {
           {t("stores.backToList")}
         </button>
 
-        <GenericUpdateForm
-          title={t("stores.form.updateTitle")}
+        <UpdateForm
+          title={t("stores.updateTitle")}
           description={t("stores.form.updateDescription")}
           fields={storeFields}
           entityId={storeId}

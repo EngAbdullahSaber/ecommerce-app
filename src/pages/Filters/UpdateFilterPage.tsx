@@ -1,6 +1,7 @@
 // pages/filters/edit/[id].tsx - Update Filter Page with Options Update
 "use client";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Filter,
   Tag,
@@ -24,8 +25,8 @@ import {
   GenericUpdateForm,
 } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
+import { UpdateForm } from "../../components/shared/GenericUpdateForm/UpdateForm";
 
 // Filter Interface based on your data structure
 interface FilterOption {
@@ -51,12 +52,12 @@ interface FilterAttribute {
 }
 
 // Fetch filter by ID
-const fetchFilterById = async (id: string): Promise<any> => {
+const fetchFilterById = async (id: string, lang: string): Promise<any> => {
   try {
-    const response = await GetSpecifiedMethod(`/filter-attributes/${id}`, "en");
+    const response = await GetSpecifiedMethod(`/filter-attributes/${id}`, lang);
 
     if (!response || !response.data) {
-      throw new Error("Filter not found");
+      throw new Error(t("filters.page.errorMessage"));
     }
 
     const filter = response.data as FilterAttribute;
@@ -97,12 +98,19 @@ interface OptionsSectionRendererProps {
   error?: any;
 }
 
-// Update the OptionsSection component in your create-filter.tsx file
+interface OptionsSectionProps {
+  options: any[];
+  onChange: (options: any[]) => void;
+  disabled?: boolean;
+}
+
+// Update the OptionsSection component
 const OptionsSection = ({
   options,
   onChange,
   disabled = false,
 }: OptionsSectionProps) => {
+  const { t } = useTranslation();
   const [localOptions, setLocalOptions] = useState(options);
 
   useEffect(() => {
@@ -142,100 +150,103 @@ const OptionsSection = ({
     const updatedOptions = [...localOptions];
     updatedOptions[index] = { ...updatedOptions[index], [field]: value };
     setLocalOptions(updatedOptions);
-    onChange(updatedOptions); // Make sure this is called
+    onChange(updatedOptions);
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-600 dark:text-slate-400">
-          Manage filter options
+        <div className="text-sm font-medium text-slate-600 dark:text-slate-400">
+          {t("filters.create.fields.options.helper")}
         </div>
         <button
           type="button"
           onClick={addOption}
           disabled={disabled}
-          className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-500/10 dark:to-violet-500/10 text-purple-600 dark:text-purple-400 rounded-lg hover:from-purple-100 hover:to-violet-100 dark:hover:from-purple-500/20 dark:hover:to-violet-500/20 transition-all duration-200 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm"
         >
           <Plus size={16} />
-          Add Option
+          {t("filters.create.fields.options.add")}
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {localOptions.map((option, index) => (
           <div
             key={index}
-            className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white/50 dark:bg-slate-800/50 space-y-3"
+            className="group p-5 border border-slate-200 dark:border-slate-700 rounded-xl bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-800 dark:to-slate-800/50 shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-500/20 dark:to-violet-500/20 rounded-lg">
-                  <Tag
-                    size={16}
-                    className="text-purple-600 dark:text-purple-400"
-                  />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg shadow-sm">
+                  <Tag size={18} className="text-white" />
                 </div>
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Option #{index + 1}
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    {t("filters.create.fields.options.option")} #{index + 1}
+                  </span>
                   {option.id && (
-                    <span className="text-xs text-slate-400 ml-2">
-                      (ID: {option.id})
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                      {t("common.id")}: {option.id}
                     </span>
                   )}
-                </span>
+                </div>
               </div>
               {localOptions.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeOption(index)}
                   disabled={disabled}
-                  className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed opacity-0 group-hover:opacity-100"
                 >
-                  <X size={16} />
+                  <X size={18} />
                 </button>
               )}
             </div>
 
-            <div className="grid grid-cols-12 gap-3">
+            <div className="grid grid-cols-12 gap-4">
               {/* Value Field */}
               <div className="col-span-4">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Value
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 mb-2">
+                  {t("filters.create.fields.options.value")}
                   <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   type="text"
                   value={option.value}
                   onChange={(e) => updateOption(index, "value", e.target.value)}
-                  placeholder="e.g., red, blue, green"
+                  placeholder={t(
+                    "filters.create.fields.options.valuePlaceholder",
+                  )}
                   disabled={disabled}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+                  className="w-full px-3.5 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-shadow duration-200"
                   required
                 />
               </div>
 
               {/* Name Field */}
               <div className="col-span-4">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Display Name
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 mb-2">
+                  {t("filters.create.fields.options.name")}
                   <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   type="text"
                   value={option.name}
                   onChange={(e) => updateOption(index, "name", e.target.value)}
-                  placeholder="e.g., Red, Blue, Green"
+                  placeholder={t(
+                    "filters.create.fields.options.namePlaceholder",
+                  )}
                   disabled={disabled}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+                  className="w-full px-3.5 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-shadow duration-200"
                   required
                 />
               </div>
 
               {/* Sort Order Field */}
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Sort Order
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 mb-2">
+                  {t("filters.create.fields.options.sortOrder")}
                 </label>
                 <input
                   type="number"
@@ -249,16 +260,16 @@ const OptionsSection = ({
                     )
                   }
                   disabled={disabled}
-                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+                  className="w-full px-3.5 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-shadow duration-200"
                 />
               </div>
 
               {/* Active Status */}
               <div className="col-span-2">
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Active
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 mb-2">
+                  {t("filters.create.fields.options.status")}
                 </label>
-                <div className="flex items-center h-full">
+                <div className="flex items-center h-[42px]">
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
                       type="checkbox"
@@ -269,7 +280,7 @@ const OptionsSection = ({
                       disabled={disabled}
                       className="sr-only peer disabled:opacity-50"
                     />
-                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-purple-600 peer-disabled:opacity-50"></div>
+                    <div className="w-11 h-6 bg-slate-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-500 peer-focus:ring-offset-2 dark:peer-focus:ring-offset-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-gradient-to-r peer-checked:from-purple-500 peer-checked:to-violet-600 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed"></div>
                   </label>
                 </div>
               </div>
@@ -282,12 +293,13 @@ const OptionsSection = ({
 };
 
 export default function UpdateFilterPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const params = useParams();
   const navigate = useNavigate();
   const toast = useToast();
   const filterId = params.id as string;
   const queryClient = useQueryClient();
+  const lang = i18n.language || "en";
 
   // Define form fields for updating filter
   const filterFields: FormField[] = [
@@ -319,21 +331,6 @@ export default function UpdateFilterPage() {
       ),
     },
 
-    // Key (Read-only)
-    {
-      name: "key",
-      label: t("filters.create.fields.key.label"),
-      type: "text",
-      placeholder: t("filters.create.fields.key.placeholder"),
-      readOnly: true,
-      cols: 6,
-      validation: z
-        .string()
-        .min(2, t("filters.create.fields.key.validation"))
-        .regex(/^[a-z][a-z0-9]*$/, t("filters.create.fields.key.format")),
-      helperText: "Filter key cannot be changed",
-    },
-
     // Name
     {
       name: "name",
@@ -342,15 +339,40 @@ export default function UpdateFilterPage() {
       placeholder: t("filters.create.fields.name.placeholder"),
       required: true,
       icon: <Tag size={18} />,
-      cols: 6,
+      cols: 12,
       validation: z.string().min(2, t("filters.create.fields.name.validation")),
       helperText: t("filters.create.fields.name.helper"),
     },
 
     // Options Section Header
     {
+      name: "optionsHeader",
+      label: t("filters.create.sections.options.title"),
+      type: "custom",
+      cols: 12,
+      render: () => (
+        <div className="space-y-3 mb-6 mt-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-500/10 dark:to-rose-500/10 rounded-lg">
+              <List size={20} className="text-pink-600 dark:text-pink-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                {t("filters.create.sections.options.title")}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {t("filters.create.sections.options.description")}
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    // Options Section
+    {
       name: "options",
-      label: "Filter Options",
+      label: t("filters.create.fields.options.label"),
       type: "custom",
       cols: 12,
       renderCustom: ({
@@ -391,24 +413,28 @@ export default function UpdateFilterPage() {
 
       console.log("Sending update data:", updateData);
 
-      // Make API call - assuming your API accepts the full object with options
+      // Make API call
       const response = await UpdateMethod(
         `/filter-attributes`,
         updateData,
         id,
-        "en",
+        lang,
       );
 
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("filters.messages.noResponse"));
       }
 
       if (response.code !== 200) {
-        throw new Error(
-          response.message?.english || response.message || "Update failed",
-        );
+        const errorMessage =
+          lang === "ar"
+            ? response.message?.arabic
+            : response.message?.english ||
+              response.message ||
+              t("filters.edit.form.error");
+        throw new Error(errorMessage);
       }
 
       return response;
@@ -469,19 +495,21 @@ export default function UpdateFilterPage() {
         (opt: any) => !opt.value.trim() || !opt.name.trim(),
       );
       if (emptyOptions.length > 0) {
-        errors.options = "All options must have both value and display name";
+        errors.options = t("filters.create.fields.options.validation.required");
       }
 
       // Check for duplicate values
       const values = data.options.map((opt: any) => opt.value.toLowerCase());
       const uniqueValues = new Set(values);
       if (uniqueValues.size !== values.length) {
-        errors.options = "Option values must be unique";
+        errors.options = t(
+          "filters.create.fields.options.validation.duplicate",
+        );
       }
 
       // Check for minimum options
       if (data.options.length === 0) {
-        errors.options = "At least one option is required";
+        errors.options = t("filters.create.fields.options.validation.minimum");
       }
     }
 
@@ -496,13 +524,13 @@ export default function UpdateFilterPage() {
             {t("filters.page.errorTitle")}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
-            The filter ID is missing or invalid.
+            {t("filters.messages.filterIdMissing")}
           </p>
           <button
             onClick={() => navigate("/filters")}
             className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
-            {t("filters.page.back") || "Back to Filters"}
+            {t("filters.page.back")}
           </button>
         </div>
       </div>
@@ -512,24 +540,12 @@ export default function UpdateFilterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-violet-50/30 dark:from-slate-950 dark:via-purple-950/30 dark:to-violet-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/filters")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("filters.create.back")}
-        </button>
-
-        <GenericUpdateForm
+        <UpdateForm
           title={t("filters.edit.title")}
           description={t("filters.edit.description")}
           fields={filterFields}
           entityId={filterId}
-          fetchData={fetchFilterById}
+          fetchData={(id: string) => fetchFilterById(id, lang)}
           onUpdate={handleUpdate}
           onCancel={() => navigate("/filters")}
           onBack={() => navigate("/filters")}

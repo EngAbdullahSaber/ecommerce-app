@@ -249,6 +249,7 @@ export default function MerchantsPage() {
     {
       key: "firstName",
       label: t("merchants.page.columns.merchant"),
+      width: "250px",
       render: (value: string, row: Merchant) => (
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-500/10 dark:to-indigo-500/10 rounded-lg">

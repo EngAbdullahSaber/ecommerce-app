@@ -137,7 +137,7 @@ export const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
                 value={inputValue}
                 onChange={handleSearchChange}
                 placeholder={`Search ${total} options...`}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 text-black dark:text-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 autoFocus
               />
             </div>

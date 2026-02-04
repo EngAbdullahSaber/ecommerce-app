@@ -1,6 +1,7 @@
 // pages/merchants/edit/[id].tsx - Update Merchant Page
 "use client";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   User,
   Mail,
@@ -21,6 +22,7 @@ import {
   GenericUpdateForm,
 } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../components/shared/GenericUpdateForm/UpdateForm";
 
 // Merchant Interface based on your data structure
 interface Merchant {
@@ -36,12 +38,12 @@ interface Merchant {
 }
 
 // Fetch merchant by ID
-const fetchMerchantById = async (id: string): Promise<any> => {
+const fetchMerchantById = async (id: string, lang: string): Promise<any> => {
   try {
-    const response = await GetSpecifiedMethod(`/merchants/${id}`, "en");
+    const response = await GetSpecifiedMethod(`/merchants/${id}`, lang);
 
     if (!response || !response.data) {
-      throw new Error("Merchant not found");
+      throw new Error(t("merchants.messages.merchantNotFound"));
     }
 
     const merchant = response.data as Merchant;
@@ -71,7 +73,7 @@ const fetchMerchantById = async (id: string): Promise<any> => {
             hour: "2-digit",
             minute: "2-digit",
           })
-        : "Never updated",
+        : t("merchants.messages.neverUpdated"),
     };
 
     return transformedData;
@@ -84,6 +86,8 @@ const fetchMerchantById = async (id: string): Promise<any> => {
 export default function UpdateMerchantPage() {
   const params = useParams();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || "en";
   const toast = useToast();
   const merchantId = params.id as string;
   const queryClient = useQueryClient();
@@ -93,7 +97,7 @@ export default function UpdateMerchantPage() {
     // Basic Information Section Header
     {
       name: "basicInfoHeader",
-      label: "Basic Information",
+      label: t("merchants.create.sections.basicInfo.title"),
       type: "custom",
       cols: 12,
       render: () => (
@@ -104,10 +108,10 @@ export default function UpdateMerchantPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Merchant Information
+                {t("merchants.form.basicInformation")}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Update merchant personal details
+                {t("merchants.create.sections.basicInfo.description")}
               </p>
             </div>
           </div>
@@ -118,88 +122,36 @@ export default function UpdateMerchantPage() {
     // First Name
     {
       name: "firstName",
-      label: "First Name",
+      label: t("merchants.create.fields.firstName.label"),
       type: "text",
-      placeholder: "Ahmed",
+      placeholder: t("merchants.create.fields.firstName.placeholder"),
       required: true,
       icon: <User size={18} />,
       cols: 6,
-      validation: z.string().min(2, "First name must be at least 2 characters"),
-      helperText: "Enter merchant's first name",
+      validation: z
+        .string()
+        .min(2, t("merchants.create.fields.firstName.validation")),
+      helperText: t("merchants.create.fields.firstName.helper"),
     },
 
     // Last Name
     {
       name: "lastName",
-      label: "Last Name",
+      label: t("merchants.create.fields.lastName.label"),
       type: "text",
-      placeholder: "Ali",
+      placeholder: t("merchants.create.fields.lastName.placeholder"),
       required: true,
-      cols: 6,
-      validation: z.string().min(2, "Last name must be at least 2 characters"),
-      helperText: "Enter merchant's last name",
-    },
-
-    // Contact Information Section Header
-    {
-      name: "contactInfoHeader",
-      label: "Contact Information",
-      type: "custom",
-      cols: 12,
-      render: () => (
-        <div className="space-y-3 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-500/10 dark:to-pink-500/10 rounded-lg">
-              <Mail
-                size={20}
-                className="text-purple-600 dark:text-purple-400"
-              />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Contact Details
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Merchant's contact information (read-only)
-              </p>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    // Email (Read-only)
-    {
-      name: "email",
-      label: "Email Address",
-      type: "email",
-      placeholder: "ahmed.ali@merchant.com",
-      readOnly: true,
-      icon: <Mail size={18} />,
-      cols: 6,
-      validation: z.string().email("Please enter a valid email address"),
-      helperText: "Email cannot be changed",
-    },
-
-    // Phone Number (Read-only)
-    {
-      name: "phone",
-      label: "Phone Number",
-      type: "tel",
-      placeholder: "+966501234568",
-      readOnly: true,
-      icon: <Phone size={18} />,
       cols: 6,
       validation: z
         .string()
-        .regex(/^\+?[1-9]\d{1,14}$/, "Please enter a valid phone number"),
-      helperText: "Phone number cannot be changed",
+        .min(2, t("merchants.create.fields.lastName.validation")),
+      helperText: t("merchants.create.fields.lastName.helper"),
     },
 
     // Account Settings Section Header
     {
       name: "settingsHeader",
-      label: "Account Settings",
+      label: t("merchants.form.accountSettings"),
       type: "custom",
       cols: 12,
       render: () => (
@@ -210,10 +162,10 @@ export default function UpdateMerchantPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Account Preferences
+                {t("merchants.form.accountPreferences")}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Update merchant's account preferences
+                {t("merchants.form.updatePreferences")}
               </p>
             </div>
           </div>
@@ -224,92 +176,26 @@ export default function UpdateMerchantPage() {
     // Language Selection
     {
       name: "language",
-      label: "Language Preference",
+      label: t("merchants.create.fields.language.label"),
       type: "select",
       required: true,
       icon: <Globe size={18} />,
       cols: 6,
       options: [
-        { label: "العربية (Arabic)", value: "ar" },
-        { label: "English", value: "en" },
+        {
+          label:
+            lang === "ar"
+              ? t("merchants.page.language.ar") + " (العربية)"
+              : "العربية (" + t("merchants.page.language.ar") + ")",
+          value: "ar",
+        },
+        {
+          label: t("merchants.page.language.en"),
+          value: "en",
+        },
       ],
       validation: z.enum(["ar", "en"]),
-      helperText: "Select merchant's preferred language",
-    },
-
-    // Verification Status (Read-only)
-    {
-      name: "isVerified",
-      label: "Verification Status",
-      type: "custom",
-      cols: 6,
-      render: (value: boolean) => (
-        <div className="flex items-center gap-3 p-3 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-lg border border-emerald-200 dark:border-emerald-500/20">
-          <Shield
-            size={18}
-            className={
-              value
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-amber-600 dark:text-amber-400"
-            }
-          />
-          <div>
-            <div className="font-medium text-slate-900 dark:text-white">
-              {value ? "Verified Account" : "Pending Verification"}
-            </div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">
-              {value
-                ? "Account is verified and active"
-                : "Account requires verification"}
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    // Metadata Section Header
-    {
-      name: "metadataHeader",
-      label: "Metadata",
-      type: "custom",
-      cols: 12,
-      render: () => (
-        <div className="space-y-3 mb-6 mt-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-500/10 dark:to-gray-500/10 rounded-lg">
-              <Info size={20} className="text-slate-600 dark:text-slate-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                System Information
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                System metadata about this merchant account
-              </p>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    // Read-only Fields
-    {
-      name: "createdAt",
-      label: "Created At",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "📅",
-      helperText: "Date and time when this merchant account was created",
-    },
-    {
-      name: "updatedAt",
-      label: "Last Updated",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "🔄",
-      helperText: "Date and time when this merchant account was last updated",
+      helperText: t("merchants.create.fields.language.helper"),
     },
   ];
 
@@ -318,38 +204,29 @@ export default function UpdateMerchantPage() {
     try {
       console.log("Update called with data:", data);
 
-      // Prepare FormData
-      const formData = new FormData();
-
-      // Add merchant data in the required format
-      if (data.firstName) {
-        formData.append("firstName", data.firstName);
-      }
-      if (data.lastName) {
-        formData.append("lastName", data.lastName);
-      }
-      if (data.language) {
-        formData.append("language", data.language);
-      }
-
       const requestData: any = {
         firstName: data.firstName,
         lastName: data.lastName,
         language: data.language,
       };
+
       // Make API call
-      const response = await UpdateMethod(`/merchants`, requestData, id, "en");
+      const response = await UpdateMethod(`/merchants`, requestData, id, lang);
 
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("merchants.messages.noResponse"));
       }
 
       if (response.code !== 200) {
-        throw new Error(
-          response.message?.english || response.message || "Update failed"
-        );
+        const errorMessage =
+          lang === "ar"
+            ? response.message?.arabic
+            : response.message?.english ||
+              response.message ||
+              t("merchants.messages.updateFailed");
+        throw new Error(errorMessage);
       }
 
       return response;
@@ -362,7 +239,7 @@ export default function UpdateMerchantPage() {
   const handleAfterSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["merchants"] });
     queryClient.invalidateQueries({ queryKey: ["merchant", merchantId] });
-    toast.success("Merchant updated successfully!", { duration: 2000 });
+    toast.success(t("merchants.messages.updateSuccess"), { duration: 2000 });
 
     // Redirect after delay
     setTimeout(() => {
@@ -372,9 +249,7 @@ export default function UpdateMerchantPage() {
 
   const handleAfterError = (error: any) => {
     console.error("Update failed:", error);
-    toast.error(
-      error.message || "Failed to update merchant. Please try again."
-    );
+    toast.error(error.message || t("merchants.messages.updateFailed"));
   };
 
   // Transform data before submission
@@ -394,16 +269,16 @@ export default function UpdateMerchantPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Merchant Not Found
+            {t("merchants.messages.merchantNotFoundTitle")}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
-            The merchant ID is missing or invalid.
+            {t("merchants.messages.merchantIdMissing")}
           </p>
           <button
             onClick={() => navigate("/merchants")}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Merchants
+            {t("merchants.page.back")}
           </button>
         </div>
       </div>
@@ -422,20 +297,20 @@ export default function UpdateMerchantPage() {
             size={20}
             className="group-hover:-translate-x-1 transition-transform"
           />
-          Back to Merchants
+          {t("merchants.page.back")}
         </button>
 
-        <GenericUpdateForm
-          title={`Update Merchant`}
-          description="Edit merchant details and save changes. Note: Email and phone number cannot be changed."
+        <UpdateForm
+          title={t("merchants.updateTitle")}
+          description={t("merchants.form.updateDescription")}
           fields={merchantFields}
           entityId={merchantId}
-          fetchData={fetchMerchantById}
+          fetchData={(id: string) => fetchMerchantById(id, lang)}
           onUpdate={handleUpdate}
           onCancel={() => navigate("/merchants")}
           onBack={() => navigate("/merchants")}
-          submitLabel="Save Changes"
-          cancelLabel="Cancel"
+          submitLabel={t("common.saveChanges")}
+          cancelLabel={t("common.cancel")}
           showBackButton={true}
           className="mb-8"
           afterSuccess={handleAfterSuccess}
@@ -447,11 +322,15 @@ export default function UpdateMerchantPage() {
 
             // Add any custom validation here
             if (data.firstName && data.firstName.trim().length < 2) {
-              errors.firstName = "First name must be at least 2 characters";
+              errors.firstName = t(
+                "merchants.create.fields.firstName.validation",
+              );
             }
 
             if (data.lastName && data.lastName.trim().length < 2) {
-              errors.lastName = "Last name must be at least 2 characters";
+              errors.lastName = t(
+                "merchants.create.fields.lastName.validation",
+              );
             }
 
             return errors;

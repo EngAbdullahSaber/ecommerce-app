@@ -21,6 +21,8 @@ import {
   GenericUpdateForm,
 } from "../../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
+import { useTranslation } from "react-i18next";
 
 // Sub Category Interface
 interface Name {
@@ -46,32 +48,18 @@ const fetchSubCategoryById = async (id: string): Promise<any> => {
     const response = await GetSpecifiedMethod(`/categories/${id}`, "en");
 
     if (!response || !response.data) {
-      throw new Error("Sub category not found");
+      throw new Error("categories.sub.edit.fetch.error");
     }
 
     const category = response.data as SubCategory;
-    console.log("Sub category data:", category);
     // Transform the data for the form
     const transformedData = {
       id: category.id,
       englishTitle: category?.title?.english || "",
       arabicTitle: category?.title?.arabic || "",
-      createdAt: new Date(category.createdAt).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      updatedAt: category.updatedAt
-        ? new Date(category.updatedAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-        : "Never updated",
+      image: category.image
+        ? `${import.meta.env.VITE_IMAGE_BASE_URL}${category.image}`
+        : null,
     };
 
     return transformedData;
@@ -82,6 +70,7 @@ const fetchSubCategoryById = async (id: string): Promise<any> => {
 };
 
 export default function UpdateSubCategoryPage() {
+  const { t } = useTranslation();
   const params = useParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -93,7 +82,7 @@ export default function UpdateSubCategoryPage() {
     // Basic Information Section Header
     {
       name: "basicInfoHeader",
-      label: "Basic Information",
+      label: "categories.sub.edit.fields.basicInfoHeader.title",
       type: "custom",
       cols: 12,
       render: () => (
@@ -104,10 +93,10 @@ export default function UpdateSubCategoryPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Sub Category Information
+                {t("categories.sub.edit.fields.basicInfoHeader.title")}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Update sub category details and information
+                {t("categories.sub.edit.fields.basicInfoHeader.description")}
               </p>
             </div>
           </div>
@@ -118,44 +107,37 @@ export default function UpdateSubCategoryPage() {
     // Category Names (Editable)
     {
       name: "englishTitle",
-      label: "English Title",
+      label: "categories.sub.edit.fields.englishTitle.label",
       type: "text",
-      placeholder: "Updated Electronics",
+      placeholder: "categories.sub.edit.fields.englishTitle.placeholder",
       required: true,
       icon: <Globe size={18} />,
       cols: 6,
-      validation: z.string().min(2, "Title must be at least 2 characters"),
-      helperText: "The name of the sub category in English",
+      validation: z
+        .string()
+        .min(2, t("categories.sub.edit.fields.englishTitle.validation")),
+      helperText: "categories.sub.edit.fields.englishTitle.helper",
     },
     {
       name: "arabicTitle",
-      label: "العنوان العربي (Arabic)",
+      label: "categories.sub.edit.fields.arabicTitle.label",
       type: "text",
-      placeholder: "إلكترونيات محدثة",
+      placeholder: "categories.sub.edit.fields.arabicTitle.placeholder",
       required: true,
       cols: 6,
-      validation: z.string().min(2, "العنوان يجب أن يكون على الأقل حرفين"),
-      helperText: "اسم الفئة الرئيسية بالعربية",
+      validation: z
+        .string()
+        .min(2, t("categories.sub.edit.fields.arabicTitle.validation")),
+      helperText: "categories.sub.edit.fields.arabicTitle.helper",
     },
 
-    // Read-only Fields
+    // Image Upload
     {
-      name: "createdAt",
-      label: "Created At",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "📅",
-      helperText: "Date and time when this category was created",
-    },
-    {
-      name: "updatedAt",
-      label: "Last Updated",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "🔄",
-      helperText: "Date and time when this category was last updated",
+      name: "image",
+      label: "categories.sub.edit.fields.image.label",
+      type: "image",
+      required: false,
+      cols: 12,
     },
   ];
 
@@ -194,18 +176,20 @@ export default function UpdateSubCategoryPage() {
         `/categories`,
         formData,
         id,
-        "en"
+        "en",
       );
 
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error("categories.sub.edit.form.noResponse");
       }
 
       if (response.code !== 200) {
         throw new Error(
-          response.message?.english || response.message || "Update failed"
+          response.message?.english ||
+            response.message ||
+            "categories.sub.edit.form.error",
         );
       }
 
@@ -218,7 +202,7 @@ export default function UpdateSubCategoryPage() {
 
   const handleAfterSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["sub-categories"] });
-    toast.success("Sub category updated successfully!", { duration: 2000 });
+    toast.success(t("categories.sub.edit.form.success"), { duration: 2000 });
 
     // Redirect after delay
     setTimeout(() => {
@@ -228,9 +212,7 @@ export default function UpdateSubCategoryPage() {
 
   const handleAfterError = (error: any) => {
     console.error("Update failed:", error);
-    toast.error(
-      error.message || "Failed to update sub category. Please try again."
-    );
+    toast.error(error.message || t("categories.sub.edit.form.error"));
   };
 
   // Transform data before submission
@@ -255,16 +237,16 @@ export default function UpdateSubCategoryPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Sub Category Not Found
+            {t("categories.sub.edit.notFound.title")}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
-            The sub category ID is missing or invalid.
+            {t("categories.sub.edit.notFound.description")}
           </p>
           <button
             onClick={() => navigate("/sub-categories")}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Sub Categories
+            {t("categories.sub.edit.notFound.backButton")}
           </button>
         </div>
       </div>
@@ -274,29 +256,17 @@ export default function UpdateSubCategoryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/sub-categories")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          Back to Sub Categories
-        </button>
-
-        <GenericUpdateForm
-          title={`Update Sub Category`}
-          description="Edit sub category details and save changes"
+        <UpdateForm
+          title="categories.sub.edit.title"
+          description="categories.sub.edit.description"
           fields={subCategoryFields}
           entityId={categoryId}
           fetchData={fetchSubCategoryById}
           onUpdate={handleUpdate}
           onCancel={() => navigate("/sub-categories")}
           onBack={() => navigate("/sub-categories")}
-          submitLabel="Save Changes"
-          cancelLabel="Cancel"
+          submitLabel="categories.sub.edit.form.submit"
+          cancelLabel="categories.sub.edit.form.cancel"
           showBackButton={true}
           className="mb-8"
           afterSuccess={handleAfterSuccess}

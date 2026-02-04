@@ -528,130 +528,155 @@
   "areas": {
     "title": "المناطق",
     "createTitle": "إضافة منطقة جديدة",
-    "createSubtitle": "أدخل تفاصيل المنطقة مع ربطها بمدينة",
+    "createSubtitle": "أدخل تفاصيل المنطقة مع المدينة المرتبطة",
     "createArea": "إنشاء منطقة",
     "updateArea": "تحديث المنطقة",
     "areaName": "اسم المنطقة",
     "city": "المدينة",
     "noAreas": "لم يتم العثور على مناطق",
-    "backToList": "العودة إلى المناطق",
-    "form": {
-      "title": "معلومات المنطقة",
-      "description": "أكمل تفاصيل المنطقة أدناه. يجب تقديم الاسم باللغتين الإنجليزية والعربية.",
-      "englishName": "اسم المنطقة (إنجليزي)",
-      "arabicName": "اسم المنطقة (عربي)",
-      "selectCity": "اختر مدينة",
-      "searchCity": "ابحث عن مدينة...",
-      "submitCreate": "إنشاء المنطقة",
-      "creating": "جارٍ إنشاء المنطقة...",
-      "createSuccess": "تم إنشاء المنطقة بنجاح!",
-      "createError": "خطأ أثناء إنشاء المنطقة: {{message}}",
-      "updateSuccess": "تم تحديث المنطقة بنجاح!",
-      "updateError": "خطأ أثناء تحديث المنطقة: {{message}}",
-      "basicInformation": "المعلومات الأساسية",
-      "areaInformation": "معلومات المنطقة",
-      "enterAreaDetails": "أدخل المعلومات الأساسية للمنطقة الجديدة",
-      "addNewArea": "إضافة منطقة جديدة",
-      "enterAreaDetailsWithCity": "أدخل تفاصيل المنطقة واختر مدينة",
-      "fillAreaDetails": "املأ تفاصيل المنطقة أدناه",
-      "areaNameEnglish": "اسم المنطقة (الإنجليزية)",
-      "areaNameEnglishPlaceholder": "Nacr City",
-      "areaNameEnglishHelper": "أدخل اسم المنطقة باللغة الإنجليزية",
-      "areaNameArabic": "اسم المنطقة (العربية)",
-      "areaNameArabicPlaceholder": "مدينة نصر",
-      "areaNameArabicHelper": "أدخل اسم المنطقة باللغة العربية",
-      "nameMinLength": "يجب أن يكون الاسم مكون من حرفين على الأقل",
-      "city": "المدينة",
-      "selectCityRequired": "الرجاء اختيار مدينة",
-      "selectCityHelper": "اختر المدينة التي تقع فيها هذه المنطقة",
-      "createArea": "إنشاء منطقة"
-    },
-    "title": "إدارة المناطق",
     "subtitle": "إدارة وتنظيم المناطق الجغرافية",
     "addArea": "إضافة منطقة جديدة",
     "addFirstArea": "إضافة أول منطقة",
     "searchPlaceholder": "البحث عن المناطق بالاسم...",
     "loading": "جاري تحميل المناطق...",
-    "loadError": "فشل تحميل المناطق",
+    "loadError": "فشل في تحميل المناطق",
     "loadErrorDesc": "تعذر جلب بيانات المناطق. يرجى المحاولة مرة أخرى.",
     "noAreasFound": "لم يتم العثور على مناطق",
     "noAreasYet": "لم تتم إضافة أي مناطق بعد. ابدأ بإضافة منطقتك الأولى.",
     "noSearchResults": "لا توجد مناطق تطابق معايير البحث الخاصة بك.",
     "deleteTitle": "حذف المنطقة",
-    "deleteDescription": "هل أنت متأكد من رغبتك في حذف هذه المنطقة؟ لا يمكن التراجع عن هذا الإجراء.",
+    "deleteDescription": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟ لا يمكن التراجع عن هذا الإجراء.",
     "unknownArea": "منطقة غير معروفة",
     "unknownCity": "مدينة غير معروفة",
     "messages": {
-      "deleteSuccess": "تم حذف المنطقة بنجاح",
-      "deleteFailed": "فشل حذف المنطقة",
       "createSuccess": "تم إنشاء المنطقة بنجاح",
-      "createFailed": "فشل إنشاء المنطقة",
+      "createFailed": "فشل في إنشاء المنطقة",
       "creating": "جاري إنشاء المنطقة...",
       "noResponse": "لا يوجد رد من الخادم",
-      "backToAreas": "العودة إلى المناطق"
+      "backToAreas": "العودة إلى المناطق",
+      "updateSuccess": "تم تحديث المنطقة بنجاح!",
+      "updateFailed": "فشل في تحديث المنطقة",
+      "areaNotFound": "لم يتم العثور على المنطقة",
+      "areaIdMissing": "معرف المنطقة مفقود"
     },
     "table": {
       "englishName": "الاسم بالإنجليزية",
       "arabicName": "الاسم بالعربية",
-      "city": "المدينة"
+      "city": "المدينة",
+      "actions": "الإجراءات"
+    },
+    "backToList": "العودة إلى المناطق",
+    "form": {
+      "basicInformation": "المعلومات الأساسية",
+      "areaInformation": "معلومات المنطقة",
+      "updateAreaDetails": "قم بتحديث تفاصيل المنطقة أدناه",
+      "editAreaDetails": "تعديل معلومات المنطقة",
+      "englishName": "اسم المنطقة (الإنجليزية)",
+      "arabicName": "اسم المنطقة (العربية)",
+      "areaNameEnglishPlaceholder": "أدخل الاسم بالإنجليزية",
+      "areaNameArabicPlaceholder": "أدخل الاسم بالعربية",
+      "areaNameEnglishHelper": "أدخل اسم المنطقة باللغة الإنجليزية",
+      "areaNameArabicHelper": "أدخل اسم المنطقة باللغة العربية",
+      "nameMinLength": "يجب أن يكون الاسم مكونًا من حرفين على الأقل",
+      "city": "المدينة",
+      "selectCity": "اختر مدينة",
+      "selectCityRequired": "الرجاء اختيار مدينة",
+      "selectCityHelper": "اختر المدينة التي تقع فيها هذه المنطقة",
+      "createArea": "إنشاء منطقة",
+      "searchCity": "البحث عن مدينة...",
+      "submitCreate": "إنشاء منطقة",
+      "creating": "جاري إنشاء المنطقة...",
+      "createSuccess": "تم إنشاء المنطقة بنجاح!",
+      "createError": "خطأ في إنشاء المنطقة: {{message}}",
+      "updateSuccess": "تم تحديث المنطقة بنجاح!",
+      "updateError": "خطأ في تحديث المنطقة: {{message}}"
     },
     "validations": {
-      "nameMin": "يجب أن يكون الاسم 2 أحرف على الأقل",
-      "selectCity": "يرجى اختيار مدينة"
+      "nameMin": "يجب أن يكون الاسم مكونًا من حرفين على الأقل",
+      "selectCity": "الرجاء اختيار مدينة"
     }
   },
   "events": {
-    "createTitle": "إنشاء حدث جديد",
-    "createSubtitle": "نظم وجدول أحداثك",
-    "backToList": "العودة إلى قائمة الأحداث",
+    "title": "الفعاليات",
+    "createTitle": "إنشاء فعالية جديدة",
+    "createSubtitle": "نظم وجدول فعالياتك",
+    "updateEvent": "تحديث الفعالية",
+    "backToList": "العودة إلى قائمة الفعاليات",
+    "addEvent": "إضافة فعالية",
+    "management": "إدارة الفعاليات",
+    "managementSubtitle": "إدارة وتنظيم فعالياتك بكفاءة",
+    "searchPlaceholder": "البحث عن الفعاليات بالعنوان...",
+    "loading": "جاري تحميل الفعاليات...",
+    "allTypes": "جميع الأنواع",
+    "allStatus": "جميع الحالات",
+    "allVisibility": "جميع مستويات الرؤية",
+    "filter": "تصفية",
+    "clearFilters": "مسح الفلاتر",
+    "showFilters": "إظهار الفلاتر",
+    "hideFilters": "إخفاء الفلاتر",
+    "noEventsFound": "لم يتم العثور على فعاليات",
+    "noEventsMatch": "لا توجد فعاليات تطابق معايير البحث الخاصة بك.",
+    "noEventsInDB": "لا توجد فعاليات في قاعدة البيانات بعد.",
+    "createFirstEvent": "أنشئ فعاليتك الأولى",
+    "failedToLoad": "فشل في تحميل الفعاليات",
+    "tryAgain": "حاول مرة أخرى",
+    "untitledEvent": "فعالية بدون عنوان",
+    "unknownEvent": "فعالية غير معروفة",
+    "fetchError": "حدث خطأ في جلب بيانات الفعاليات.",
+
+    "messages": {
+      "createSuccess": "تم إنشاء الفعالية بنجاح!",
+      "createFailed": "فشل في إنشاء الفعالية",
+      "updateSuccess": "تم تحديث الفعالية بنجاح!",
+      "updateFailed": "فشل في تحديث الفعالية",
+      "deleteSuccess": "تم حذف الفعالية بنجاح!",
+      "deleteError": "فشل في حذف الفعالية. يرجى المحاولة مرة أخرى.",
+      "noResponse": "لا يوجد رد من الخادم",
+      "backToEvents": "العودة إلى الفعاليات",
+      "eventNotFound": "لم يتم العثور على الفعالية",
+      "eventIdMissing": "معرف الفعالية مفقود"
+    },
+
     "form": {
-      "title": "تفاصيل الحدث",
-      "description": "املأ التفاصيل لإنشاء حدث جديد",
-      "titleEnglish": "عنوان الحدث (الإنجليزية)",
-      "placeholderTitleEnglish": "أدخل عنوان الحدث بالإنجليزية",
-      "titleArabic": "عنوان الحدث (العربية)",
-      "placeholderTitleArabic": "أدخل عنوان الحدث بالعربية",
-      "eventDate": "تاريخ الحدث",
-      "helper": {
-        "eventDate": "حدد التاريخ  للحدث",
-        "eventType": "اختر نوع الحدث",
-        "visibility": "الأحداث العامة مرئية لجميع المستخدمين",
-        "status": "تعيين الحدث كنشط أو غير نشط"
-      },
-      "eventType": "نوع الحدث",
-      "placeholderEventType": "اختر نوع الحدث",
+      "title": "تفاصيل الفعالية",
+      "description": "املأ التفاصيل لإنشاء فعالية جديدة",
+      "eventInformation": "معلومات الفعالية",
+      "eventDetails": "تفاصيل الفعالية",
+      "updateEventDetails": "قم بتحديث تفاصيل الفعالية أدناه",
+      "editEventDetails": "تعديل معلومات الفعالية",
+      "englishTitle": "عنوان الفعالية (الإنجليزية)",
+      "arabicTitle": "عنوان الفعالية (العربية)",
+      "placeholderTitleEnglish": "أدخل عنوان الفعالية بالإنجليزية",
+      "placeholderTitleArabic": "أدخل عنوان الفعالية بالعربية",
+      "englishTitleHelper": "أدخل عنوان الفعالية باللغة الإنجليزية",
+      "arabicTitleHelper": "أدخل عنوان الفعالية باللغة العربية",
+      "titleMinLength": "يجب أن يكون العنوان مكونًا من حرفين على الأقل",
+      "eventDate": "تاريخ ووقت الفعالية",
+      "eventType": "نوع الفعالية",
+      "placeholderEventType": "اختر نوع الفعالية",
       "visibility": "الرؤية",
+      "visibilitySettings": "إعدادات الرؤية",
+      "eventVisibility": "رؤية الفعالية",
       "public": "عام",
       "private": "خاص",
+      "controlVisibility": "تحكم في من يمكنه رؤية هذه الفعالية",
+      "visibilityHelper": "الفعاليات العامة مرئية لجميع المستخدمين",
+      "makePublicOrPrivate": "اجعل الفعالية عامة أو خاصة",
       "status": "الحالة",
-      "submitCreate": "إنشاء الحدث",
-      "creating": "جاري إنشاء الحدث...",
-      "createSuccess": "تم إنشاء الحدث بنجاح!",
-      "createError": "فشل في إنشاء الحدث: {{message}}"
+      "submitCreate": "إنشاء فعالية",
+      "creating": "جاري إنشاء الفعالية...",
+      "createSuccess": "تم إنشاء الفعالية بنجاح!",
+      "createError": "فشل في إنشاء الفعالية: {{message}}"
     },
-    "addEvent": "إضافة حدث",
-    "columns": {
-      "eventTitle": "عنوان الحدث",
-      "arabicTitle": "العنوان العربي",
-      "eventDateTime": "تاريخ الحدث",
-      "type": "النوع",
-      "visibility": "الرؤية",
-      "status": "الحالة",
-      "created": "تم الإنشاء"
-    },
-    "untitledEvent": "حدث بدون عنوان",
-    "untitledEventAr": "حدث بدون عنوان",
-    "unknownEvent": "حدث غير معروف",
-    "fetchError": "حدث خطأ في جلب بيانات الأحداث.",
 
     "validations": {
-      "titleMin": "يجب أن يكون العنوان على الأقل حرفين",
-      "titleMinAr": "يجب أن يكون العنوان على الأقل حرفين",
-      "selectDate": "الرجاء تحديد تاريخ",
-      "selectType": "الرجاء اختيار نوع الحدث",
-      "selectVisibility": "الرجاء اختيار الرؤية",
+      "titleMin": "يجب أن يكون العنوان مكونًا من حرفين على الأقل",
+      "selectDate": "الرجاء اختيار تاريخ",
+      "selectType": "الرجاء اختيار نوع الفعالية",
+      "selectVisibility": "الرجاء اختيار مستوى الرؤية",
       "selectStatus": "الرجاء اختيار الحالة"
     },
+
     "types": {
       "Birthday": "عيد ميلاد",
       "Party": "حفلة",
@@ -661,92 +686,36 @@
       "Concert": "حفل موسيقي",
       "Seminar": "ندوة",
       "Workshop": "ورشة عمل",
-      "Networking": "تواصل",
+      "Networking": "شبكات تواصل",
       "Festival": "مهرجان"
     },
-    "management": "إدارة الأحداث",
-    "managementSubtitle": "إدارة وتنظيم الأحداث بكفاءة",
-    "searchPlaceholder": "البحث عن الأحداث بالعنوان...",
-    "allTypes": "جميع الأنواع",
-    "allStatus": "جميع الحالات",
-    "allVisibility": "جميع أنواع الرؤية",
-    "filter": "تصفية",
-    "clearFilters": "مسح الفلاتر",
-    "showFilters": "إظهار الفلاتر",
-    "hideFilters": "إخفاء الفلاتر",
-    "noEventsFound": "لم يتم العثور على أحداث",
-    "noEventsMatch": "لا توجد أحداث تطابق معايير البحث الخاصة بك.",
-    "noEventsInDB": "لا توجد أحداث في قاعدة البيانات بعد.",
-    "createFirstEvent": "أنشئ أول حدث لك",
-    "failedToLoad": "فشل تحميل الأحداث",
-    "tryAgain": "حاول مرة أخرى",
-    "deleteConfirmTitle": "حذف الحدث",
-    "deleteConfirmDescription": "هل أنت متأكد أنك تريد حذف هذا الحدث؟ لا يمكن التراجع عن هذا الإجراء وسيتم فقدان جميع البيانات المرتبطة به.",
-    "deleteSuccess": "تم حذف الحدث بنجاح!",
-    "deleteError": "فشل حذف الحدث. يرجى المحاولة مرة أخرى."
+
+    "columns": {
+      "eventTitle": "عنوان الفعالية",
+      "arabicTitle": "العنوان العربي",
+      "eventDateTime": "تاريخ ووقت الفعالية",
+      "type": "النوع",
+      "visibility": "الرؤية",
+      "status": "الحالة",
+      "created": "تاريخ الإنشاء",
+      "actions": "الإجراءات"
+    },
+
+    "deleteConfirm": {
+      "title": "حذف الفعالية",
+      "description": "هل أنت متأكد أنك تريد حذف هذه الفعالية؟ لا يمكن التراجع عن هذا الإجراء وستفقد جميع البيانات المرتبطة بها."
+    }
   },
   "stores": {
-    "create": {
-      "title": "إنشاء متجر جديد",
-      "subtitle": "إضافة متجر جديد إلى المنصة"
-    },
+    "title": "المتاجر",
+    "createTitle": "إنشاء متجر جديد",
+    "updateTitle": "تحديث المتجر",
+    "createSubtitle": "أضف متجرًا جديدًا إلى منصتك",
+    "updateSubtitle": "تعديل معلومات المتجر",
     "management": "إدارة المتاجر",
     "managementSubtitle": "إدارة وعرض معلومات المتاجر مع الأوصاف والشعارات",
     "backToList": "العودة إلى قائمة المتاجر",
-    "form": {
-      "title": "تفاصيل المتجر",
-      "selectMerchantHelper": "اختر تاجرًا من القائمة",
-      "searchMerchant": "البحث عن تاجر",
-      "selectMerchant": "اختيار التاجر",
-      "description": "املأ معلومات المتجر",
-      "englishName": "اسم المتجر (الإنجليزية)",
-      "arabicName": "اسم المتجر (العربية)",
-      "englishDescription": "الوصف (الإنجليزية)",
-      "arabicDescription": "الوصف (العربية)",
-      "storeLogo": "شعار المتجر",
-      "uploadLogo": "تحميل صورة شعار المتجر",
-      "clickToUploadLogo": "انقر لتحميل الشعار",
-      "changeUploadedFile": "تغيير الملف المرفوع",
-      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG حتى 5 ميجابايت",
-      "logoPreview": "معاينة الشعار",
-      "logoPreviewHere": "ستظهر معاينة الشعار هنا",
-      "storeImage": "صورة المتجر",
-      "uploadImage": "تحميل صورة بانر المتجر (اختياري)",
-      "JPGPNGUpTo10MB": "JPG, PNG حتى 10 ميجابايت",
-      "image": {
-        "click": "انقر لتحميل صورة المتجر",
-        "change": "تغيير صورة المتجر"
-      },
-      "imagePreviewHere": "ستظهر معاينة صورة المتجر هنا",
-      "actions": {
-        "create": "إنشاء المتجر",
-        "update": "تحديث المتجر"
-      }
-    },
-    "validations": {
-      "nameMin": "يجب أن يكون الاسم على الأقل حرفين",
-      "descriptionMin": "يجب أن يكون الوصف على الأقل 10 أحرف"
-    },
-    "messages": {
-      "creating": "جاري إنشاء المتجر...",
-      "createSuccess": "تم إنشاء المتجر بنجاح!",
-      "createFailed": "فشل في إنشاء المتجر: ",
-      "updating": "جاري تحديث المتجر...",
-      "updateSuccess": "تم تحديث المتجر بنجاح!",
-      "updateFailed": "فشل في تحديث المتجر: ",
-      "deleting": "جاري حذف المتجر...",
-      "deleteSuccess": "تم حذف المتجر بنجاح!",
-      "deleteFailed": "فشل حذف المتجر. يرجى المحاولة مرة أخرى."
-    },
-    "columns": {
-      "logo": "الشعار",
-      "englishName": "الاسم بالإنجليزية",
-      "arabicName": "الاسم بالعربية",
-      "englishDescription": "الوصف بالإنجليزية",
-      "arabicDescription": "الوصف بالعربية",
-      "status": "الحالة",
-      "actions": "الإجراءات"
-    },
+    "addStore": "إضافة متجر",
     "searchPlaceholder": "البحث عن المتاجر بالاسم أو الوصف...",
     "allStatus": "جميع الحالات",
     "filter": "تصفية",
@@ -757,44 +726,120 @@
     "noStoresMatch": "لا توجد متاجر تطابق معايير البحث الخاصة بك.",
     "noStoresInDB": "لا توجد متاجر في قاعدة البيانات بعد.",
     "createFirstStore": "أضف متجرك الأول",
-    "failedToLoad": "فشل تحميل المتاجر",
+    "failedToLoad": "فشل في تحميل المتاجر",
     "fetchError": "حدث خطأ في جلب بيانات المتاجر.",
     "tryAgain": "حاول مرة أخرى",
-    "addStore": "إضافة متجر",
-    "deleteConfirmTitle": "حذف المتجر",
-    "deleteConfirmDescription": "هل أنت متأكد أنك تريد حذف هذا المتجر؟ لا يمكن التراجع عن هذا الإجراء.",
     "unknownStore": "متجر غير معروف",
     "untitledStore": "متجر بدون عنوان",
     "noDescription": "لا يوجد وصف متاح",
-    "noDescriptionAr": "لا يوجد وصف"
+
+    "form": {
+      "title": "تفاصيل المتجر",
+      "description": "املأ معلومات المتجر",
+      "updateDescription": "قم بتحديث معلومات المتجر أدناه",
+      "englishName": "اسم المتجر (الإنجليزية)",
+      "arabicName": "اسم المتجر (العربية)",
+      "englishDescription": "الوصف (الإنجليزية)",
+      "arabicDescription": "الوصف (العربية)",
+      "placeholderEnglishName": "متجر الإلكترونيات",
+      "placeholderArabicName": "متجر الإلكترونيات",
+      "placeholderEnglishDescription": "متجر متخصص في الأجهزة الإلكترونية",
+      "placeholderArabicDescription": "متجر متخصص في بيع الأجهزة الإلكترونية",
+      "englishNameHelper": "أدخل اسم المتجر باللغة الإنجليزية",
+      "arabicNameHelper": "أدخل اسم المتجر باللغة العربية",
+      "englishDescriptionHelper": "أدخل وصف المتجر باللغة الإنجليزية",
+      "arabicDescriptionHelper": "أدخل وصف المتجر باللغة العربية",
+      "storeLogo": "شعار المتجر",
+      "uploadLogo": "رفع صورة شعار المتجر",
+      "clickToUploadLogo": "انقر لرفع الشعار",
+      "changeUploadedFile": "تغيير الملف المرفوع",
+      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG حتى 5 ميغابايت",
+      "logoPreview": "معاينة الشعار",
+      "logoPreviewHere": "ستظهر معاينة الشعار هنا",
+      "storeImage": "صورة المتجر",
+      "uploadImage": "رفع صورة بانر المتجر (اختياري)",
+      "newLogoOptional": "شعار جديد (اختياري)",
+      "newStoreImageOptional": "صورة جديدة للمتجر (اختياري)",
+      "leaveEmptyKeepCurrent": "اتركه فارغاً للحفاظ على الشعار الحالي",
+      "imageUploadHelper": "ارفع صورة جديدة للمتجر. JPG, PNG حتى 10 ميغابايت",
+      "image": {
+        "click": "انقر لرفع صورة المتجر",
+        "change": "تغيير صورة المتجر"
+      },
+      "imagePreviewHere": "ستظهر معاينة صورة المتجر هنا",
+      "selectMerchantHelper": "اختر تاجرًا من القائمة",
+      "searchMerchant": "بحث عن تاجر",
+      "selectMerchant": "اختر تاجرًا"
+    },
+
+    "validations": {
+      "nameMin": "يجب أن يكون الاسم مكونًا من حرفين على الأقل",
+      "descriptionMin": "يجب أن يكون الوصف مكونًا من 10 أحرف على الأقل"
+    },
+
+    "messages": {
+      "creating": "جاري إنشاء المتجر...",
+      "createSuccess": "تم إنشاء المتجر بنجاح!",
+      "createFailed": "فشل في إنشاء المتجر: ",
+      "updating": "جاري تحديث المتجر...",
+      "updateSuccess": "تم تحديث المتجر بنجاح!",
+      "updateFailed": "فشل في تحديث المتجر: ",
+      "deleting": "جاري حذف المتجر...",
+      "deleteSuccess": "تم حذف المتجر بنجاح!",
+      "deleteFailed": "فشل في حذف المتجر. يرجى المحاولة مرة أخرى.",
+      "noResponse": "لا يوجد رد من الخادم",
+      "storeNotFound": "لم يتم العثور على المتجر",
+      "storeNotFoundTitle": "المتجر غير موجود",
+      "storeNotFoundDesc": "المتجر الذي تبحث عنه غير موجود."
+    },
+
+    "columns": {
+      "logo": "الشعار",
+      "englishName": "الاسم بالإنجليزية",
+      "arabicName": "الاسم بالعربية",
+      "englishDescription": "الوصف بالإنجليزية",
+      "arabicDescription": "الوصف بالعربية",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+
+    "deleteConfirm": {
+      "title": "حذف المتجر",
+      "description": "هل أنت متأكد أنك تريد حذف هذا المتجر؟ لا يمكن التراجع عن هذا الإجراء."
+    }
   },
+
   "filters": {
+    "title": "الفلاتر",
+    "createTitle": "إنشاء فلتر جديد",
+    "updateTitle": "تحديث الفلتر",
     "page": {
       "title": "إدارة الفلاتر",
-      "description": "إدارة وتنظيم فلاتر وخصائص المنتجات",
-      "loading": "جارٍ تحميل الفلاتر...",
+      "description": "إدارة وتنظيم فلاتر المنتجات والسمات",
+      "back": "العودة إلى الفلاتر",
+      "loading": "جاري تحميل الفلاتر...",
       "errorTitle": "خطأ في تحميل الفلاتر",
-      "errorMessage": "فشل تحميل الفلاتر. يرجى المحاولة مرة أخرى.",
-      "noFilters": "لا توجد فلاتر",
-      "noMatch": "لا توجد فلاتر تطابق معايير البحث",
-      "emptyList": "ابدأ بإنشاء أول خاصية فلترة",
+      "errorMessage": "فشل في تحميل الفلاتر. يرجى المحاولة مرة أخرى.",
+      "noFilters": "لم يتم العثور على فلاتر",
+      "noMatch": "لا توجد فلاتر تطابق معايير البحث الخاصة بك",
+      "emptyList": "ابدأ بإنشاء أول سمة فلتر",
       "addFirstFilter": "إنشاء أول فلتر",
       "tryAgain": "حاول مرة أخرى",
       "refresh": "تحديث",
       "addFilter": "إضافة فلتر",
-      "searchPlaceholder": "ابحث عن الفلاتر بالاسم أو المفتاح...",
+      "searchPlaceholder": "البحث عن الفلاتر بالاسم أو المفتاح...",
       "delete": {
         "title": "حذف الفلتر",
         "description": "هل أنت متأكد أنك تريد حذف هذا الفلتر؟ لا يمكن التراجع عن هذا الإجراء.",
         "success": "تم حذف الفلتر بنجاح",
-        "error": "فشل حذف الفلتر"
+        "error": "فشل في حذف الفلتر"
       },
       "status": {
         "active": "نشط",
         "inactive": "غير نشط"
       },
       "columns": {
-        "id": "المعرّف",
+        "id": "المعرف",
         "filter": "الفلتر",
         "key": "المفتاح",
         "status": "الحالة",
@@ -823,48 +868,48 @@
     "create": {
       "back": "العودة إلى الفلاتر",
       "title": "إنشاء فلتر جديد",
-      "description": "إضافة خاصية فلترة جديدة مع خيارات مخصصة",
+      "description": "إضافة سمة فلتر جديدة مع خيارات مخصصة",
       "form": {
         "title": "تفاصيل الفلتر",
-        "description": "املأ تفاصيل خاصية الفلترة الجديدة",
+        "description": "املأ التفاصيل لسمة الفلتر الجديدة الخاصة بك",
         "submit": "إنشاء فلتر",
         "cancel": "إلغاء",
-        "loading": "جارٍ إنشاء الفلتر...",
+        "loading": "جاري إنشاء الفلتر...",
         "success": "تم إنشاء الفلتر بنجاح",
-        "error": "فشل إنشاء الفلتر"
+        "error": "فشل في إنشاء الفلتر"
       },
       "sections": {
         "basicInfo": {
           "title": "المعلومات الأساسية",
-          "description": "تحديد مفتاح الفلتر والاسم ومسار المصدر"
+          "description": "تحديد مفتاح الفلتر، الاسم، ومسار المصدر"
         },
         "options": {
           "title": "خيارات الفلتر",
-          "description": "إضافة وتهيئة خيارات الفلتر"
+          "description": "إضافة وتكوين خيارات الفلتر"
         }
       },
       "fields": {
         "key": {
           "label": "مفتاح الفلتر",
-          "placeholder": "مثال: color، size، material",
-          "validation": "يجب أن يكون المفتاح مكوّنًا من حرفين على الأقل",
-          "format": "يجب أن يحتوي المفتاح على أحرف صغيرة وأرقام فقط (بدون مسافات)",
-          "helper": "معرّف فريد للفلتر (يُستخدم في استدعاءات API)"
+          "placeholder": "مثال: color, size, material",
+          "validation": "يجب أن يكون المفتاح مكونًا من حرفين على الأقل",
+          "format": "يجب أن يكون المفتاح أحرف صغيرة وأرقام فقط (بدون مسافات)",
+          "helper": "معرف فريد للفلتر (يستخدم في استدعاءات API)"
         },
         "name": {
           "label": "اسم العرض",
-          "placeholder": "مثال: اللون، المقاس، الخامة",
-          "validation": "يجب أن يكون الاسم مكوّنًا من حرفين على الأقل",
-          "helper": "اسم سهل الاستخدام يظهر في الواجهة"
+          "placeholder": "مثال: اللون، المقاس، المادة",
+          "validation": "يجب أن يكون الاسم مكونًا من حرفين على الأقل",
+          "helper": "اسم ودي للمستخدم يعرض في الواجهة"
         },
         "sourcePath": {
           "label": "مسار المصدر (اختياري)",
-          "placeholder": "مثال: product.color، variant.size",
-          "helper": "المسار إلى مصدر البيانات لهذا الفلتر"
+          "placeholder": "مثال: product.color, variant.size",
+          "helper": "مسار مصدر البيانات لهذا الفلتر"
         },
         "isActive": {
-          "label": "حالة التفعيل",
-          "helper": "تمكين أو تعطيل خاصية الفلترة"
+          "label": "حالة النشاط",
+          "helper": "تمكين أو تعطيل سمة الفلتر هذه"
         },
         "options": {
           "label": "خيارات الفلتر",
@@ -873,14 +918,14 @@
           "remove": "إزالة",
           "option": "خيار",
           "value": "القيمة",
-          "valuePlaceholder": "مثال: أحمر، أزرق، أخضر",
+          "valuePlaceholder": "مثال: red, blue, green",
           "name": "اسم العرض",
           "namePlaceholder": "مثال: أحمر، أزرق، أخضر",
           "sortOrder": "الترتيب",
           "status": "نشط",
           "validation": {
             "minimum": "مطلوب خيار واحد على الأقل",
-            "required": "القيمة واسم العرض مطلوبان",
+            "required": "مطلوب كل من القيمة والاسم",
             "duplicate": "يجب أن تكون قيم الخيارات فريدة"
           }
         }
@@ -889,33 +934,34 @@
     "edit": {
       "back": "العودة إلى الفلاتر",
       "title": "تعديل الفلتر",
-      "description": "تعديل خاصية الفلترة والخيارات",
+      "description": "تعديل سمة الفلتر والخيارات",
       "form": {
         "title": "تعديل تفاصيل الفلتر",
-        "description": "تحديث تفاصيل خاصية الفلترة",
+        "description": "تحديث التفاصيل لسمة الفلتر هذه",
         "submit": "تحديث الفلتر",
         "cancel": "إلغاء",
-        "loading": "جارٍ تحديث الفلتر...",
+        "loading": "جاري تحديث الفلتر...",
         "success": "تم تحديث الفلتر بنجاح",
-        "error": "فشل تحديث الفلتر"
+        "error": "فشل في تحديث الفلتر",
+        "keyHelper": "لا يمكن تغيير مفتاح الفلتر"
       }
     },
     "view": {
       "back": "العودة إلى الفلاتر",
       "title": "عرض الفلتر",
-      "description": "عرض تفاصيل الفلتر وإعداداته",
-      "loading": "جارٍ تحميل الفلتر...",
+      "description": "عرض تفاصيل الفلتر والتكوين",
+      "loading": "جاري تحميل الفلتر...",
       "loadingMessage": "يرجى الانتظار أثناء جلب معلومات الفلتر",
       "error": "الفلتر غير موجود",
       "errorMessage": "تعذر العثور على الفلتر المطلوب أو ليس لديك صلاحية لعرضه.",
       "retry": "العودة إلى الفلاتر",
       "basicInfo": {
         "title": "المعلومات الأساسية",
-        "description": "خصائص الفلتر والبيانات الوصفية"
+        "description": "سمات الفلتر وبيانات التعريف"
       },
       "options": {
         "title": "خيارات الفلتر",
-        "description": "{{count}} خيار متاح"
+        "description": "{{count}} خيارات متاحة"
       },
       "statistics": {
         "title": "الإحصائيات",
@@ -923,7 +969,7 @@
       },
       "metadata": {
         "title": "معلومات النظام",
-        "description": "البيانات الوصفية للفلتر"
+        "description": "بيانات تعريف الفلتر"
       },
       "fields": {
         "key": "مفتاح الفلتر",
@@ -932,8 +978,8 @@
         "status": "الحالة",
         "createdAt": "تاريخ الإنشاء",
         "updatedAt": "آخر تحديث",
-        "filterId": "معرّف الفلتر",
-        "option": "الخيار",
+        "filterId": "معرف الفلتر",
+        "option": "خيار",
         "value": "القيمة",
         "displayName": "اسم العرض",
         "sort": "الترتيب",
@@ -950,7 +996,7 @@
         "edit": "تعديل الفلتر",
         "backToList": "العودة إلى القائمة",
         "copy": "نسخ إلى الحافظة",
-        "copyId": "نسخ المعرّف"
+        "copyId": "نسخ المعرف"
       },
       "messages": {
         "copied": "تم النسخ إلى الحافظة!"
@@ -962,8 +1008,8 @@
         "description": "إدارة خيارات الفلتر",
         "back": "العودة إلى الفلتر",
         "addOption": "إضافة خيار",
-        "noOptions": "لا توجد خيارات",
-        "loading": "جارٍ تحميل الخيارات..."
+        "noOptions": "لم يتم العثور على خيارات",
+        "loading": "جاري تحميل الخيارات..."
       },
       "fields": {
         "value": {
@@ -977,15 +1023,29 @@
           "validation": "اسم العرض مطلوب"
         },
         "sortOrder": {
-          "label": "ترتيب العرض",
-          "placeholder": "أدخل ترتيب العرض",
-          "helper": "الأرقام الأصغر تظهر أولاً"
+          "label": "ترتيب الفرز",
+          "placeholder": "أدخل ترتيب الفرز",
+          "helper": "تظهر الأرقام الأقل أولاً"
         },
         "isActive": {
           "label": "نشط",
           "helper": "تمكين أو تعطيل هذا الخيار"
         }
       }
+    },
+    "messages": {
+      "creating": "جاري إنشاء الفلتر...",
+      "createSuccess": "تم إنشاء الفلتر بنجاح!",
+      "createFailed": "فشل في إنشاء الفلتر: ",
+      "updating": "جاري تحديث الفلتر...",
+      "updateSuccess": "تم تحديث الفلتر بنجاح!",
+      "updateFailed": "فشل في تحديث الفلتر: ",
+      "deleting": "جاري حذف الفلتر...",
+      "deleteSuccess": "تم حذف الفلتر بنجاح!",
+      "deleteFailed": "فشل في حذف الفلتر. يرجى المحاولة مرة أخرى.",
+      "noResponse": "لا يوجد رد من الخادم",
+      "filterNotFound": "لم يتم العثور على الفلتر",
+      "filterIdMissing": "معرف الفلتر مفقود أو غير صالح."
     }
   },
   "imageUploader": {
@@ -1358,68 +1418,15 @@
     }
   },
   "brands": {
-    "create": {
-      "title": "إضافة علامة تجارية جديدة",
-      "subtitle": "أدخل تفاصيل العلامة التجارية بالإنجليزية والعربية"
-    },
+    "title": "العلامات التجارية",
+    "createTitle": "إنشاء علامة تجارية جديدة",
+    "updateTitle": "تحديث العلامة التجارية",
+    "createSubtitle": "أدخل تفاصيل العلامة التجارية باللغتين الإنجليزية والعربية",
+    "updateSubtitle": "تعديل معلومات العلامة التجارية",
     "management": "إدارة العلامات التجارية",
     "managementSubtitle": "إدارة وعرض معلومات العلامات التجارية مع الأوصاف والشعارات",
     "backToList": "العودة إلى العلامات التجارية",
-    "form": {
-      "title": "معلومات العلامة التجارية",
-      "description": "املأ تفاصيل العلامة التجارية أدناه. جميع الحقول مطلوبة.",
-      "englishTitle": "عنوان العلامة التجارية (الإنجليزية)",
-      "arabicTitle": "عنوان العلامة التجارية (العربية)",
-      "englishDescription": "الوصف (الإنجليزية)",
-      "arabicDescription": "الوصف (العربية)",
-      "brandLogo": "شعار العلامة التجارية",
-      "uploadLogo": "تحميل صورة الشعار (JPG, PNG, SVG, WEBP - بحد أقصى 5 ميجابايت)",
-      "clickToUploadLogo": "انقر لتحميل الشعار",
-      "changeUploadedFile": "تغيير الملف المرفوع",
-      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG, WEBP حتى 5 ميجابايت",
-      "logoPreview": "معاينة الشعار",
-      "logoPreviewHere": "ستظهر معاينة الشعار هنا",
-      "logoRequirements": {
-        "title": "متطلبات الشعار:",
-        "items": [
-          "استخدم خلفية شفافة (يُوصى بصيغة PNG)",
-          "الحد الأدنى للأبعاد: 200x200 بكسل",
-          "الحد الأقصى لحجم الملف: 5 ميجابايت",
-          "الصيغ المدعومة: JPG, PNG, SVG, WEBP",
-          "يفضل الاتجاه المربع أو الأفقي"
-        ]
-      },
-      "actions": {
-        "create": "إنشاء علامة تجارية",
-        "update": "تحديث العلامة التجارية"
-      }
-    },
-    "validations": {
-      "titleMin": "يجب أن يكون العنوان على الأقل حرفين",
-      "titleMinAr": "يجب أن يكون العنوان على الأقل حرفين",
-      "descriptionMin": "يجب أن يكون الوصف على الأقل 10 أحرف",
-      "descriptionMinAr": "يجب أن يكون الوصف على الأقل 10 أحرف"
-    },
-    "messages": {
-      "creating": "جاري إنشاء العلامة التجارية...",
-      "createSuccess": "تم إنشاء العلامة التجارية بنجاح!",
-      "createFailed": "خطأ في إنشاء العلامة التجارية: ",
-      "updating": "جاري تحديث العلامة التجارية...",
-      "updateSuccess": "تم تحديث العلامة التجارية بنجاح!",
-      "updateFailed": "فشل في تحديث العلامة التجارية: ",
-      "deleting": "جاري حذف العلامة التجارية...",
-      "deleteSuccess": "تم حذف العلامة التجارية بنجاح!",
-      "deleteFailed": "فشل حذف العلامة التجارية. يرجى المحاولة مرة أخرى."
-    },
-    "columns": {
-      "logo": "الشعار",
-      "englishTitle": "الاسم بالإنجليزية",
-      "arabicTitle": "الاسم بالعربية",
-      "englishDescription": "الوصف بالإنجليزية",
-      "arabicDescription": "الوصف بالعربية",
-      "status": "الحالة",
-      "actions": "الإجراءات"
-    },
+    "addBrand": "إضافة علامة تجارية",
     "searchPlaceholder": "البحث عن العلامات التجارية بالاسم أو الوصف...",
     "allStatus": "جميع الحالات",
     "filter": "تصفية",
@@ -1430,16 +1437,95 @@
     "noBrandsMatch": "لا توجد علامات تجارية تطابق معايير البحث الخاصة بك.",
     "noBrandsInDB": "لا توجد علامات تجارية في قاعدة البيانات بعد.",
     "createFirstBrand": "أضف علامتك التجارية الأولى",
-    "failedToLoad": "فشل تحميل العلامات التجارية",
+    "failedToLoad": "فشل في تحميل العلامات التجارية",
     "fetchError": "حدث خطأ في جلب بيانات العلامات التجارية.",
     "tryAgain": "حاول مرة أخرى",
-    "addBrand": "إضافة علامة تجارية",
-    "deleteConfirmTitle": "حذف العلامة التجارية",
-    "deleteConfirmDescription": "هل أنت متأكد أنك تريد حذف هذه العلامة التجارية؟ لا يمكن التراجع عن هذا الإجراء.",
     "unknownBrand": "علامة تجارية غير معروفة",
     "untitledBrand": "علامة تجارية بدون عنوان",
     "noDescription": "لا يوجد وصف متاح",
-    "noDescriptionAr": "لا يوجد وصف متاح"
+
+    "form": {
+      "title": "معلومات العلامة التجارية",
+      "description": "املأ تفاصيل العلامة التجارية أدناه. جميع الحقول مطلوبة.",
+      "updateDescription": "تعديل تفاصيل العلامة التجارية وحفظ التغييرات",
+      "englishTitle": "عنوان العلامة التجارية (الإنجليزية)",
+      "arabicTitle": "عنوان العلامة التجارية (العربية)",
+      "englishDescription": "الوصف (الإنجليزية)",
+      "arabicDescription": "الوصف (العربية)",
+      "placeholderEnglishTitle": "سامسونج",
+      "placeholderArabicTitle": "سامسونج",
+      "placeholderEnglishDescription": "وصف محدث...",
+      "placeholderArabicDescription": "وصف محدث...",
+      "englishTitleHelper": "أدخل عنوان العلامة التجارية باللغة الإنجليزية",
+      "arabicTitleHelper": "أدخل عنوان العلامة التجارية باللغة العربية",
+      "englishDescriptionHelper": "أدخل وصف العلامة التجارية باللغة الإنجليزية",
+      "arabicDescriptionHelper": "أدخل وصف العلامة التجارية باللغة العربية",
+      "titleMinLength": "يجب أن يكون العنوان مكونًا من حرفين على الأقل",
+      "titleMinLengthAr": "العنوان يجب أن يكون على الأقل حرفين",
+      "descriptionMinLength": "يجب أن يكون الوصف مكونًا من 10 أحرف على الأقل",
+      "descriptionMinLengthAr": "الوصف يجب أن يكون على الأقل 10 أحرف",
+      "brandLogo": "شعار العلامة التجارية",
+      "uploadLogo": "رفع صورة الشعار (JPG, PNG, SVG, WEBP - الحد الأقصى 5MB)",
+      "clickToUploadLogo": "انقر لرفع الشعار",
+      "changeUploadedFile": "تغيير الملف المرفوع",
+      "JPGPNGSVGUpTo5MB": "JPG, PNG, SVG, WEBP حتى 5 ميغابايت",
+      "logoPreview": "معاينة الشعار",
+      "logoPreviewHere": "ستظهر معاينة الشعار هنا",
+      "newImageOptional": "شعار جديد (اختياري)",
+      "imageUploadHelper": "اتركه فارغاً للحفاظ على الشعار الحالي. JPG, PNG حتى 5 ميغابايت",
+      "aboutBrandUpdates": "حول تحديثات العلامات التجارية",
+      "titleUpdates": "تحديثات العناوين",
+      "titleUpdatesHelper": "يجب أن تكون عناوين العلامات التجارية دقيقة ومطابقة للاسم الرسمي للعلامة التجارية في كل لغة.",
+      "imageUpdates": "تحديثات الشعارات",
+      "imageUpdatesHelper": "عند تحديث شعار، تأكد من أنه يلبي المتطلبات للعرض الأمثل عبر جميع المنصات.",
+      "logoRequirements": {
+        "title": "متطلبات الشعار:",
+        "items": [
+          "استخدم خلفية شفافة (يوصى بصيغة PNG)",
+          "الحد الأدنى للأبعاد: 200x200 بكسل",
+          "الحد الأقصى لحجم الملف: 5MB",
+          "الصيغ المدعومة: JPG, PNG, SVG, WEBP",
+          "يفضل التوجيه المربع أو الأفقي"
+        ]
+      }
+    },
+
+    "validations": {
+      "titleMin": "يجب أن يكون العنوان مكونًا من حرفين على الأقل",
+      "titleMinAr": "يجب أن يكون العنوان مكونًا من حرفين على الأقل",
+      "descriptionMin": "يجب أن يكون الوصف مكونًا من 10 أحرف على الأقل",
+      "descriptionMinAr": "يجب أن يكون الوصف مكونًا من 10 أحرف على الأقل"
+    },
+
+    "messages": {
+      "creating": "جاري إنشاء العلامة التجارية...",
+      "createSuccess": "تم إنشاء العلامة التجارية بنجاح!",
+      "createFailed": "خطأ في إنشاء العلامة التجارية: ",
+      "updating": "جاري تحديث العلامة التجارية...",
+      "updateSuccess": "تم تحديث العلامة التجارية بنجاح!",
+      "updateFailed": "فشل في تحديث العلامة التجارية: ",
+      "deleting": "جاري حذف العلامة التجارية...",
+      "deleteSuccess": "تم حذف العلامة التجارية بنجاح!",
+      "deleteFailed": "فشل في حذف العلامة التجارية. يرجى المحاولة مرة أخرى.",
+      "noResponse": "لا يوجد رد من الخادم",
+      "brandNotFound": "العلامة التجارية غير موجودة",
+      "brandIdMissing": "معرف العلامة التجارية مفقود أو غير صالح."
+    },
+
+    "columns": {
+      "logo": "الشعار",
+      "englishTitle": "الاسم بالإنجليزية",
+      "arabicTitle": "الاسم بالعربية",
+      "englishDescription": "الوصف بالإنجليزية",
+      "arabicDescription": "الوصف بالعربية",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+
+    "deleteConfirm": {
+      "title": "حذف العلامة التجارية",
+      "description": "هل أنت متأكد أنك تريد حذف هذه العلامة التجارية؟ لا يمكن التراجع عن هذا الإجراء."
+    }
   },
   "help": {
     "brandTitles": {
@@ -1468,34 +1554,35 @@
     }
   },
   "merchants": {
+    "title": "التجار",
+    "createTitle": "إنشاء تاجر جديد",
+    "updateTitle": "تحديث التاجر",
     "page": {
       "title": "إدارة التجار",
-      "description": "إدارة وعرض حسابات التجار والمعلومات",
+      "description": "إدارة وعرض حسابات ومعلومات التجار",
+      "back": "العودة إلى التجار",
       "refresh": "تحديث",
       "addMerchant": "إضافة تاجر",
       "searchPlaceholder": "البحث عن التجار بالاسم، البريد الإلكتروني، أو الهاتف...",
       "noMerchants": "لم يتم العثور على تجار",
-      "noMatch": "لا توجد تجار تطابق معايير البحث.",
-      "emptyList": "لا توجد تجار في قاعدة البيانات حتى الآن.",
-      "addFirstMerchant": "أضف أول تاجر لك",
+      "noMatch": "لا يوجد تجار يطابق معايير البحث الخاصة بك.",
+      "emptyList": "لا يوجد تجار في قاعدة البيانات بعد.",
+      "addFirstMerchant": "أضف تاجرك الأول",
       "loading": "جاري تحميل التجار...",
-      "errorTitle": "فشل تحميل التجار",
+      "errorTitle": "فشل في تحميل التجار",
       "errorMessage": "حدث خطأ في جلب بيانات التجار.",
       "tryAgain": "حاول مرة أخرى",
-      "delete": {
-        "title": "حذف التاجر",
-        "description": "هل أنت متأكد من حذف هذا التاجر؟ هذا الإجراء لا يمكن التراجع عنه وسيزيل جميع البيانات المرتبطة.",
-        "success": "تم حذف التاجر بنجاح!",
-        "error": "فشل حذف التاجر. يرجى المحاولة مرة أخرى."
+      "language": {
+        "ar": "العربية",
+        "en": "الإنجليزية",
+        "fr": "الفرنسية"
       },
-      "actions": {
-        "edit": "تعديل",
-        "delete": "حذف",
-        "editTitle": "تعديل التاجر",
-        "deleteTitle": "حذف التاجر"
+      "status": {
+        "verified": "تم التحقق",
+        "pending": "قيد الانتظار"
       },
       "columns": {
-        "id": "الرقم",
+        "id": "المعرف",
         "merchant": "التاجر",
         "email": "البريد الإلكتروني",
         "phone": "الهاتف",
@@ -1503,15 +1590,6 @@
         "verification": "التحقق",
         "joined": "تاريخ الانضمام",
         "actions": "الإجراءات"
-      },
-      "status": {
-        "verified": "تم التحقق",
-        "pending": "قيد الانتظار"
-      },
-      "language": {
-        "ar": "العربية",
-        "en": "الإنجليزية",
-        "fr": "الفرنسية"
       },
       "filters": {
         "all": "الكل",
@@ -1533,17 +1611,33 @@
           "en": "الإنجليزية"
         },
         "clear": "مسح الفلاتر"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "delete": "حذف",
+        "editTitle": "تعديل التاجر",
+        "deleteTitle": "حذف التاجر"
+      },
+      "delete": {
+        "title": "حذف التاجر",
+        "description": "هل أنت متأكد أنك تريد حذف هذا التاجر؟ لا يمكن التراجع عن هذا الإجراء وستتم إزالة جميع البيانات المرتبطة.",
+        "success": "تم حذف التاجر بنجاح!",
+        "error": "فشل في حذف التاجر. يرجى المحاولة مرة أخرى."
       }
     },
     "form": {
+      "basicInformation": "معلومات التاجر",
+      "accountSettings": "إعدادات الحساب",
+      "accountPreferences": "تفضيلات الحساب",
+      "updateDescription": "تعديل تفاصيل التاجر وحفظ التغييرات. ملاحظة: لا يمكن تغيير البريد الإلكتروني ورقم الهاتف.",
+      "updatePreferences": "تحديث تفضيلات حساب التاجر",
       "selectMerchantHelper": "اختر تاجرًا من القائمة",
-      "searchMerchant": "البحث عن تاجر",
-      "selectMerchant": "اختيار التاجر"
+      "searchMerchant": "بحث عن تاجر",
+      "selectMerchant": "اختر تاجرًا"
     },
     "create": {
       "title": "إضافة تاجر جديد",
       "description": "إنشاء حساب تاجر جديد مع معلومات الاتصال وإعدادات الأمان",
-      "back": "العودة إلى التجار",
       "form": {
         "title": "إعداد حساب التاجر",
         "description": "املأ جميع الحقول المطلوبة لإنشاء حساب تاجر جديد. جميع المعلومات مطلوبة.",
@@ -1551,7 +1645,7 @@
         "cancel": "إلغاء",
         "loading": "جاري إنشاء حساب التاجر...",
         "success": "تم إنشاء التاجر بنجاح!",
-        "error": "فشل إنشاء التاجر. يرجى المحاولة مرة أخرى."
+        "error": "فشل في إنشاء التاجر. يرجى المحاولة مرة أخرى."
       },
       "sections": {
         "basicInfo": {
@@ -1571,32 +1665,32 @@
         "firstName": {
           "label": "الاسم الأول",
           "placeholder": "أحمد",
-          "validation": "الاسم الأول يجب أن يكون على الأقل حرفين",
+          "validation": "يجب أن يكون الاسم الأول مكونًا من حرفين على الأقل",
           "helper": "أدخل الاسم الأول للتاجر"
         },
         "lastName": {
           "label": "اسم العائلة",
           "placeholder": "علي",
-          "validation": "اسم العائلة يجب أن يكون على الأقل حرفين",
-          "helper": "أدخل اسم العائلة للتاجر"
+          "validation": "يجب أن يكون اسم العائلة مكونًا من حرفين على الأقل",
+          "helper": "أدخل اسم عائلة التاجر"
         },
         "email": {
           "label": "البريد الإلكتروني",
           "placeholder": "ahmed.ali@merchant.com",
-          "validation": "يرجى إدخال بريد إلكتروني صحيح",
-          "helper": "أدخل بريد التاجر الإلكتروني"
+          "validation": "الرجاء إدخال عنوان بريد إلكتروني صالح",
+          "helper": "أدخل عنوان البريد الإلكتروني للتاجر"
         },
         "phone": {
           "label": "رقم الهاتف",
           "placeholder": "+966501234568",
-          "validation": "يرجى إدخال رقم هاتف صحيح",
-          "helper": "التنسيق: رمز الدولة + الرقم"
+          "validation": "الرجاء إدخال رقم هاتف صالح",
+          "helper": "التنسيق: +رمز البلد الرقم"
         },
         "password": {
           "label": "كلمة المرور",
           "placeholder": "••••••••",
-          "validation": "كلمة المرور يجب أن تكون على الأقل 6 أحرف",
-          "helper": "6 أحرف على الأقل"
+          "validation": "يجب أن تكون كلمة المرور مكونة من 6 أحرف على الأقل",
+          "helper": "الحد الأدنى 6 أحرف"
         },
         "confirmPassword": {
           "label": "تأكيد كلمة المرور",
@@ -1605,7 +1699,7 @@
           "helper": "أعد إدخال كلمة المرور"
         },
         "language": {
-          "label": "اللغة المفضلة",
+          "label": "تفضيل اللغة",
           "helper": "اختر اللغة المفضلة للتاجر",
           "options": {
             "ar": "العربية",
@@ -1614,13 +1708,29 @@
         },
         "terms": {
           "label": "الشروط والأحكام",
-          "validation": "يجب قبول الشروط والأحكام",
+          "validation": "يجب أن توافق على الشروط والأحكام",
           "text": "أوافق على",
           "termsLink": "شروط الخدمة",
           "and": "و",
           "privacyLink": "سياسة الخصوصية"
         }
       }
+    },
+    "messages": {
+      "creating": "جاري إنشاء التاجر...",
+      "createSuccess": "تم إنشاء التاجر بنجاح!",
+      "createFailed": "فشل في إنشاء التاجر: ",
+      "updating": "جاري تحديث التاجر...",
+      "updateSuccess": "تم تحديث التاجر بنجاح!",
+      "updateFailed": "فشل في تحديث التاجر: ",
+      "deleting": "جاري حذف التاجر...",
+      "deleteSuccess": "تم حذف التاجر بنجاح!",
+      "deleteFailed": "فشل في حذف التاجر. يرجى المحاولة مرة أخرى.",
+      "noResponse": "لا يوجد رد من الخادم",
+      "merchantNotFound": "لم يتم العثور على التاجر",
+      "merchantNotFoundTitle": "التاجر غير موجود",
+      "merchantIdMissing": "معرف التاجر مفقود أو غير صالح.",
+      "neverUpdated": "لم يتم التحديث أبدًا"
     }
   },
   "categories": {
@@ -1841,6 +1951,59 @@
             "requiredError": "صورة الفئة الفرعية مطلوبة",
             "invalidType": "يرجى تحميل ملف صورة صحيح (JPEG, PNG, WebP)",
             "sizeError": "يجب أن يكون حجم الصورة أقل من 5MB"
+          }
+        }
+      },
+      "edit": {
+        "title": "تحديث التصنيف الفرعي",
+        "description": "تعديل تفاصيل التصنيف الفرعي وحفظ التغييرات",
+        "fetch": {
+          "error": "التصنيف الفرعي غير موجود"
+        },
+        "form": {
+          "title": "معلومات التصنيف الفرعي",
+          "description": "تحديث تفاصيل هذا التصنيف الفرعي",
+          "submit": "حفظ التغييرات",
+          "cancel": "إلغاء",
+          "loading": "جاري تحديث التصنيف الفرعي...",
+          "success": "تم تحديث التصنيف الفرعي بنجاح!",
+          "error": "فشل تحديث التصنيف الفرعي. يرجى المحاولة مرة أخرى.",
+          "noResponse": "لا يوجد رد من الخادم"
+        },
+        "notFound": {
+          "title": "التصنيف الفرعي غير موجود",
+          "description": "معرّف التصنيف الفرعي مفقود أو غير صالح.",
+          "backButton": "العودة إلى التصنيفات الفرعية"
+        },
+        "fields": {
+          "basicInfoHeader": {
+            "title": "المعلومات الأساسية",
+            "description": "أدخل تفاصيل التصنيف الفرعي"
+          },
+          "englishTitle": {
+            "label": "اسم التصنيف الفرعي (إنجليزي)",
+            "placeholder": "أدخل الاسم بالإنجليزية",
+            "validation": "يجب ألا يقل الاسم عن حرفين",
+            "helper": "أدخل اسم التصنيف الفرعي باللغة الإنجليزية"
+          },
+          "arabicTitle": {
+            "label": "اسم التصنيف الفرعي (عربي)",
+            "placeholder": "أدخل الاسم بالعربية",
+            "validation": "يجب ألا يقل الاسم عن حرفين",
+            "helper": "أدخل اسم التصنيف الفرعي باللغة العربية"
+          },
+          "image": {
+            "label": "صورة التصنيف الفرعي",
+            "title": "صورة التصنيف الفرعي (اختياري)",
+            "description": "قم برفع صورة للتصنيف الفرعي (JPG, PNG, WebP, SVG - بحد أقصى 5MB)",
+            "upload": "اضغط لرفع الصورة",
+            "change": "تغيير الصورة",
+            "fileTypes": "JPG, PNG, SVG, WebP حتى 5MB",
+            "preview": "معاينة الصورة",
+            "previewPlaceholder": "ستظهر معاينة الصورة هنا",
+            "invalidType": "يرجى رفع ملف صورة صالح (JPEG, PNG, WebP, SVG)",
+            "sizeError": "يجب ألا يتجاوز حجم الصورة 5MB",
+            "imageUploadHelper": "قم برفع صورة جديدة للتصنيف الفرعي. اترك الحقل فارغًا للاحتفاظ بالصورة الحالية"
           }
         }
       }

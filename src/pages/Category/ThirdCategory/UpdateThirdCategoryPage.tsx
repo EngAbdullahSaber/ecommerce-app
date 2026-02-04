@@ -21,6 +21,7 @@ import {
   GenericUpdateForm,
 } from "../../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
 
 // Third Category Interface
 interface Name {
@@ -194,7 +195,7 @@ export default function UpdateThirdCategoryPage() {
         `/categories`,
         formData,
         id,
-        "en"
+        "en",
       );
 
       console.log("Update response:", response);
@@ -205,7 +206,7 @@ export default function UpdateThirdCategoryPage() {
 
       if (response.code !== 200) {
         throw new Error(
-          response.message?.english || response.message || "Update failed"
+          response.message?.english || response.message || "Update failed",
         );
       }
 
@@ -229,7 +230,7 @@ export default function UpdateThirdCategoryPage() {
   const handleAfterError = (error: any) => {
     console.error("Update failed:", error);
     toast.error(
-      error.message || "Failed to update third category. Please try again."
+      error.message || "Failed to update third category. Please try again.",
     );
   };
 
@@ -274,19 +275,7 @@ export default function UpdateThirdCategoryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/third-categories")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          Back to Third Categories
-        </button>
-
-        <GenericUpdateForm
+        <UpdateForm
           title={`Update Third Category`}
           description="Edit third category details and save changes"
           fields={thirdCategoryFields}

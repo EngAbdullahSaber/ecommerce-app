@@ -1,10 +1,11 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Calendar, ChevronDown, AlertCircle } from "lucide-react";
+import { Calendar, ChevronDown, AlertCircle, Check } from "lucide-react";
 import { FormField } from "./types";
 import { PaginatedSelectComponent } from "./PaginatedSelect";
 import DatePickerComponent from "./DateTimePicker";
 import { ImageInputComponent } from "./ImageInput";
+import { useTranslation } from "react-i18next";
 
 interface FieldRendererProps {
   field: FormField;
@@ -38,7 +39,8 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
     disabled: field.disabled || disabled || isSubmitting || readOnly,
     placeholder: field.placeholder,
   };
-
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   switch (field.type) {
     case "textarea":
       return (
@@ -60,6 +62,13 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
             {...commonProps}
             className={inputClassName}
             disabled={readOnly}
+            style={{
+              appearance: "none",
+              WebkitAppearance: "none",
+              MozAppearance: "none",
+              backgroundImage: "none",
+              paddingRight: "1rem",
+            }}
           >
             <option value="">Select {field.label}</option>
             {field.options?.map((option) => (
@@ -68,7 +77,9 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
               </option>
             ))}
           </select>
-          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+          <div
+            className={`absolute inset-y-0 ${lang == "ar" ? "left-3" : "right-3"} flex items-center pointer-events-none`}
+          >
             <ChevronDown size={16} className="text-slate-400" />
           </div>
         </div>

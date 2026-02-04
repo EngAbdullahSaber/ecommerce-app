@@ -99,7 +99,7 @@ const fetchAreaById = async (id: string, lang: string): Promise<any> => {
 const fetchCountries = async (
   endpoint: string,
   params: any,
-  lang: string
+  lang: string,
 ): Promise<any> => {
   try {
     console.log("Fetching countries with params:", params);
@@ -122,7 +122,7 @@ const fetchCountries = async (
       page || 1,
       pageSize || 10,
       lang, // language
-      searchTerm // search term
+      searchTerm, // search term
     );
 
     console.log("Countries response:", response);
@@ -159,7 +159,7 @@ export default function UpdateAreaPage() {
     // Basic Information Section Header
     {
       name: "basicInfoHeader",
-      label: "Basic Information",
+      label: t("areas.form.basicInformation"),
       type: "custom",
       cols: 12,
       render: () => (
@@ -189,22 +189,22 @@ export default function UpdateAreaPage() {
       name: "nameEnglish",
       label: t("areas.form.englishName"),
       type: "text",
-      placeholder: "Manhattan",
+      placeholder: t("areas.form.areaNameEnglishPlaceholder"),
       required: true,
       icon: <Globe size={18} />,
       cols: 6,
       validation: z.string().min(2, t("areas.form.nameMinLength")),
-      helperText: t("areas.form.englishNameHelper"),
+      helperText: t("areas.form.areaNameEnglishHelper"),
     },
     {
       name: "nameArabic",
       label: t("areas.form.arabicName"),
       type: "text",
-      placeholder: "مانهاتن",
+      placeholder: t("areas.form.areaNameArabicPlaceholder"),
       required: true,
       cols: 6,
       validation: z.string().min(2, t("areas.form.nameMinLength")),
-      helperText: t("areas.form.arabicNameHelper"),
+      helperText: t("areas.form.areaNameArabicHelper"),
     },
 
     // City Selection (Paginated Select)
@@ -218,16 +218,18 @@ export default function UpdateAreaPage() {
       icon: <Flag size={18} />,
       paginatedSelectConfig: {
         endpoint: "/cities",
-        searchParam: "name", // Using "name" as search parameter
-        labelKey: "name.english",
+        searchParam: "name",
+        labelKey: lang === "ar" ? "name.arabic" : "name.english",
         valueKey: "id",
         pageSize: 10,
         debounceTime: 500,
         transformResponse: (data: any) => {
-          // Handle different response structures
           const cities = data.cities || data.data || data || [];
           return cities.map((city: any) => ({
-            label: city.name?.english || `City ${city.id}`,
+            label:
+              lang === "ar"
+                ? city.name?.arabic || `مدينة ${city.id}`
+                : city.name?.english || `City ${city.id}`,
             value: city.id,
             ...city,
           }));
@@ -235,51 +237,6 @@ export default function UpdateAreaPage() {
       },
       validation: z.number().min(1, t("areas.form.selectCityRequired")),
       helperText: t("areas.form.selectCityHelper"),
-    },
-
-    // Metadata Section Header
-    {
-      name: "metadataHeader",
-      label: "Metadata",
-      type: "custom",
-      cols: 12,
-      render: () => (
-        <div className="space-y-3 mb-6 mt-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-500/10 dark:to-gray-500/10 rounded-lg">
-              <Info size={20} className="text-slate-600 dark:text-slate-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                {t("common.metadata")}
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t("areas.form.systemInformation")}
-              </p>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    // Read-only Fields
-    {
-      name: "createdAt",
-      label: t("common.createdAt"),
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "📅",
-      helperText: t("areas.form.createdAtHelper"),
-    },
-    {
-      name: "updatedAt",
-      label: t("common.lastUpdated"),
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "🔄",
-      helperText: t("areas.form.updatedAtHelper"),
     },
   ];
 
@@ -316,13 +273,17 @@ export default function UpdateAreaPage() {
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("areas.messages.noResponse"));
       }
 
       if (response.code !== 200) {
-        throw new Error(
-          response.message?.english || response.message || "Update failed"
-        );
+        const errorMessage =
+          lang === "ar"
+            ? response.message?.arabic
+            : response.message?.english ||
+              response.message ||
+              t("areas.messages.updateFailed");
+        throw new Error(errorMessage);
       }
 
       return response;
@@ -387,20 +348,8 @@ export default function UpdateAreaPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50/30 to-emerald-50/30 dark:from-slate-950 dark:via-green-950/30 dark:to-emerald-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/areas")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("areas.messages.backToAreas")}
-        </button>
-
         <GenericUpdateForm
-          title={t("areas.form.updateArea")}
+          title={t("areas.updateArea")}
           description={t("areas.form.editAreaDetails")}
           fields={areaFields}
           entityId={areaId}

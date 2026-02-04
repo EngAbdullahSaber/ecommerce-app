@@ -343,7 +343,7 @@ export default function EventsPage() {
     {
       key: "eventDate",
       label: t("events.columns.eventDateTime", "Event Date & Time"),
-      width: "180px",
+      width: "250px",
       render: (value: string) => (
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">

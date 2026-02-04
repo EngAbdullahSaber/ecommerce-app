@@ -1,6 +1,7 @@
 // pages/parent-categories/edit/[id].tsx - Update Parent Category Page
 "use client";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Folder,
   Globe,
@@ -21,6 +22,7 @@ import {
   GenericUpdateForm,
 } from "../../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
 
 // Parent Category Interface
 interface Name {
@@ -41,9 +43,12 @@ interface ParentCategory {
 }
 
 // Fetch parent category by ID
-const fetchParentCategoryById = async (id: string): Promise<any> => {
+const fetchParentCategoryById = async (
+  id: string,
+  lang: string,
+): Promise<any> => {
   try {
-    const response = await GetSpecifiedMethod(`/categories/${id}`, "en");
+    const response = await GetSpecifiedMethod(`/categories/${id}`, lang);
 
     if (!response || !response.data) {
       throw new Error("Parent category not found");
@@ -57,6 +62,10 @@ const fetchParentCategoryById = async (id: string): Promise<any> => {
       id: category.id,
       englishTitle: category?.title?.english || "",
       arabicTitle: category?.title?.arabic || "",
+      image: category.image
+        ? `${import.meta.env.VITE_IMAGE_BASE_URL}${category.image}`
+        : null,
+      imageUrl: category.image,
       createdAt: new Date(category.createdAt).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -72,7 +81,7 @@ const fetchParentCategoryById = async (id: string): Promise<any> => {
             hour: "2-digit",
             minute: "2-digit",
           })
-        : "Never updated",
+        : t("categories.messages.neverUpdated"),
     };
 
     return transformedData;
@@ -85,6 +94,8 @@ const fetchParentCategoryById = async (id: string): Promise<any> => {
 export default function UpdateParentCategoryPage() {
   const params = useParams();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language || "en";
   const toast = useToast();
   const categoryId = params.id as string;
   const queryClient = useQueryClient();
@@ -94,7 +105,7 @@ export default function UpdateParentCategoryPage() {
     // Basic Information Section Header
     {
       name: "basicInfoHeader",
-      label: "Basic Information",
+      label: t("categories.parent.create.sections.basicInfo.title"),
       type: "custom",
       cols: 12,
       render: () => (
@@ -105,10 +116,10 @@ export default function UpdateParentCategoryPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                Parent Category Information
+                {t("categories.parent.create.form.title")}
               </h3>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Update parent category details and information
+                {t("categories.edit.updateDescription")}
               </p>
             </div>
           </div>
@@ -119,44 +130,38 @@ export default function UpdateParentCategoryPage() {
     // Category Names (Editable)
     {
       name: "englishTitle",
-      label: "English Title",
+      label: t("categories.parent.create.fields.englishTitle.label"),
       type: "text",
-      placeholder: "Updated Electronics",
+      placeholder: t(
+        "categories.parent.create.fields.englishTitle.placeholder",
+      ),
       required: true,
       icon: <Globe size={18} />,
       cols: 6,
-      validation: z.string().min(2, "Title must be at least 2 characters"),
-      helperText: "The name of the parent category in English",
+      validation: z
+        .string()
+        .min(2, t("categories.parent.create.fields.englishTitle.validation")),
+      helperText: t("categories.parent.create.fields.englishTitle.helper"),
     },
     {
       name: "arabicTitle",
-      label: "العنوان العربي (Arabic)",
+      label: t("categories.parent.create.fields.arabicTitle.label"),
       type: "text",
-      placeholder: "إلكترونيات محدثة",
+      placeholder: t("categories.parent.create.fields.arabicTitle.placeholder"),
       required: true,
       cols: 6,
-      validation: z.string().min(2, "العنوان يجب أن يكون على الأقل حرفين"),
-      helperText: "اسم الفئة الرئيسية بالعربية",
-    },
-
-    // Read-only Fields
-    {
-      name: "createdAt",
-      label: "Created At",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "📅",
-      helperText: "Date and time when this category was created",
+      validation: z
+        .string()
+        .min(2, t("categories.parent.create.fields.arabicTitle.validation")),
+      helperText: t("categories.parent.create.fields.arabicTitle.helper"),
     },
     {
-      name: "updatedAt",
-      label: "Last Updated",
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "🔄",
-      helperText: "Date and time when this category was last updated",
+      name: "image",
+      label: t("categories.parent.create.fields.image.title"),
+      type: "image",
+      cols: 12,
+      accept: ".jpg,.jpeg,.png,.webp,.svg",
+      helperText: t("categories.parent.create.fields.image.fileTypes"),
     },
   ];
 
@@ -185,7 +190,6 @@ export default function UpdateParentCategoryPage() {
       }
 
       // Log FormData for debugging
-      console.log("FormData contents:");
       for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
@@ -195,19 +199,23 @@ export default function UpdateParentCategoryPage() {
         `/categories`,
         formData,
         id,
-        "en"
+        lang,
       );
 
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("categories.messages.noResponse"));
       }
 
       if (response.code !== 200) {
-        throw new Error(
-          response.message?.english || response.message || "Update failed"
-        );
+        const errorMessage =
+          lang === "ar"
+            ? response.message?.arabic
+            : response.message?.english ||
+              response.message ||
+              t("categories.edit.form.error");
+        throw new Error(errorMessage);
       }
 
       return response;
@@ -219,7 +227,7 @@ export default function UpdateParentCategoryPage() {
 
   const handleAfterSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ["parent-categories"] });
-    toast.success("Parent category updated successfully!", { duration: 2000 });
+    toast.success(t("categories.edit.form.success"), { duration: 2000 });
 
     // Redirect after delay
     setTimeout(() => {
@@ -229,9 +237,7 @@ export default function UpdateParentCategoryPage() {
 
   const handleAfterError = (error: any) => {
     console.error("Update failed:", error);
-    toast.error(
-      error.message || "Failed to update parent category. Please try again."
-    );
+    toast.error(error.message || t("categories.edit.form.error"));
   };
 
   // Transform data before submission
@@ -256,16 +262,16 @@ export default function UpdateParentCategoryPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Parent Category Not Found
+            {t("categories.messages.categoryNotFoundTitle")}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">
-            The parent category ID is missing or invalid.
+            {t("categories.messages.categoryIdMissing")}
           </p>
           <button
             onClick={() => navigate("/parent-categories")}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Parent Categories
+            {t("categories.parent.page.back")}
           </button>
         </div>
       </div>
@@ -275,29 +281,17 @@ export default function UpdateParentCategoryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-indigo-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/parent-categories")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          Back to Parent Categories
-        </button>
-
-        <GenericUpdateForm
-          title={`Update Parent Category`}
-          description="Edit parent category details and save changes"
+        <UpdateForm
+          title={t("categories.edit.title")}
+          description={t("categories.edit.description")}
           fields={parentCategoryFields}
           entityId={categoryId}
-          fetchData={fetchParentCategoryById}
+          fetchData={(id: string) => fetchParentCategoryById(id, lang)}
           onUpdate={handleUpdate}
           onCancel={() => navigate("/parent-categories")}
           onBack={() => navigate("/parent-categories")}
-          submitLabel="Save Changes"
-          cancelLabel="Cancel"
+          submitLabel={t("common.saveChanges")}
+          cancelLabel={t("common.cancel")}
           showBackButton={true}
           className="mb-8"
           afterSuccess={handleAfterSuccess}

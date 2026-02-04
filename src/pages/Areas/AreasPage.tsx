@@ -205,7 +205,6 @@ export default function AreasPage() {
     {
       key: "id",
       label: "ID",
-      width: "80px",
       render: (value: number) => (
         <div className="font-bold text-slate-700 dark:text-slate-300">
           #{value}
@@ -215,6 +214,8 @@ export default function AreasPage() {
     {
       key: "name",
       label: t("areas.table.englishName"),
+      width: "170px",
+
       render: (value: Name, row: Area) => (
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-500/10 dark:to-indigo-500/10 rounded-lg">
@@ -234,6 +235,8 @@ export default function AreasPage() {
     {
       key: "name",
       label: t("areas.table.arabicName"),
+      width: "100px",
+
       render: (value: Name) => (
         <div className="font-semibold text-center text-slate-900 dark:text-white">
           {value.arabic?.trim() || t("common.notAvailable")}

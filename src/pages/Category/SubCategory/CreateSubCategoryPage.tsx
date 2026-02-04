@@ -19,6 +19,7 @@ import { useToast } from "../../../hooks/useToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { PaginatedSelectConfig } from "../../../components/shared/GenericUpdateForm";
 import { useTranslation } from "react-i18next";
+import { CreateForm } from "../../../components/shared/GenericForm/CreateForm";
 
 export default function CreateSubCategoryPage() {
   const { t } = useTranslation();
@@ -69,7 +70,7 @@ export default function CreateSubCategoryPage() {
   // Custom fetch function for paginated select
   const fetchParentCategoriesOptions = async (
     endpoint: string,
-    params: any
+    params: any,
   ) => {
     try {
       const page = params.page || 1;
@@ -93,7 +94,7 @@ export default function CreateSubCategoryPage() {
         pageSize,
         "en",
         searchTerm,
-        additionalParams
+        additionalParams,
       );
 
       if (!response) {
@@ -161,17 +162,6 @@ export default function CreateSubCategoryPage() {
         .min(2, t("categories.sub.create.fields.arabicTitle.validation")),
     },
 
-    // Type - Fixed as SUB
-    {
-      name: "type",
-      label: t("categories.sub.create.fields.type.label"),
-      type: "hidden",
-      value: "SUB",
-      required: true,
-      cols: 12,
-      validation: z.string().default("SUB"),
-    },
-
     // Parent Category Select
     {
       name: "parentId",
@@ -195,115 +185,6 @@ export default function CreateSubCategoryPage() {
       type: "image",
       required: true,
       cols: 12,
-      renderCustom: ({ onChange, value, disabled }) => (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-lg">
-              <ImageIcon
-                size={20}
-                className="text-blue-600 dark:text-blue-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-900 dark:text-white mb-1">
-                {t("categories.sub.create.fields.image.title")}
-              </label>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t("categories.sub.create.fields.image.description")}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* File Upload */}
-            <div>
-              <label className="block mb-2">
-                <div className="relative cursor-pointer">
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setImageFile(file);
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setImagePreview(reader.result as string);
-                        };
-                        reader.readAsDataURL(file);
-                        onChange(file);
-                      }
-                    }}
-                    className="sr-only"
-                    id="image-upload"
-                    required={true}
-                    disabled={disabled}
-                  />
-                  <div
-                    className={`flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-2xl transition-colors bg-gradient-to-br from-slate-50/50 to-white/50 dark:from-slate-900/50 dark:to-slate-800/50 ${
-                      disabled
-                        ? "border-slate-200 dark:border-slate-700 opacity-50"
-                        : "border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer"
-                    }`}
-                  >
-                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-full mb-3">
-                      <Upload
-                        size={24}
-                        className="text-blue-600 dark:text-blue-400"
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-slate-900 dark:text-white mb-1">
-                      {imageFile
-                        ? t("categories.sub.create.fields.image.change")
-                        : t("categories.sub.create.fields.image.upload")}
-                    </span>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
-                      {t("categories.sub.create.fields.image.fileTypes")}
-                    </span>
-                    {imageFile && (
-                      <div className="mt-3 px-3 py-1 bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-500/10 dark:to-green-500/10 rounded-full">
-                        <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                          ✓ {imageFile.name}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* Preview */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                {t("categories.sub.create.fields.image.preview")}
-              </label>
-              <div className="w-full h-48 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-white/30 dark:from-slate-900 dark:to-slate-800/30 flex items-center justify-center">
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt={t("categories.sub.create.fields.image.preview")}
-                    className="w-full h-full object-contain p-4"
-                  />
-                ) : (
-                  <div className="text-center p-4">
-                    <div className="mx-auto w-12 h-12 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-full flex items-center justify-center mb-2">
-                      <ImageIcon
-                        size={20}
-                        className="text-slate-400 dark:text-slate-500"
-                      />
-                    </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {t(
-                        "categories.sub.create.fields.image.previewPlaceholder"
-                      )}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
     },
   ];
 
@@ -346,7 +227,7 @@ export default function CreateSubCategoryPage() {
       const response = await CreateMethodFormData(
         "/categories",
         formData,
-        "en"
+        "en",
       );
 
       if (response) {
@@ -373,7 +254,7 @@ export default function CreateSubCategoryPage() {
         `${t("categories.sub.create.form.error")}: ${
           error.message || t("categories.sub.create.form.error")
         }`,
-        { duration: 3000 }
+        { duration: 3000 },
       );
 
       throw error;
@@ -385,19 +266,6 @@ export default function CreateSubCategoryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-purple-950/30 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/sub-categories")}
-          disabled={isLoading}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("categories.sub.create.back")}
-        </button>
-
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -416,7 +284,7 @@ export default function CreateSubCategoryPage() {
         </div>
 
         {/* Form */}
-        <GenericForm
+        <CreateForm
           title={t("categories.sub.create.form.title")}
           description={t("categories.sub.create.form.description")}
           fields={subCategoryFields}

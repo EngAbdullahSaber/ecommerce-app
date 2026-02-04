@@ -217,6 +217,7 @@ export function UpdateForm<T = any>({
     <FormContainer className={className}>
       <FormHeader
         title={title}
+        t={t}
         description={description}
         showBackButton={showBackButton}
         onBack={onBack || onCancel}
@@ -347,6 +348,7 @@ const FormContainer: React.FC<{
 
 const FormHeader: React.FC<{
   title: string;
+  t: any;
   description?: string;
   showBackButton: boolean;
   onBack?: () => void;
@@ -355,6 +357,7 @@ const FormHeader: React.FC<{
   isDirty: boolean;
 }> = ({
   title,
+  t,
   description,
   showBackButton,
   onBack,

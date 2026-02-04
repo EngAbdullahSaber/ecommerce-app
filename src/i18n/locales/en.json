@@ -4,6 +4,24 @@
     "remove": "Remove",
     "metadata": "metadata",
     "Error": "Error",
+    "noImagesUploadedYet": "no Images Uploaded Yet",
+    "uploading": "Uploading",
+    "dragAndDropOrClickToUploadAnImage": "drag And Drop Or Click To Upload An Image",
+    "dropYourImagesHere": "drop Your Images Here",
+    "uploadImages": "Upload Images",
+    "Drag&droporclicktouploadupto${maxFiles}files": "Drag & drop or click to upload up to ${maxFiles} files",
+    "youHaveUnsavedChanges": "you Have Unsaved Changes",
+
+    "uploadedImages": "Uploaded Images",
+    "clearAll": "Clear All",
+    "unknown": "Unknown",
+
+    "noResults": "No results found",
+    "noResponse": "No response from server",
+    "required": "Required",
+    "optional": "Optional",
+    "submit": "Submit",
+    "reset": "Reset",
     "deleteMessage1": "This action is permanent and cannot be undone. All associated data will be permanently deleted.",
     "deleteMessage": "permanent and cannot be undone. All associated data will be permanently deleted.",
     "Warning": "Warning",
@@ -163,13 +181,17 @@
   },
   "countries": {
     "title": "Countries",
+    "updateTitle": "Update Country",
     "createTitle": "Add New Country",
     "createSubtitle": "Enter the country details in both English and Arabic",
     "createCountry": "Create Country",
     "updateCountry": "Update Country",
+    "updateDescription": "Edit country details and save changes",
     "countryName": "Country Name",
     "countryCode": "Country Code",
     "noCountries": "No countries found",
+    "notFound": "Country Not Found",
+    "invalidId": "The country ID is missing or invalid.",
     "backToList": "Back to Countries",
     "subtitle": "Manage countries, flags, and localized names",
     "addCountry": "Add Country",
@@ -185,22 +207,29 @@
     "deleteDescription": "Are you sure you want to delete this country?",
     "messages": {
       "deleteSuccess": "Country deleted successfully",
-      "deleteFailed": "Failed to delete country"
+      "deleteFailed": "Failed to delete country",
+      "updateSuccess": "Country updated successfully!",
+      "updateError": "Failed to update country. Please try again.",
+      "updateFailed": "Update failed"
     },
     "table": {
       "flag": "Flag",
       "englishName": "English Name",
       "arabicName": "Arabic Name"
     },
-
     "form": {
       "title": "Country Information",
       "description": "Fill in the country details below",
       "englishName": "Country Name (English)",
+      "englishNamePlaceholder": "United States",
       "arabicName": "اسم الدولة (Arabic)",
+      "arabicNamePlaceholder": "الولايات المتحدة",
       "countryFlag": "Country Flag",
+      "flagHelperText": "Leave empty to keep current flag. JPG, PNG, SVG up to 5MB",
       "submitCreate": "Create Country",
+      "submitUpdate": "Save Changes",
       "creating": "Creating country...",
+      "updating": "Updating country...",
       "createSuccess": "Country created successfully!",
       "createError": "Error creating country: {{message}}",
       "updateSuccess": "Country updated successfully!",
@@ -215,17 +244,9 @@
       "activeCountries": "Active Countries",
       "newestCountry": "Newest Country",
       "oldestCountry": "Oldest Country"
-    },
-    "common": {
-      "actions": "Actions",
-      "edit": "Edit",
-      "delete": "Delete",
-      "refresh": "Refresh",
-      "tryAgain": "Try Again",
-      "status": "Status",
-      "unknown": "Unknown"
     }
   },
+
   "cities": {
     "title": "Cities",
     "createTitle": "Add New City",
@@ -238,13 +259,26 @@
     "backToList": "Back to Cities",
     "form": {
       "title": "City Information",
+      "country": "Country",
+
       "description": "Fill in the city details below. The name must be provided in both English and Arabic.",
+      "cityInformation": "City Information",
+      "updateCityDetails": "Update city information including name in both languages and country association",
+      "editCityDetails": "Edit city details and save changes",
       "englishName": "City Name (English)",
+      "englishNamePlaceholder": "New York",
+      "englishNameHelper": "Enter city name in English",
       "arabicName": "اسم المدينة (Arabic)",
+      "arabicNamePlaceholder": "نيويورك",
+      "arabicNameHelper": "Enter city name in Arabic",
       "selectCountry": "Select country",
+      "selectCountryHelper": "Choose the country this city belongs to",
       "searchCountry": "Search for a country...",
+      "countryId": "Country {{id}}",
       "submitCreate": "Create City",
+      "submitUpdate": "Update City",
       "creating": "Creating city...",
+      "updating": "Updating city...",
       "createSuccess": "City created successfully!",
       "createError": "Error creating city: {{message}}",
       "updateSuccess": "City updated successfully!",
@@ -254,13 +288,36 @@
       "nameMin": "Name must be at least 2 characters",
       "selectCountry": "Please select a country"
     },
+    "messages": {
+      "cityNotFound": "City Not Found",
+      "cityIdMissing": "The city ID is missing or invalid.",
+      "backToCities": "Back to Cities",
+      "updateSuccess": "City updated successfully!",
+      "updateError": "Failed to update city. Please try again.",
+      "updateFailed": "Update failed",
+      "loadError": "Failed to load cities",
+      "deleteSuccess": "City deleted successfully",
+      "deleteFailed": "Failed to delete city"
+    },
     "stats": {
       "totalCities": "Total Cities",
       "uniqueCountries": "Countries",
       "newestCity": "Newest City",
       "oldestCity": "Oldest City"
+    },
+    "common": {
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
     }
   },
+
   "CITIES": {
     "TITLE": "Cities Management",
     "SUBTITLE": "Manage and view city information with country details",

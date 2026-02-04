@@ -18,11 +18,9 @@ import {
   UpdateMethodFormData,
   GetPanigationMethod,
 } from "../../services/apis/ApiMethod";
-import {
-  FormField,
-  GenericUpdateForm,
-} from "../../components/shared/GenericUpdateForm";
+import { FormField } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { UpdateForm } from "../../components/shared/GenericUpdateForm/UpdateForm";
 
 // City Interface based on your data structure
 interface CityName {
@@ -103,7 +101,7 @@ const fetchCityById = async (id: string, lang: string): Promise<any> => {
 const fetchCountries = async (
   endpoint: string,
   params: any,
-  lang: string
+  lang: string,
 ): Promise<any> => {
   try {
     console.log("Fetching countries with params:", params);
@@ -126,7 +124,7 @@ const fetchCountries = async (
       page || 1,
       pageSize || 10,
       lang, // language
-      searchTerm // search term
+      searchTerm, // search term
     );
 
     console.log("Countries response:", response);
@@ -163,7 +161,7 @@ export default function UpdateCityPage() {
     // Basic Information Section Header
     {
       name: "basicInfoHeader",
-      label: "Basic Information",
+      label: t("cities.form.cityInformation"),
       type: "custom",
       cols: 12,
       render: () => (
@@ -193,22 +191,28 @@ export default function UpdateCityPage() {
       name: "nameEnglish",
       label: t("cities.form.englishName"),
       type: "text",
-      placeholder: "New York",
+      placeholder: t("cities.form.englishNamePlaceholder", "New York"),
       required: true,
       icon: <Globe size={18} />,
       cols: 6,
-      validation: z.string().min(2, t("cities.form.nameMinLength")),
-      helperText: t("cities.form.englishNameHelper"),
+      validation: z.string().min(2, t("cities.validations.nameMin")),
+      helperText: t(
+        "cities.form.englishNameHelper",
+        "Enter city name in English",
+      ),
     },
     {
       name: "nameArabic",
       label: t("cities.form.arabicName"),
       type: "text",
-      placeholder: "نيويورك",
+      placeholder: t("cities.form.arabicNamePlaceholder", "نيويورك"),
       required: true,
       cols: 6,
-      validation: z.string().min(2, t("cities.form.nameMinLength")),
-      helperText: t("cities.form.arabicNameHelper"),
+      validation: z.string().min(2, t("cities.validations.nameMin")),
+      helperText: t(
+        "cities.form.arabicNameHelper",
+        "Enter city name in Arabic",
+      ),
     },
 
     // Country Selection (Paginated Select)
@@ -222,66 +226,25 @@ export default function UpdateCityPage() {
       icon: <Flag size={18} />,
       paginatedSelectConfig: {
         endpoint: "/countries",
-        searchParam: "name", // Using "name" as search parameter
+        searchParam: "name",
         labelKey: "name.english",
         valueKey: "id",
         pageSize: 10,
         debounceTime: 500,
         transformResponse: (data: any) => {
-          return data.countries.map((country: any) => ({
-            label: country.name?.english || `Country ${country.id}`,
-            value: country.id,
-            ...country,
-          }));
+          return (
+            data.countries?.map((country: any) => ({
+              label:
+                country.name?.english ||
+                t("cities.form.countryId", { id: country.id }),
+              value: country.id,
+              ...country,
+            })) || []
+          );
         },
       },
-      validation: z.number().min(1, t("cities.form.selectCountryRequired")),
+      validation: z.number().min(1, t("cities.validations.selectCountry")),
       helperText: t("cities.form.selectCountryHelper"),
-    },
-
-    // Metadata Section Header
-    {
-      name: "metadataHeader",
-      label: "Metadata",
-      type: "custom",
-      cols: 12,
-      render: () => (
-        <div className="space-y-3 mb-6 mt-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-500/10 dark:to-gray-500/10 rounded-lg">
-              <Info size={20} className="text-slate-600 dark:text-slate-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                {t("common.metadata")}
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {t("cities.form.systemInformation")}
-              </p>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    // Read-only Fields
-    {
-      name: "createdAt",
-      label: t("common.createdAt"),
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "📅",
-      helperText: t("cities.form.createdAtHelper"),
-    },
-    {
-      name: "updatedAt",
-      label: t("common.lastUpdated"),
-      type: "text",
-      readOnly: true,
-      cols: 6,
-      prefix: "🔄",
-      helperText: t("cities.form.updatedAtHelper"),
     },
   ];
 
@@ -317,18 +280,20 @@ export default function UpdateCityPage() {
         `/cities`,
         formData,
         id,
-        lang
+        lang,
       );
 
       console.log("Update response:", response);
 
       if (!response) {
-        throw new Error("No response from server");
+        throw new Error(t("common.noResponse"));
       }
 
       if (response.code !== 200) {
         throw new Error(
-          response.message?.english || response.message || "Update failed"
+          response.message?.english ||
+            response.message ||
+            t("cities.messages.updateFailed"),
         );
       }
 
@@ -351,7 +316,7 @@ export default function UpdateCityPage() {
 
   const handleAfterError = (error: any) => {
     console.error("Update failed:", error);
-    toast.error(error.message || t("cities.messages.updateFailed"));
+    toast.error(error.message || t("cities.messages.updateError"));
   };
 
   // Transform data before submission
@@ -394,20 +359,8 @@ export default function UpdateCityPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-slate-950 dark:via-blue-950/30 dark:to-purple-950/30 p-4 md:p-8">
       <div className="max-w-5xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/cities")}
-          className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 mb-6 transition-colors duration-200 group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          {t("cities.messages.backToCities")}
-        </button>
-
-        <GenericUpdateForm
-          title={t("cities.form.updateCity")}
+        <UpdateForm
+          title={t("cities.updateCity")}
           description={t("cities.form.editCityDetails")}
           fields={cityFields}
           entityId={cityId}

@@ -21,6 +21,7 @@ export type FieldType =
   | "image"
   | "autocomplete"
   | "custom"
+  | "imageApi"
   | "array";
 
 export interface FieldOption {

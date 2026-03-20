@@ -74,6 +74,13 @@ import UpdateProductPage from "./pages/Products/UpdateProductPage";
 import PromoRulesPage from "./pages/PromoRules/PromoRulesPage";
 import CreatePromoRules from "./pages/PromoRules/CreatePromoRules";
 import UpdatePromoRules from "./pages/PromoRules/UpdatePromoRules";
+import HomePageSectionsPage from "./pages/HomePage/Sections/HomePageSectionsPage";
+import TodayShoppingPage from "./pages/HomePage/TodayShopping/TodayShoppingPage";
+import SpotlightBrandsPage from "./pages/HomePage/SpotlightBrands/SpotlightBrandsPage";
+import CreateSpotlightBrandPage from "./pages/HomePage/SpotlightBrands/CreateSpotlightBrandPage";
+import UpdateSpotlightBrandPage from "./pages/HomePage/SpotlightBrands/UpdateSpotlightBrandPage";
+import InfluencersPage from "./pages/HomePage/Influencers/InfluencersPage";
+import CreateInfluencerPage from "./pages/HomePage/Influencers/CreateInfluencerPage";
 
 export default function App() {
   useLanguage();
@@ -211,6 +218,34 @@ export default function App() {
             <Route path="videos" element={<Videos />} />
             <Route path="line-chart" element={<LineChart />} />
             <Route path="bar-chart" element={<BarChart />} />
+            <Route
+              path="home-page/sections"
+              element={<HomePageSectionsPage />}
+            />
+            <Route
+              path="home-page/today-shopping"
+              element={<TodayShoppingPage />}
+            />
+            <Route
+              path="home-page/spotlight-brands"
+              element={<SpotlightBrandsPage />}
+            />
+            <Route
+              path="home-page/spotlight-brands/create"
+              element={<CreateSpotlightBrandPage />}
+            />
+            <Route
+              path="home-page/spotlight-brands/edit/:id"
+              element={<UpdateSpotlightBrandPage />}
+            />
+            <Route
+              path="home-page/influencers"
+              element={<InfluencersPage />}
+            />
+            <Route
+              path="home-page/influencers/create"
+              element={<CreateInfluencerPage />}
+            />
           </Route>
 
           {/* Fallback Route */}

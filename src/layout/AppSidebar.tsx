@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../hooks/useLanguage";
+import { useSidebar } from "../context/SidebarContext";
 import {
   FiPackage,
   FiGlobe,
@@ -36,13 +37,7 @@ const HorizontalDots = ({ className }: { className?: string }) => (
   </div>
 );
 
-// Mock context
-const useSidebar = () => ({
-  isExpanded: true,
-  isMobileOpen: false,
-  isHovered: false,
-  setIsHovered: () => {},
-});
+
 
 type NavItem = {
   name: string;
@@ -228,6 +223,27 @@ const AppSidebar: React.FC = () => {
 
   const categoryItems: CategoryItem[] = [
     {
+      name: t("sidebar.homePage"),
+      subCategories: [
+        {
+          name: t("sidebar.homePageSections"),
+          path: "/home-page/sections",
+        },
+        {
+          name: t("sidebar.todayShopping"),
+          path: "/home-page/today-shopping",
+        },
+        {
+          name: t("sidebar.spotlightBrands"),
+          path: "/home-page/spotlight-brands",
+        },
+        {
+          name: t("sidebar.influencers"),
+          path: "/home-page/influencers",
+        },
+      ],
+    },
+    {
       name: t("sidebar.categories"),
       subCategories: [
         {
@@ -254,6 +270,7 @@ const AppSidebar: React.FC = () => {
   } | null>(null);
   const [openCategories, setOpenCategories] = useState<string[]>([
     t("sidebar.categories"),
+    t("sidebar.homePage"),
   ]);
   const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
     {},

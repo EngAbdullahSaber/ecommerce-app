@@ -19,7 +19,7 @@ interface LoginResponse {
 
 // Constants
 const DEMO_CREDENTIALS = {
-  email: "john5.doe@example.com",
+  email: "admin@admin.com",
   password: "12345678",
 } as const;
 

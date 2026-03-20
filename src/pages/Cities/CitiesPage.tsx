@@ -136,6 +136,14 @@ const calculateStats = (cities: City[]) => {
   };
 };
 
+interface CitiesResult {
+  data: City[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 export default function CitiesPage() {
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -185,20 +193,14 @@ export default function CitiesPage() {
     page: number;
     pageSize: number;
     searchTerm?: string;
-  }): Promise<{
-    data: City[];
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-  }> => {
+  }): Promise<CitiesResult> => {
     try {
       const response = (await GetPanigationMethod(
         "/cities",
         page,
         pageSize,
         lang,
-        searchTerm,
+        searchTerm
       )) as CitiesResponse;
 
       const cities = response.data?.cities || [];
@@ -252,7 +254,7 @@ export default function CitiesPage() {
     isLoading,
     isError,
     refetch,
-  } = useQuery({
+  } = useQuery<CitiesResult, Error>({
     queryKey: ["cities", currentPage, rowsPerPage, debouncedSearchTerm],
     queryFn: () =>
       fetchCities({
@@ -260,7 +262,7 @@ export default function CitiesPage() {
         pageSize: rowsPerPage,
         searchTerm: debouncedSearchTerm,
       }),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -578,7 +580,7 @@ export default function CitiesPage() {
               totalItems={citiesResponse.total}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              isLoading={isLoading}
+              loading={isLoading}
             />
           </div>
         )}

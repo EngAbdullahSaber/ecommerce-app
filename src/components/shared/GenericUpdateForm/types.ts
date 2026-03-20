@@ -12,10 +12,12 @@ export type FieldType =
   | "multiselect"
   | "date"
   | "datetime"
+  | "daterange"
   | "checkbox"
   | "radio"
   | "file"
   | "image"
+  | "imageApi"
   | "custom";
 
 export interface FieldOption {
@@ -35,6 +37,17 @@ export interface PaginatedSelectConfig {
   debounceTime?: number;
   additionalParams?: Record<string, any>;
   transformResponse?: (data: any) => FieldOption[];
+}
+
+export interface ImageUploadConfig {
+  uploadEndpoint?: string;
+  maxSize?: number;
+  accept?: string;
+  multiple?: boolean;
+  maxFiles?: number;
+  preview?: boolean;
+  onUpload?: (file: File) => Promise<string>;
+  onRemove?: (url: string) => Promise<void>;
 }
 
 export interface FormField {
@@ -63,6 +76,7 @@ export interface FormField {
   initialValue?: any;
   fullWidth?: boolean;
   step?: number;
+  imageUploadConfig?: ImageUploadConfig;
 }
 
 export interface GenericUpdateFormProps<T = any> {

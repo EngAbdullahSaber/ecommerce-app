@@ -6,6 +6,7 @@ import { DateRangeInputComponent } from "./DateRangeInput";
 import { ImageInputComponent } from "./ImageInput";
 import { PaginatedSelectComponent } from "./PaginatedSelect";
 import DateTimePicker from "./DateTimePicker";
+import { FileUploadComponent } from "./FileUpload";
 
 interface FieldRendererProps {
   field: FormField;
@@ -77,6 +78,24 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
     case "image":
       return (
         <ImageInputComponent
+          name={field.name}
+          value={controllerField.value}
+          onChange={(value) => {
+            controllerField.onChange(value);
+            if (onFieldChange) {
+              onFieldChange(field.name, value);
+            }
+          }}
+          disabled={field.disabled || disabled}
+          readOnly={field.readOnly}
+          config={field.imageUploadConfig}
+          errors={error}
+          fullWidth={field.fullWidth}
+        />
+      );
+    case "imageApi":
+      return (
+        <FileUploadComponent
           name={field.name}
           value={controllerField.value}
           onChange={(value) => {

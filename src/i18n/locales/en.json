@@ -98,16 +98,210 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
-    "all": "All",
-    "none": "None",
-    "select": "Select",
     "noData": "No data found",
     "actions": "Actions",
     "date": "Date",
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
-    "pending": "Pending"
+    "pending": "Pending",
+    "all": "All"
+  },
+  "homePageSections": {
+    "title": "Home Page Sections",
+    "description": "Manage the sections displayed on the home page",
+    "refresh": "Refresh",
+    "addSection": "Add Section",
+    "searchPlaceholder": "Search sections...",
+    "loading": "Loading sections...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load home page sections",
+    "tryAgain": "Try Again",
+    "noSections": "No sections found",
+    "noMatch": "No sections match your search",
+    "emptyList": "The section list is empty",
+    "columns": {
+      "id": "ID",
+      "section": "Section Name",
+      "isVisible": "Visibility",
+      "displayOrder": "Display Order",
+      "lastUpdated": "Last Updated",
+      "actions": "Actions"
+    },
+    "status": {
+      "visible": "Visible",
+      "hidden": "Hidden"
+    }
+  },
+  "todayShopping": {
+    "title": "Today Shopping",
+    "description": "Manage today's featured shopping items",
+    "refresh": "Refresh",
+    "searchPlaceholder": "Search items...",
+    "loading": "Loading shopping items...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load today's shopping items",
+    "tryAgain": "Try Again",
+    "noItems": "No shopping items found",
+    "columns": {
+      "id": "ID",
+      "title": "Title",
+      "key": "Key",
+      "image": "Image",
+      "isActive": "Is Active",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "edit": {
+      "title": "Edit Today Shopping Item",
+      "description": "Update bilingual names and image for this featured item",
+      "fields": {
+        "titleEn": "English Title",
+        "titleAr": "Arabic Title",
+        "image": "Featured Image"
+      },
+      "messages": {
+        "updating": "Updating item...",
+        "updateSuccess": "Item updated successfully!",
+        "updateFailed": "Failed to update item"
+      }
+    }
+  },
+  "spotlightBrands": {
+    "title": "Spotlight Brands",
+    "description": "Manage the brands featured in the spotlight section",
+    "refresh": "Refresh",
+    "searchPlaceholder": "Search spotlight brands...",
+    "loading": "Loading spotlight brands...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load spotlight brands",
+    "tryAgain": "Try Again",
+    "noBrands": "No spotlight brands found",
+    "columns": {
+      "id": "ID",
+      "brandTitle": "Brand Title",
+      "image": "Image",
+      "displayOrder": "Display Order",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "actions": "Actions"
+    },
+    "addBrand": "Add Spotlight Brand",
+    "create": {
+      "title": "Add New Spotlight Brand",
+      "subtitle": "Feature a brand on the home page",
+      "form": {
+        "title": "Brand Information",
+        "description": "Enter the details for the brand you want to feature",
+        "brand": "Select Brand",
+        "brandPlaceholder": "Search and select a brand...",
+        "displayOrder": "Display Order",
+        "displayOrderPlaceholder": "Enter display order...",
+        "dateRange": "Visibility Period",
+        "actions": {
+          "create": "Add to Spotlight"
+        }
+      },
+      "messages": {
+        "creating": "Adding brand to spotlight...",
+        "createSuccess": "Brand added to spotlight successfully",
+        "createFailed": "Failed to add brand to spotlight"
+      },
+      "validations": {
+        "brandRequired": "Please select a brand",
+        "orderRequired": "Display order is required",
+        "orderMin": "Order must be 0 or greater",
+        "startDateRequired": "Start date is required",
+        "endDateRequired": "End date is required",
+        "endDateAfterStart": "End date must be after start date"
+      }
+    },
+    "edit": {
+      "title": "Edit Spotlight Brand",
+      "subtitle": "Update the spotlight feature for this brand",
+      "messages": {
+        "loading": "Loading brand details...",
+        "updating": "Updating spotlight brand...",
+        "updateSuccess": "Spotlight brand updated successfully",
+        "updateFailed": "Failed to update spotlight brand"
+      },
+      "form": {
+        "actions": {
+          "update": "Save Changes"
+        }
+      }
+    },
+    "delete": {
+      "title": "Delete Spotlight Brand",
+      "description": "Are you sure you want to remove this brand from the spotlight section? This action cannot be undone.",
+      "messages": {
+        "deleting": "Removing brand from spotlight...",
+        "deleteSuccess": "Brand removed from spotlight successfully",
+        "deleteFailed": "Failed to remove brand from spotlight"
+      }
+    }
+  },
+  "influencers": {
+    "title": "Influencers",
+    "description": "Manage our community of influencers and their featured products",
+    "refresh": "Refresh",
+    "loading": "Loading influencers...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load influencers",
+    "noInfluencers": "No influencers found",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "create": {
+      "title": "Add New Influencer",
+      "subtitle": "Bring a new influencer into our community",
+      "form": {
+        "title": "Influencer Information",
+        "description": "Enter the details for the influencer and their account",
+        "userType": "User Type",
+        "newUser": "Create New User",
+        "existingUser": "Use Existing User",
+        "selectUser": "Select User",
+        "selectUserPlaceholder": "Search and select a user...",
+        "displayNameEn": "Display Name (English)",
+        "displayNameAr": "Display Name (Arabic)",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "password": "Password",
+        "image": "Profile Image",
+        "actions": {
+          "create": "Add Influencer"
+        }
+      },
+      "messages": {
+        "creating": "Adding influencer...",
+        "createSuccess": "Influencer added successfully",
+        "createFailed": "Failed to add influencer"
+      },
+      "validations": {
+        "userRequired": "Please select a user",
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Valid email is required",
+        "phoneRequired": "Phone number is required",
+        "passwordRequired": "Password is required (min 8 characters)",
+        "displayNameEnRequired": "English display name is required",
+        "displayNameArRequired": "Arabic display name is required",
+        "imageRequired": "Profile image is required"
+      }
+    },
+    "productsList": "Featured Products",
+    "contactInfo": "Contact Information",
+    "socialName": "Display Name",
+    "realName": "Real Name"
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -134,7 +328,12 @@
     "uiElements": "UI Elements",
     "calendar": "Calendar",
     "others": "Others",
-    "documents": "Documents"
+    "documents": "Documents",
+    "homePage": "Home Page",
+    "homePageSections": "Home Page Sections",
+    "todayShopping": "Today Shopping",
+    "spotlightBrands": "Spotlight Brands",
+    "influencers": "Influencers"
   },
   "header": {
     "searchPlaceholder": "Search...",

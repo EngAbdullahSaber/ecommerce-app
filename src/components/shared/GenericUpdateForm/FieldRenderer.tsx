@@ -6,6 +6,8 @@ import { PaginatedSelectComponent } from "./PaginatedSelect";
 import DatePickerComponent from "./DateTimePicker";
 import { ImageInputComponent } from "./ImageInput";
 import { useTranslation } from "react-i18next";
+import { FileUploadComponent } from "../GenericForm/FileUpload";
+import { DateRangeInputComponent } from "../GenericForm/DateRangeInput";
 
 interface FieldRendererProps {
   field: FormField;
@@ -219,7 +221,6 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
         </div>
       );
 
-    case "file":
     case "image":
       return (
         <ImageInputComponent
@@ -231,6 +232,31 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
           config={field.imageUploadConfig}
           errors={error}
           fullWidth={field.fullWidth}
+        />
+      );
+    case "imageApi":
+      return (
+        <FileUploadComponent
+          name={field.name}
+          value={controllerField.value}
+          onChange={controllerField.onChange}
+          disabled={field.disabled || disabled || isSubmitting}
+          readOnly={readOnly}
+          config={field.imageUploadConfig}
+          errors={error}
+          fullWidth={field.fullWidth}
+        />
+      );
+    case "daterange":
+      return (
+        <DateRangeInputComponent
+          name={field.name}
+          value={controllerField.value}
+          onChange={controllerField.onChange}
+          disabled={field.disabled || disabled || isSubmitting}
+          readOnly={readOnly}
+          errors={error}
+          placeholder={field.placeholder || `Select ${field.label}`}
         />
       );
 

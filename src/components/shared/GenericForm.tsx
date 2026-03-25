@@ -851,10 +851,10 @@ function usePaginatedSelect(
     [config, fetchData],
   );
 
-  // Initial load
+  // Initial load and refetch on config change
   useEffect(() => {
     fetchData(1, "", true);
-  }, []);
+  }, [config.endpoint, JSON.stringify(config.additionalParams)]);
 
   return {
     options,
@@ -1497,6 +1497,7 @@ interface ArrayFieldProps {
   errors: any;
   disabled?: boolean;
   defaultValues?: any[];
+  fetchOptions?: GenericFormProps["fetchOptions"];
 }
 
 const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
@@ -1506,6 +1507,7 @@ const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
   errors,
   disabled = false,
   defaultValues = [],
+  fetchOptions,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -1672,6 +1674,21 @@ const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
                                   {subField.label}
                                 </span>
                               </label>
+                            );
+                          case "paginatedSelect":
+                            return (
+                              <PaginatedSelectComponent
+                                config={subField.paginatedSelectConfig!}
+                                value={controllerField.value}
+                                onChange={controllerField.onChange}
+                                placeholder={
+                                  subField.placeholder ||
+                                  `Select ${subField.label}`
+                                }
+                                disabled={subField.disabled || disabled}
+                                readOnly={subField.readOnly}
+                                fetchOptions={fetchOptions}
+                              />
                             );
                           case "image":
                             return (
@@ -1977,7 +1994,6 @@ export function GenericForm({
             );
           } else if (
             field.type !== "file" &&
-            field.type !== "image" &&
             field.type !== "paginatedSelect"
           ) {
             fieldSchema = fieldSchema.min(1, `${field.label} is required`);
@@ -2086,6 +2102,7 @@ export function GenericForm({
             errors={errors}
             disabled={field.disabled || isLoading}
             defaultValues={defaultValues[field.name] || []}
+            fetchOptions={fetchOptions}
           />
         );
 

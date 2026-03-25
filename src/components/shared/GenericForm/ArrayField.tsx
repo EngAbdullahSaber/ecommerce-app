@@ -11,6 +11,7 @@ interface ArrayFieldProps {
   errors: any;
   disabled?: boolean;
   defaultValues?: any[];
+  fetchOptions?: (endpoint: string, params: any) => Promise<any>;
 }
 
 export const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
@@ -20,6 +21,7 @@ export const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
   errors,
   disabled = false,
   defaultValues = [],
+  fetchOptions,
 }) => {
   const { fields, append, remove } = useFieldArray({
     control,
@@ -58,7 +60,7 @@ export const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
           type="button"
           onClick={addItem}
           disabled={
-            disabled || (config.maxItems && fields.length >= config.maxItems)
+            disabled || (!!config.maxItems && fields.length >= config.maxItems)
           }
           className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-500/10 dark:to-violet-500/10 text-purple-600 dark:text-purple-400 rounded-lg hover:from-purple-100 hover:to-violet-100 dark:hover:from-purple-500/20 dark:hover:to-violet-500/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -129,6 +131,7 @@ export const ArrayFieldComponent: React.FC<ArrayFieldProps> = ({
                           controllerField={controllerField}
                           disabled={subField.disabled || disabled}
                           error={fieldError}
+                          fetchOptions={fetchOptions}
                         />
                       )}
                     />

@@ -1478,7 +1478,8 @@
           "edit": "Edit",
           "delete": "Delete",
           "editTitle": "Edit category",
-          "deleteTitle": "Delete category"
+          "deleteTitle": "Delete category",
+          "sectionsTitle": "Manage Sections"
         },
         "columns": {
           "id": "ID",
@@ -1794,6 +1795,84 @@
       "categoryNotFoundTitle": "Parent Category Not Found",
       "categoryIdMissing": "The parent category ID is missing or invalid.",
       "neverUpdated": "Never updated"
+    }
+  },
+
+  "categorySections": {
+    "title": "Category Sections",
+    "description": "Manage sections for this parent category",
+    "refresh": "Refresh",
+    "loading": "Loading sections...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load category sections",
+    "tryAgain": "Try Again",
+    "noSections": "No sections found",
+    "columns": {
+      "id": "ID",
+      "title": "Title",
+      "type": "Type",
+      "key": "Key",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "types": {
+      "SPECIFIC_CATEGORIES": "Specific Categories",
+      "SPECIFIC_BRANDS": "Specific Brands",
+      "SPECIFIC_FILTERS": "Specific Filters",
+      "CATEGORIES": "Categories",
+      "BRANDS": "Brands",
+      "BILL_CATEGORIES": "Bill Categories"
+    },
+    "create": {
+      "title": "Add New Section",
+      "description": "Create a new section for this category",
+      "back": "Back to Sections",
+      "form": {
+        "title": "Section Information",
+        "description": "Fill in the details for the new section",
+        "submit": "Create Section",
+        "cancel": "Cancel",
+        "loading": "Creating section...",
+        "success": "Section created successfully!",
+        "error": "Failed to create section"
+      },
+      "fields": {
+        "title": "Section Title",
+        "type": "Section Type",
+        "key": "System Key (EN)",
+        "keyAr": "System Key (AR)",
+        "isActive": "Is Active",
+        "collections": "Collections",
+        "addCollection": "Add Collection Item",
+        "collectionId": "Item Selection",
+        "image": "Item Image (Optional)"
+      }
+    },
+    "update": {
+      "title": "Update Section",
+      "description": "Modify the configuration for this category section",
+      "back": "Back to Sections",
+      "form": {
+        "title": "Update Section",
+        "description": "You are editing an existing section",
+        "submit": "Update Section",
+        "cancel": "Cancel",
+        "loading": "Updating section...",
+        "success": "Section updated successfully!",
+        "error": "Failed to update section"
+      }
+    },
+    "delete": {
+      "title": "Delete Section",
+      "description": "Are you sure you want to delete this section? This action cannot be undone.",
+      "success": "Section deleted successfully!",
+      "error": "Failed to delete section"
+    },
+    "deleteCollection": {
+      "title": "Remove Item",
+      "description": "Are you sure you want to remove this item from the section?",
+      "success": "Item removed successfully!",
+      "error": "Failed to remove item"
     }
   },
 

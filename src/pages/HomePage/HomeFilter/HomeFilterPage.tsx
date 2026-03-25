@@ -9,8 +9,18 @@ import {
   ChevronRight,
   Trash2,
   Plus,
+  Image as ImageIcon,
+  Layers,
+  Sparkles,
+  Settings,
+  Eye,
+  EyeOff,
+  Clock,
+  TrendingUp,
+  Award,
+  Zap
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   GetSpecifiedMethod,
@@ -24,6 +34,7 @@ import { FormField } from "../../../components/shared/GenericUpdateForm/types";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { ImagePlus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FilterOption {
   id: number;
@@ -69,6 +80,16 @@ export default function HomeFilterPage() {
   const navigate = useNavigate();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editingOption, setEditingOption] = useState<Option | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const fetchHomeFilter = async (): Promise<HomeFilterData | null> => {
     try {
@@ -102,7 +123,6 @@ export default function HomeFilterPage() {
     queryFn: fetchHomeFilter,
   });
 
-
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       return await DeleteMethod("home-page/admin/home-filter", id.toString(), lang);
@@ -111,8 +131,6 @@ export default function HomeFilterPage() {
       toast.success(t("common.success"));
       queryClient.invalidateQueries({ queryKey: ["home-filter"] });
       setIsDeleteOpen(false);
-      // Optional: navigate away if the current view should no longer exist
-      // navigate("/dashboard");
     },
     onError: (error: any) => {
       console.error("Delete error:", error);
@@ -139,82 +157,65 @@ export default function HomeFilterPage() {
       imageUploadConfig: {
         uploadEndpoint: "/upload",
       },
-      validation: z.string().min(1),
+      validation: z.string().min(1, "Image is required"),
     },
-  ];
-
-  const editFields: FormField[] = [
-    {
-      name: "titleEn",
-      label: t("homeFilter.edit.fields.titleEn"),
-      type: "text",
-      required: true,
-      cols: 6,
-      validation: z.string().min(1),
-    },
-    {
-      name: "titleAr",
-      label: t("homeFilter.edit.fields.titleAr"),
-      type: "text",
-      required: true,
-      cols: 6,
-      validation: z.string().min(1),
-    },
-    {
-        name: "filterAttributeId",
-        label: t("homeFilter.edit.fields.filterAttribute"),
-        type: "paginatedSelect",
-        required: true,
-        cols: 12,
-        paginatedSelectConfig: {
-            endpoint: "filter-attributes",
-            labelKey: "name",
-            valueKey: "id",
-        },
-        validation: z.number(),
-    }
   ];
 
   const handleRefresh = () => {
     refetch();
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 dark:from-slate-900 dark:via-blue-900/20 dark:to-indigo-900/20 p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-xl transform hover:rotate-6 transition-transform">
-              <Filter size={32} className="text-white" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-black bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 dark:from-slate-100 dark:via-blue-100 dark:to-indigo-100 bg-clip-text text-transparent">
-                {t("homeFilter.title")}
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400 mt-1">
-                {t("homeFilter.description")}
-              </p>
-            </div>
-          </div>
+  // Filter options based on search
+  const filteredOptions = homeFilter?.options.filter(option => {
+    const name = lang === "ar" ? option.filterOption.nameAr : option.filterOption.name;
+    const value = option.filterOption.value;
+    return name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+           value.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+  }) || [];
 
-          <button
-            onClick={handleRefresh}
-            disabled={isLoading}
-            className="group flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-2xl font-bold shadow-sm hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 active:scale-95"
-          >
-            <RefreshCw size={20} className={`${isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500"}`} />
-            {t("homeFilter.refresh")}
-          </button>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+      <div className="max-w-[1600px] mx-auto p-6 md:p-8 lg:p-10">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
+                <div className="relative p-3 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl shadow-xl">
+                  <Filter size={32} className="text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-900 via-indigo-900 to-blue-900 dark:from-white dark:via-indigo-100 dark:to-blue-100 bg-clip-text text-transparent">
+                  {t("homeFilter.title")}
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+                  {t("homeFilter.description")}
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleRefresh}
+              disabled={isLoading}
+              className="group relative px-5 py-2.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-medium shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-700 disabled:opacity-50"
+            >
+              <RefreshCw 
+                size={18} 
+                className={`${isLoading ? "animate-spin" : "group-hover:rotate-180"} transition-all duration-500`} 
+              />
+            </button>
+          </div>
         </div>
 
         {/* Loading State */}
         {isLoading && (
           <div className="space-y-6">
-            <div className="h-64 rounded-[2.5rem] bg-white/50 dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
+            <div className="h-80 rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-48 rounded-3xl bg-white/50 dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
+                <div key={i} className="h-64 rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
               ))}
             </div>
           </div>
@@ -222,19 +223,19 @@ export default function HomeFilterPage() {
 
         {/* Error State */}
         {isError && !isLoading && (
-          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-12 text-center border border-red-100 dark:border-red-900/30">
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-full w-fit mx-auto mb-6">
+          <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-700">
+            <div className="p-4 bg-red-50 dark:bg-red-500/10 rounded-full w-fit mx-auto mb-6">
               <Filter size={48} className="text-red-500" />
             </div>
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
               {t("homeFilter.errorTitle")}
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto">
+            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
               {t("homeFilter.errorMessage")}
             </p>
             <button
               onClick={handleRefresh}
-              className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-indigo-500/30 transition-all active:scale-95"
+              className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all active:scale-95"
             >
               {t("homeFilter.tryAgain")}
             </button>
@@ -243,21 +244,21 @@ export default function HomeFilterPage() {
 
         {/* Empty State */}
         {!isLoading && !isError && !homeFilter && (
-          <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-xl p-16 text-center border border-slate-200/60 dark:border-slate-700/60 animate-in fade-in zoom-in duration-700">
-            <div className="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-full w-fit mx-auto mb-8">
+          <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-3xl p-16 text-center border border-slate-200 dark:border-slate-700 animate-in fade-in zoom-in duration-700">
+            <div className="p-6 bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-500/20 dark:to-blue-500/20 rounded-full w-fit mx-auto mb-8">
               <Filter size={64} className="text-indigo-500" />
             </div>
-            <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-4">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">
               {t("common.noData") || "No Home Filter Configured"}
             </h2>
-            <p className="text-slate-600 dark:text-slate-400 mb-10 max-w-md mx-auto text-lg">
+            <p className="text-slate-500 dark:text-slate-400 mb-10 max-w-md mx-auto">
               {t("homeFilter.emptyDescription") || "You haven't set up a main filter for your home page yet. Create one now to help users find products easily."}
             </p>
             <button
               onClick={() => navigate("/home-page/home-filter/create")}
-              className="group flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-[2rem] font-black text-xl shadow-xl hover:shadow-indigo-500/40 hover:scale-105 transition-all active:scale-95 mx-auto"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-indigo-500/25 hover:scale-105 transition-all active:scale-95"
             >
-              <Plus size={28} className="group-hover:rotate-90 transition-transform duration-500" />
+              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
               {t("homeFilter.create.title").toUpperCase()}
             </button>
           </div>
@@ -267,123 +268,195 @@ export default function HomeFilterPage() {
         {!isLoading && !isError && homeFilter && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {/* Main Info Card */}
-            <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-sm border border-slate-200/60 dark:border-slate-700/60 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Filter size={120} className="text-slate-900 dark:text-white" />
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 overflow-hidden group"
+            >
+              {/* Gradient Border Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-[1px] -z-10" />
               
-              <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-8">
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <div className="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-xs font-black tracking-widest uppercase">
-                      ID: {homeFilter.id}
+              <div className="relative p-8">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                  <div className="space-y-6">
+                    {/* Badges */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg">
+                        <Hash size={14} className="text-indigo-500" />
+                        <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+                          ID: {homeFilter.id}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
+                        <Tag size={14} className="text-emerald-500" />
+                        <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                          {t("homeFilter.attribute")}: {homeFilter.filterAttribute.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg">
+                        <Layers size={14} className="text-blue-500" />
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                          {homeFilter.options.length} Options
+                        </span>
+                      </div>
                     </div>
-                    <div className="px-4 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full text-xs font-black tracking-widest uppercase">
-                      {t("homeFilter.attribute")}: {homeFilter.filterAttribute.name}
-                    </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
+                    {/* Titles */}
+                    <div>
+                      <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2">
                         {lang === "ar" ? homeFilter.titleAr : homeFilter.titleEn}
-                    </h2>
-                    <p className="text-xl font-medium text-slate-400 dark:text-slate-500">
+                      </h2>
+                      <p className="text-lg text-slate-500 dark:text-slate-400">
                         {lang === "ar" ? homeFilter.titleEn : homeFilter.titleAr}
-                    </p>
+                      </p>
+                    </div>
+
+                    {/* Meta Info */}
+                    <div className="flex flex-wrap gap-4">
+                      <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl">
+                        <Settings size={16} className="text-slate-400" />
+                        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                          Attribute ID: {homeFilter.filterAttributeId}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-4 pt-2">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl text-slate-600 dark:text-slate-400">
-                      <Tag size={16} />
-                      <span className="font-bold text-sm">{homeFilter.filterAttribute.name}</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl text-slate-600 dark:text-slate-400">
-                      <Hash size={16} />
-                      <span className="font-bold text-sm">Attr ID: {homeFilter.filterAttributeId}</span>
-                    </div>
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setIsDeleteOpen(true)}
+                      className="group/btn flex items-center justify-center gap-2 px-5 py-3 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl font-semibold transition-all active:scale-95"
+                    >
+                      <Trash2 size={18} className="group-hover/btn:rotate-12 transition-transform" />
+                      <span>{t("common.delete")}</span>
+                    </button>
+                    <button
+                      onClick={() => navigate(`/home-page/home-filter/edit/${homeFilter.id}`)}
+                      className="group/btn flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-indigo-500/25 transition-all active:scale-95"
+                    >
+                      <Edit2 size={18} className="group-hover/btn:rotate-12 transition-transform" />
+                      <span>{t("common.edit")}</span>
+                    </button>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setIsDeleteOpen(true)}
-                    className="flex items-center justify-center gap-3 px-6 py-5 bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:text-rose-400 rounded-[2rem] font-black text-lg shadow-sm hover:shadow-xl hover:bg-rose-100 transition-all active:scale-95 group"
-                  >
-                    <Trash2 size={24} className="group-hover:rotate-12 transition-transform" />
-                  </button>
-                  <button
-                    onClick={() => navigate(`/home-page/home-filter/edit/${homeFilter.id}`)}
-                    className="flex items-center justify-center gap-3 px-8 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all active:scale-95 group"
-                  >
-                    <Edit2 size={24} className="group-hover:rotate-12 transition-transform" />
-                    {t("common.edit").toUpperCase()}
-                  </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Options Title */}
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
-              <h3 className="text-2xl font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">
-                {t("homeFilter.options")}
-              </h3>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent" />
+            {/* Options Section Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl">
+                  <Sparkles size={20} className="text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                  {t("homeFilter.options")}
+                </h3>
+                <span className="px-3 py-1 bg-slate-100 dark:bg-slate-700 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400">
+                  {homeFilter.options.length} Total
+                </span>
+              </div>
+
+              {/* Search */}
+              <div className="relative w-full md:w-80">
+                <input
+                  type="text"
+                  placeholder="Search options..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                />
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
             </div>
 
             {/* Options Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {homeFilter.options.map((option) => (
-                <div
-                  key={option.id}
-                  className="group bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-sm hover:shadow-xl border border-slate-200/60 dark:border-slate-700/60 transition-all duration-500 flex flex-col items-center"
-                >
-                  <div className="relative w-full aspect-square rounded-2xl overflow-hidden mb-4 bg-slate-50 dark:bg-slate-900">
-                    <img
-                      src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + option.image}
-                      alt={lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://placehold.co/400x400?text=Option";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
-                        <button
-                          onClick={() => setEditingOption(option)}
-                          className="w-full py-2.5 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-white/40 transition-all active:scale-95"
-                        >
-                          <ImagePlus size={18} />
-                          {t("common.edit")}
-                        </button>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center space-y-1">
-                    <p className="text-xs font-black text-indigo-500 uppercase tracking-widest mb-1">
-                      {option.filterOption.value}
-                    </p>
-                    <h4 className="text-lg font-black text-slate-900 dark:text-white">
-                      {lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
-                    </h4>
-                    <p className="text-xs font-bold text-slate-400">
-                        {lang === "ar" ? option.filterOption.name : option.filterOption.nameAr}
-                    </p>
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700/50 w-full flex items-center justify-between">
-                     <span className="text-[10px] font-black text-slate-400 uppercase">ID: {option.filterOption.id}</span>
-                     <div className="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-900 text-slate-400">
-                        <ChevronRight size={14} />
-                     </div>
-                  </div>
+            <AnimatePresence mode="popLayout">
+              {filteredOptions.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                  {filteredOptions.map((option, index) => (
+                    <motion.div
+                      key={option.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                    >
+                      {/* Gradient Border Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-[1px] -z-10" />
+                      
+                      {/* Image Container */}
+                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+                        <img
+                          src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + option.image}
+                          alt={lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://placehold.co/400x400/e2e8f0/94a3b8?text=No+Image";
+                          }}
+                        />
+                        
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <button
+                            onClick={() => setEditingOption(option)}
+                            className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-xl font-semibold flex items-center gap-2 hover:bg-white/40 transition-all"
+                          >
+                            <ImagePlus size={16} />
+                            Change Image
+                          </button>
+                        </div>
+                        
+                        {/* Value Badge */}
+                        <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-lg">
+                          <span className="text-[10px] font-bold text-white uppercase">
+                            {option.filterOption.value}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="p-4 text-center">
+                        <h4 className="text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">
+                          {lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
+                        </h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
+                          {lang === "ar" ? option.filterOption.name : option.filterOption.nameAr}
+                        </p>
+                        <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-slate-400 font-mono">ID: {option.filterOption.id}</span>
+                            <ChevronRight size={12} className="text-slate-400" />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              ) : (
+                <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-12 text-center border border-slate-200 dark:border-slate-700">
+                  <div className="p-4 bg-slate-100 dark:bg-slate-700 rounded-full w-fit mx-auto mb-4">
+                    <Filter size={32} className="text-slate-400" />
+                  </div>
+                  <p className="text-slate-500 dark:text-slate-400">
+                    No options found matching your search
+                  </p>
+                </div>
+              )}
+            </AnimatePresence>
           </div>
         )}
 
-
-        {/* Delete Confirmation */}
+        {/* Delete Confirmation Dialog */}
         {homeFilter && (
           <DeleteDialog
             isOpen={isDeleteOpen}
@@ -395,10 +468,11 @@ export default function HomeFilterPage() {
             isLoading={deleteMutation.isPending}
           />
         )}
+
         {/* Edit Option Image Modal */}
         {editingOption && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-xl max-h-[90vh] overflow-hidden rounded-2xl animate-in zoom-in-95 duration-300">
               <UpdateForm
                 title={lang === "ar" ? editingOption.filterOption.nameAr : editingOption.filterOption.name}
                 description={t("homeFilter.editOptionDescription") || "Update the image for this filter option"}

@@ -12,6 +12,7 @@ import {
   XCircle,
   Eye,
   EyeOff,
+  Layout,
 } from "lucide-react";
 import { DataTable } from "../../../components/shared/DataTable";
 import { DeleteDialog } from "../../../components/shared/DeleteDialog";
@@ -212,7 +213,7 @@ export default function ParentCategoriesPage() {
         pageSize: rowsPerPage,
         searchTerm: debouncedSearchTerm,
       }),
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -375,7 +376,7 @@ export default function ParentCategoriesPage() {
     {
       key: "id",
       label: t("categories.parent.page.columns.actions"),
-      width: "140px",
+      width: "180px",
       render: (value: number, row: Category) => {
         if (!row) {
           return <div>Error: No data</div>;
@@ -383,6 +384,13 @@ export default function ParentCategoriesPage() {
 
         return (
           <div className="flex items-center justify-center gap-2">
+            <button
+              onClick={() => navigate(`/parent-categories/sections/${row.id}`)}
+              className="p-2 bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 dark:from-blue-500/10 dark:to-indigo-500/10 dark:hover:from-blue-500/20 dark:hover:to-indigo-500/20 text-blue-600 dark:text-blue-400 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-md border border-blue-200/50 dark:border-blue-500/20"
+              title={t("categories.parent.page.actions.sectionsTitle")}
+            >
+              <Layout size={16} />
+            </button>
             <button
               onClick={() => handleAction("edit", row)}
               className="p-2 bg-gradient-to-br from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 dark:from-amber-500/10 dark:to-orange-500/10 dark:hover:from-amber-500/20 dark:hover:to-orange-500/20 text-amber-600 dark:text-amber-400 rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-md border border-amber-200/50 dark:border-amber-500/20"

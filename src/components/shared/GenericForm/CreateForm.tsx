@@ -101,6 +101,7 @@ export function CreateForm({
           errors={errors}
           disabled={field.disabled || isLoading}
           defaultValues={defaultValues[field.name] || []}
+          fetchOptions={fetchOptions}
         />
       );
     }

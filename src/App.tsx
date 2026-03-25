@@ -60,6 +60,9 @@ import UpdateParentCategoryPage from "./pages/Category/ParentCategory/UpdatePare
 import UpdateSubCategoryPage from "./pages/Category/SubCategory/UpdateSubCategoryPage";
 import UpdateThirdCategoryPage from "./pages/Category/ThirdCategory/UpdateThirdCategoryPage";
 import ThirdCategoriesPage from "./pages/Category/ThirdCategory/ThirdCategoriesPage";
+import ParentCategorySectionsPage from "./pages/Category/ParentCategory/ParentCategorySectionsPage";
+import CreateCategorySectionPage from "./pages/Category/ParentCategory/CreateCategorySectionPage";
+import UpdateCategorySectionPage from "./pages/Category/ParentCategory/UpdateCategorySectionPage";
 import BannersPage from "./pages/Banners/BannersPage";
 import CreateBannerPage from "./pages/Banners/CreateBannerPage";
 import UpdateBannerPage from "./pages/Banners/UpdateBrandPage";
@@ -174,6 +177,18 @@ export default function App() {
             <Route
               path="parent-categories/edit/:id"
               element={<UpdateParentCategoryPage />}
+            />
+            <Route
+              path="parent-categories/sections/:id"
+              element={<ParentCategorySectionsPage />}
+            />
+            <Route
+              path="parent-categories/sections/:id/create"
+              element={<CreateCategorySectionPage />}
+            />
+            <Route
+              path="parent-categories/sections/:id/update/:sectionId"
+              element={<UpdateCategorySectionPage />}
             />
 
             <Route path="sub-categories" element={<SubCategoryPage />} />

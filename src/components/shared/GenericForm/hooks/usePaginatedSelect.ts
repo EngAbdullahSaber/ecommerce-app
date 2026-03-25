@@ -94,7 +94,7 @@ export function usePaginatedSelect(
 
   useEffect(() => {
     fetchData(1, "", true);
-  }, []);
+  }, [config.endpoint, JSON.stringify(config.additionalParams)]);
 
   return {
     options,

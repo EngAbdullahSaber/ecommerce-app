@@ -241,6 +241,14 @@ const AppSidebar: React.FC = () => {
           name: t("sidebar.influencers"),
           path: "/home-page/influencers",
         },
+        {
+          name: t("sidebar.homeFilter"),
+          path: "/home-page/home-filter",
+        },
+        {
+          name: t("sidebar.homeCategories"),
+          path: "/home-page/home-categories",
+        },
       ],
     },
     {

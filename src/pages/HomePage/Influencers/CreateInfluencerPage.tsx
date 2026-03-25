@@ -35,7 +35,7 @@ export default function CreateInfluencerPage() {
   const [formFields, setFormFields] = useState<FormField[]>([]);
 
   const userPaginatedConfig: PaginatedSelectConfig = {
-    endpoint: "users",
+    endpoint: "home-page/admin/users",
     searchParam: "search",
     labelKey: "email",
     valueKey: "id",

@@ -33,32 +33,27 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 
 // Product Interfaces based on your data structure
-interface Name {
-  ar: string;
-  en: string;
-}
-
-interface Description {
-  ar: string;
-  en: string;
+interface LocalizedString {
+  arabic: string;
+  english: string;
 }
 
 interface Brand {
   id: number;
-  title: Name;
+  title: LocalizedString;
   image: string;
-  description: Description;
+  description: LocalizedString;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  createdById: number;
+  createdById: number | null;
   updatedById: number | null;
   deletedById: number | null;
 }
 
 interface Category {
   id: number;
-  title: Name;
+  title: LocalizedString;
   parentId: number | null;
   image: string;
   active: boolean;
@@ -66,9 +61,16 @@ interface Category {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  createdById: number;
+  createdById: number | null;
   updatedById: number | null;
   deletedById: number | null;
+}
+
+interface ProductCategory {
+  id: number;
+  productId: number;
+  categoryId: number;
+  category: Category;
 }
 
 interface ProductImage {
@@ -89,7 +91,8 @@ interface Attribute {
   id: number;
   key: string;
   name: string;
-  sourcePath: string;
+  nameAr?: string;
+  sourcePath: string | null;
   isActive: boolean;
 }
 
@@ -98,6 +101,7 @@ interface Option {
   attributeId: number;
   value: string;
   name: string;
+  nameAr?: string;
   sortOrder: number;
   isActive: boolean;
 }
@@ -137,11 +141,10 @@ interface FilterValue {
 
 interface Product {
   id: number;
-  name: Name;
-  description: Description;
-  features: string;
+  name: LocalizedString;
+  description: LocalizedString;
+  features: LocalizedString;
   brandId: number;
-  categoryId: number;
   storeId: number | null;
   basePrice: string;
   offerPrice: string | null;
@@ -154,15 +157,27 @@ interface Product {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  createdById: number;
-  updatedById: number | null;
-  deletedById: number | null;
+  productDimensions?: LocalizedString;
+  packageDimensions?: LocalizedString;
+  countryMade?: LocalizedString;
+  productWeight?: LocalizedString;
+  recommendedAge?: LocalizedString;
+  packageWeight?: LocalizedString;
   brand: Brand;
-  category: Category;
+  categories: ProductCategory[];
+  category?: Category;
+  categoryId?: number;
   store: any | null;
   images: ProductImage[];
   variants: Variant[];
   filterValues: FilterValue[];
+  similarProducts?: {
+    id: number;
+    name: LocalizedString;
+    basePrice: string;
+    offerPrice: string | null;
+    images: { imageUrl: string; altText: string }[];
+  }[];
 }
 
 interface ProductResponse {
@@ -194,6 +209,7 @@ const fetchProductById = async (id: string, lang: string): Promise<Product> => {
 };
 
 const formatImageUrl = (url: string) => {
+  if (url.startsWith("http")) return url;
   return import.meta.env.VITE_IMAGE_BASE_URL + url;
 };
 
@@ -254,7 +270,7 @@ export default function ViewProductPage() {
     const num = parseFloat(amount);
     return new Intl.NumberFormat(lang === "ar" ? "ar-SA" : "en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "SAR",
     }).format(num);
   };
 
@@ -274,15 +290,19 @@ export default function ViewProductPage() {
   // Get grouped attributes from filter values
   const getGroupedAttributes = () => {
     if (!product) return {};
-    const grouped: Record<string, Option[]> = {};
+    const grouped: Record<string, { name: string; options: Option[] }> = {};
 
     product.filterValues.forEach((fv) => {
-      if (!grouped[fv.attribute.key]) {
-        grouped[fv.attribute.key] = [];
+      const attrKey = fv.attribute.key;
+      const attrName = lang === "ar" ? fv.attribute.nameAr || fv.attribute.name : fv.attribute.name;
+      
+      if (!grouped[attrKey]) {
+        grouped[attrKey] = { name: attrName, options: [] };
       }
+      
       // Check if option already exists to avoid duplicates
-      if (!grouped[fv.attribute.key].some((opt) => opt.id === fv.option.id)) {
-        grouped[fv.attribute.key] = [...grouped[fv.attribute.key], fv.option];
+      if (!grouped[attrKey].options.some((opt) => opt.id === fv.option.id)) {
+        grouped[attrKey].options.push(fv.option);
       }
     });
 
@@ -419,7 +439,7 @@ export default function ViewProductPage() {
             </div>
             <div className="flex-1">
               <h1 className="text-3xl font-black bg-gradient-to-r from-slate-900 via-amber-900 to-orange-900 dark:from-slate-100 dark:via-amber-100 dark:to-orange-100 bg-clip-text text-transparent">
-                {product.name[lang === "ar" ? "ar" : "en"]}
+                {product.name[lang === "ar" ? "arabic" : "english"]}
               </h1>
               <p className="text-slate-600 dark:text-slate-400 mt-1 flex items-center gap-2">
                 <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">
@@ -483,7 +503,7 @@ export default function ViewProductPage() {
                         )}
                         alt={
                           product.images[selectedImageIndex].altText ||
-                          product.name[lang === "ar" ? "ar" : "en"]
+                          product.name[lang === "ar" ? "arabic" : "english"]
                         }
                         className="w-full h-full object-contain p-4"
                       />
@@ -562,7 +582,7 @@ export default function ViewProductPage() {
                           {t("products.view.fields.englishName")}
                         </div>
                         <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300">
-                          {product.name.en || "N/A"}
+                          {product.name.english || "N/A"}
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -573,7 +593,7 @@ export default function ViewProductPage() {
                           className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300"
                           dir="rtl"
                         >
-                          {product.name.ar || "غير متوفر"}
+                          {product.name.arabic || "غير متوفر"}
                         </div>
                       </div>
                     </div>
@@ -589,20 +609,20 @@ export default function ViewProductPage() {
                         <div className="text-xs text-slate-500 dark:text-slate-400">
                           {t("products.view.fields.englishDescription")}
                         </div>
-                        <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 min-h-[100px]">
-                          {product.description.en || "N/A"}
-                        </div>
+                        <div 
+                          className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 min-h-[100px] prose dark:prose-invert max-w-none"
+                          dangerouslySetInnerHTML={{ __html: product.description.english || "N/A" }}
+                        />
                       </div>
                       <div className="space-y-2">
                         <div className="text-xs text-slate-500 dark:text-slate-400">
                           {t("products.view.fields.arabicDescription")}
                         </div>
                         <div
-                          className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 min-h-[100px]"
+                          className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 min-h-[100px] prose dark:prose-invert max-w-none text-right"
                           dir="rtl"
-                        >
-                          {product.description.ar || "غير متوفر"}
-                        </div>
+                          dangerouslySetInnerHTML={{ __html: product.description.arabic || "غير متوفر" }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -612,9 +632,10 @@ export default function ViewProductPage() {
                     <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       {t("products.view.fields.features")}
                     </label>
-                    <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300">
-                      {product.features || "N/A"}
-                    </div>
+                    <div 
+                      className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 prose dark:prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: product.features[lang === 'ar' ? 'arabic' : 'english'] || "N/A" }}
+                    />
                   </div>
 
                   {/* Brand and Category */}
@@ -628,7 +649,7 @@ export default function ViewProductPage() {
                           <img
                             src={formatImageUrl(product.brand.image)}
                             alt={
-                              product.brand.title[lang === "ar" ? "ar" : "en"]
+                              product.brand.title[lang === "ar" ? "arabic" : "english"]
                             }
                             className="w-full h-full object-contain p-1"
                           />
@@ -636,8 +657,8 @@ export default function ViewProductPage() {
                       )}
                       <div>
                         <div className="font-medium text-slate-900 dark:text-white">
-                          {product.brand?.title?.[
-                            lang === "ar" ? "ar" : "en"
+                          {product.brand?.title[
+                            lang === "ar" ? "arabic" : "english"
                           ] || "N/A"}
                         </div>
                         <div className="text-xs text-slate-500 dark:text-slate-400">
@@ -651,31 +672,53 @@ export default function ViewProductPage() {
                     <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       {t("products.view.fields.category")}
                     </label>
-                    <div className="px-4 py-3 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 border border-green-200 dark:border-green-500/20 rounded-xl flex items-center gap-3">
-                      {product.category?.image && (
-                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                          <img
-                            src={formatImageUrl(product.category.image)}
-                            alt={
-                              product.category.title[
-                                lang === "ar" ? "ar" : "en"
-                              ]
-                            }
-                            className="w-full h-full object-contain p-1"
-                          />
+                    <div className="flex flex-wrap gap-3">
+                      {/* Handle both product.categories (array) and product.category (single object) */}
+                      {product.categories?.length > 0 ? (
+                        product.categories.map((pc) => (
+                          <div key={pc.id} className="px-4 py-3 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 border border-green-200 dark:border-green-500/20 rounded-xl flex items-center gap-3">
+                            {pc.category?.image && (
+                              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                                <img
+                                  src={formatImageUrl(pc.category.image)}
+                                  alt={pc.category.title[lang === "ar" ? "arabic" : "english"]}
+                                  className="w-full h-full object-contain p-1"
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <div className="font-medium text-slate-900 dark:text-white text-sm">
+                                {pc.category?.title[lang === "ar" ? "arabic" : "english"] || "N/A"}
+                              </div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                                {pc.category?.type}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : product.category ? (
+                        <div className="px-4 py-3 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 border border-green-200 dark:border-green-500/20 rounded-xl flex items-center gap-3">
+                          {product.category.image && (
+                            <div className="w-8 h-8 rounded-lg overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                              <img
+                                src={formatImageUrl(product.category.image)}
+                                alt={product.category.title[lang === "ar" ? "arabic" : "english"]}
+                                className="w-full h-full object-contain p-1"
+                              />
+                            </div>
+                          )}
+                          <div>
+                            <div className="font-medium text-slate-900 dark:text-white text-sm">
+                              {product.category.title[lang === "ar" ? "arabic" : "english"] || "N/A"}
+                            </div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                              {product.category.type}
+                            </div>
+                          </div>
                         </div>
+                      ) : (
+                        <div className="text-sm text-slate-400 italic">No categories assigned</div>
                       )}
-                      <div>
-                        <div className="font-medium text-slate-900 dark:text-white">
-                          {product.category?.title?.[
-                            lang === "ar" ? "ar" : "en"
-                          ] || "N/A"}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
-                          ID: {product.categoryId} • Type:{" "}
-                          {product.category?.type}
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -803,6 +846,71 @@ export default function ViewProductPage() {
               </div>
             )}
 
+            {/* Technical Specifications Card */}
+            {(product.productDimensions || product.packageDimensions || product.countryMade || product.productWeight || product.recommendedAge) && (
+              <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-slate-600 to-slate-800" />
+                <div className="px-6 py-5 border-b border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-br from-slate-50/80 to-white dark:from-slate-800/50 dark:to-slate-900/50">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-500/10 dark:to-slate-600/10 rounded-lg">
+                      <Ruler
+                        size={20}
+                        className="text-slate-600 dark:text-slate-400"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                        {t("products.view.specifications.title")}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        {t("products.view.specifications.description")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-12">
+                    {product.productDimensions && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.productDimensions")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.productDimensions[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                    {product.packageDimensions && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.packageDimensions")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.packageDimensions[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                    {product.countryMade && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.countryMade")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.countryMade[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                    {product.productWeight && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.productWeight")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.productWeight[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                    {product.recommendedAge && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.recommendedAge")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.recommendedAge[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                    {product.packageWeight && (
+                      <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <span className="text-sm text-slate-500">{t("products.view.fields.packageWeight")}</span>
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">{product.packageWeight[lang === 'ar' ? 'arabic' : 'english']}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Filter Attributes Card */}
             {product.filterValues.length > 0 && (
               <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden">
@@ -830,14 +938,13 @@ export default function ViewProductPage() {
                 <div className="p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.entries(groupedAttributes).map(
-                      ([attributeKey, options]) => (
+                      ([attributeKey, { name, options }]) => (
                         <div
                           key={attributeKey}
                           className="p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white/50 dark:bg-slate-800/50"
                         >
                           <div className="font-medium text-slate-900 dark:text-white mb-2">
-                            {attributeKey.charAt(0).toUpperCase() +
-                              attributeKey.slice(1)}
+                            {name}
                           </div>
                           <div className="flex flex-wrap gap-2">
                             {options.map((option) => (
@@ -845,7 +952,7 @@ export default function ViewProductPage() {
                                 key={option.id}
                                 className="px-3 py-1 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm"
                               >
-                                {option.name}
+                                {lang === 'ar' ? option.nameAr || option.name : option.name}
                               </span>
                             ))}
                           </div>
@@ -1187,6 +1294,62 @@ export default function ViewProductPage() {
             </div>
           </div>
         </div>
+
+        {/* Similar Products */}
+        {product.similarProducts && product.similarProducts.length > 0 && (
+          <div className="mt-12">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg">
+                <Layers size={20} className="text-white" />
+              </div>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                {t("products.view.similarProducts.title")}
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {product.similarProducts.map((p) => (
+                <div 
+                  key={p.id} 
+                  onClick={() => {
+                    navigate(`/products/view/${p.id}`);
+                    window.scrollTo(0, 0);
+                  }}
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group group"
+                >
+                  <div className="aspect-square rounded-t-2xl overflow-hidden bg-slate-50 dark:bg-slate-800">
+                    {p.images && p.images.length > 0 ? (
+                      <img 
+                        src={formatImageUrl(p.images[0].imageUrl)} 
+                        alt={p.name[lang === 'ar' ? 'arabic' : 'english']}
+                        className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon size={32} className="text-slate-300" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <h4 className="font-bold text-slate-900 dark:text-white line-clamp-1 mb-2">
+                       {p.name[lang === 'ar' ? 'arabic' : 'english']}
+                    </h4>
+                    <div className="flex items-center justify-between">
+                      <div className="font-black text-indigo-600 dark:text-indigo-400">
+                        {formatCurrency(p.offerPrice || p.basePrice)}
+                      </div>
+                      {p.offerPrice && (
+                        <div className="text-xs text-slate-400 line-through">
+                          {formatCurrency(p.basePrice)}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

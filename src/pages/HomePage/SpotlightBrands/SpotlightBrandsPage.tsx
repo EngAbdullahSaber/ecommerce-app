@@ -126,7 +126,7 @@ export default function SpotlightBrandsPage() {
         <div className="flex items-center justify-center">
           {brand?.image ? (
             <img
-              src={brand.image}
+              src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + brand.image}
               alt={lang === "ar" ? brand.title?.arabic : brand.title?.english}
               className="w-16 h-16 rounded-xl object-contain border border-slate-200 dark:border-slate-700 bg-white"
               onError={(e) => {

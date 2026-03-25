@@ -213,7 +213,7 @@ export default function TodayShoppingPage() {
                 {/* Image Section */}
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={item.image}
+                    src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + item.image}
                     alt={lang === "ar" ? item.titleAr : item.titleEn}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                     onError={(e) => {
@@ -315,7 +315,7 @@ export default function TodayShoppingPage() {
 
         {editingItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-[2.5rem] animate-in zoom-in-95 duration-300 scrollbar-thin scrollbar-thumb-pink-500/20 dark:scrollbar-thumb-pink-900/20 scrollbar-track-transparent">
+            <div className="w-full max-w-2xl max-h-[80vh] overflow-x-hidden overflow-y-auto rounded-[2.5rem] animate-in zoom-in-95 duration-300 scrollbar-thin scrollbar-thumb-pink-500/20 dark:scrollbar-thumb-pink-900/20 scrollbar-track-transparent">
               <UpdateForm
                 title={t("todayShopping.edit.title")}
                 description={t("todayShopping.edit.description")}

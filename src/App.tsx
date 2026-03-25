@@ -81,6 +81,14 @@ import CreateSpotlightBrandPage from "./pages/HomePage/SpotlightBrands/CreateSpo
 import UpdateSpotlightBrandPage from "./pages/HomePage/SpotlightBrands/UpdateSpotlightBrandPage";
 import InfluencersPage from "./pages/HomePage/Influencers/InfluencersPage";
 import CreateInfluencerPage from "./pages/HomePage/Influencers/CreateInfluencerPage";
+import UpdateInfluencerPage from "./pages/HomePage/Influencers/UpdateInfluencerPage";
+import AssignInfluencerProductsPage from "./pages/HomePage/Influencers/AssignInfluencerProductsPage";
+import HomeFilterPage from "./pages/HomePage/HomeFilter/HomeFilterPage";
+import CreateHomeFilterPage from "./pages/HomePage/HomeFilter/CreateHomeFilterPage";
+import UpdateHomeFilterPage from "./pages/HomePage/HomeFilter/UpdateHomeFilterPage";
+import HomeCategoriesPage from "./pages/HomePage/HomeCategories/HomeCategoriesPage";
+import CreateHomeCategoryPage from "./pages/HomePage/HomeCategories/CreateHomeCategoryPage";
+import UpdateHomeCategoryPage from "./pages/HomePage/HomeCategories/UpdateHomeCategoryPage";
 
 export default function App() {
   useLanguage();
@@ -245,6 +253,38 @@ export default function App() {
             <Route
               path="home-page/influencers/create"
               element={<CreateInfluencerPage />}
+            />
+            <Route
+              path="home-page/influencers/edit/:id"
+              element={<UpdateInfluencerPage />}
+            />
+            <Route
+              path="home-page/influencers/products/:id"
+              element={<AssignInfluencerProductsPage />}
+            />
+            <Route
+              path="home-page/home-filter"
+              element={<HomeFilterPage />}
+            />
+            <Route
+              path="home-page/home-filter/create"
+              element={<CreateHomeFilterPage />}
+            />
+            <Route
+              path="home-page/home-filter/edit/:id"
+              element={<UpdateHomeFilterPage />}
+            />
+            <Route
+              path="home-page/home-categories"
+              element={<HomeCategoriesPage />}
+            />
+            <Route
+              path="home-page/home-categories/create"
+              element={<CreateHomeCategoryPage />}
+            />
+            <Route
+              path="home-page/home-categories/edit/:id"
+              element={<UpdateHomeCategoryPage />}
             />
           </Route>
 

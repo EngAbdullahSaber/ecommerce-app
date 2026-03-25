@@ -246,6 +246,26 @@
   "influencers": {
     "title": "المؤثرين",
     "description": "إدارة مجتمع المؤثرين والمنتجات المميزة الخاصة بهم",
+    "manageProducts": "إدارة المنتجات",
+    "assign": {
+      "title": "تعيين المنتجات",
+      "influencerLabel": "المؤثر",
+      "searchPlaceholder": "ابحث عن المنتجات بالاسم أو SKU...",
+      "searchResults": "نتائج البحث",
+      "loadMore": "تحميل المزيد من المنتجات",
+      "noProducts": "لم يتم العثور على منتجات",
+      "searching": "جاري البحث في الكتالوج...",
+      "selectedTitle": "المختارة",
+      "productsAdded": "تمت إضافة {{count}} منتج",
+      "clearAll": "مسح الكل",
+      "emptySelection": "لم يتم اختيار منتجات بعد",
+      "emptySelectionDesc": "ابحث وأضف المنتجات من اليسار",
+      "newAssignment": "تعيين جديد",
+      "assignedProduct": "منتج معين مسبقاً",
+      "totalSelection": "إجمالي المختار",
+      "saveSelection": "حفظ الاختيار ({{count}})",
+      "loadingData": "جاري تحميل بيانات المؤثر..."
+    },
     "refresh": "تحديث",
     "loading": "جاري تحميل المؤثرين...",
     "errorTitle": "خطأ",
@@ -255,6 +275,8 @@
       "active": "نشط",
       "inactive": "غير نشط"
     },
+    "editTitle": "تحديث المؤثر",
+    "editSubtitle": "تعديل الملف الشخصي وحالة المؤثر",
     "create": {
       "title": "إضافة مؤثر جديد",
       "subtitle": "إضافة مؤثر جديد إلى مجتمعنا",
@@ -298,7 +320,82 @@
     "productsList": "المنتجات المميزة",
     "contactInfo": "معلومات الاتصال",
     "socialName": "اسم العرض",
-    "realName": "الاسم الحقيقي"
+    "realName": "الاسم الحقيقي",
+    "deleteTitle": "إزالة المؤثر",
+    "deleteDescription": "هل أنت متأكد من رغبتك في إزالة هذا المؤثر؟ لا يمكن التراجع عن هذا الإجراء."
+  },
+  "homeFilter": {
+    "title": "فلتر الصفحة الرئيسية",
+    "description": "إدارة الفلتر الرئيسي في الصفحة الرئيسية",
+    "refresh": "تحديث",
+    "loading": "جارٍ تحميل الفلتر...",
+    "errorTitle": "خطأ",
+    "errorMessage": "فشل تحميل الفلتر",
+    "tryAgain": "حاول مرة أخرى",
+    "edit": {
+      "title": "تعديل الفلتر",
+      "description": "تحديث العنوان وخاصية الفلتر",
+      "fields": {
+        "titleEn": "العنوان بالإنجليزية",
+        "titleAr": "العنوان بالعربية",
+        "filterAttribute": "خاصية الفلتر"
+      }
+    },
+    "options": "خيارات الفلتر",
+    "attribute": "الخاصية",
+    "deleteTitle": "إزالة فلتر الصفحة الرئيسية",
+    "deleteDescription": "هل أنت متأكد من رغبتك في إزالة هذا الفلتر؟ لا يمكن التراجع عن هذا الإجراء.",
+    "create": {
+        "title": "إنشاء فلتر الصفحة الرئيسية",
+        "description": "تكوين فلتر رئيسي جديد للصفحة الرئيسية",
+        "success": "تم إنشاء فلتر الصفحة الرئيسية بنجاح",
+        "error": "فشل في إنشاء فلتر الصفحة الرئيسية"
+    }
+  },
+  "homeCategories": {
+    "title": "تصنيفات الصفحة الرئيسية",
+    "description": "إدارة التصنيفات المعروضة في الصفحة الرئيسية",
+    "refresh": "تحديث",
+    "loading": "جارٍ تحميل التصنيفات...",
+    "errorTitle": "خطأ",
+    "errorMessage": "فشل تحميل التصنيفات",
+    "tryAgain": "حاول مرة أخرى",
+    "table": {
+      "columns": {
+        "id": "المعرف",
+        "category": "التصنيف",
+        "displayOrder": "الترتيب",
+        "type": "النوع",
+        "withBestSeller": "الأكثر مبيعاً",
+        "actions": "الإجراءات"
+      }
+    },
+    "fields": {
+      "category": "التصنيف",
+      "displayOrder": "ترتيب العرض",
+      "type": "النوع",
+      "withBestSeller": "عرض الأكثر مبيعاً"
+    },
+    "types": {
+      "SPECIFIC_CATEGORIES": "تصنيفات محددة",
+      "SPECIFIC_CATEGORIES_WITH_SUBCATEGORIES_AND_BRANDS": "تصنيفات مع الفرعية والعلامات التجارية"
+    },
+    "status": {
+      "withBestSeller": "مع الأكثر مبيعاً",
+      "withoutBestSeller": "بدون الأكثر مبيعاً"
+    },
+    "create": {
+      "title": "إضافة تصنيف للصيحة الرئيسية",
+      "description": "تكوين تصنيف محدد ليتم عرضه في الصفحة الرئيسية",
+      "success": "تمت إضافة تصنيف الصفحة الرئيسية بنجاح",
+      "error": "فشل في إضافة تصنيف الصفحة الرئيسية"
+    },
+    "edit": {
+      "title": "تحديث تصنيف الصفحة الرئيسية",
+      "description": "تعديل تكوين تصنيف معروض في الصفحة الرئيسية",
+      "success": "تم تحديث تصنيف الصفحة الرئيسية بنجاح",
+      "error": "فشل في تحديث تصنيف الصفحة الرئيسية"
+    }
   },
   "sidebar": {
     "dashboard": "لوحة التحكم",
@@ -331,7 +428,9 @@
     "homePageSections": "أقسام الصفحة الرئيسية",
     "todayShopping": "تسوق اليوم",
     "spotlightBrands": "العلامات التجارية المميزة",
-    "influencers": "المؤثرين"
+    "influencers": "المؤثرين",
+    "homeFilter": "فلتر الصفحة الرئيسية",
+    "homeCategories": "تصنيفات الصفحة الرئيسية"
   },
 
   "banners": {
@@ -1481,6 +1580,84 @@
       "variantsHelper": "أضف أنواع المنتج بخصائص وأسعار مختلفة",
 
       "createProduct": "إنشاء المنتج"
+    },
+    "view": {
+      "back": "العودة إلى المنتجات",
+      "loading": "جاري تحميل المنتج",
+      "loadingMessage": "يتم الآن جلب تفاصيل المنتج من النظام...",
+      "error": "خطأ",
+      "errorMessage": "عذراً، تعذر تحميل تفاصيل المنتج في الوقت الحالي.",
+      "retry": "حاول مرة أخرى",
+      "description": "تفاصيل المنتج",
+      "save": "حفظ",
+      "fields": {
+        "name": "اسم المنتج",
+        "englishName": "الاسم الإنجليزي",
+        "arabicName": "الاسم العربي",
+        "description": "وصف المنتج",
+        "englishDescription": "الوصف الإنجليزي",
+        "arabicDescription": "الوصف العربي",
+        "features": "المميزات الرئيسية",
+        "brand": "العلامة التجارية",
+        "category": "الأقسام",
+        "price": "السعر الأساسي",
+        "offerPrice": "سعر العرض",
+        "status": "الحالة",
+        "stock": "كمية المخزون",
+        "sku": "رمز المنتج (SKU)",
+        "freeDelivery": "توصيل مجاني",
+        "fastShipping": "شحن سريع",
+        "ableToGift": "مناسب للتغليف كهدية",
+        "productDimensions": "أبعاد المنتج",
+        "packageDimensions": "أبعاد العبوة",
+        "countryMade": "بلد الصنع",
+        "productWeight": "وزن المنتج",
+        "recommendedAge": "العمر الموصى به",
+        "packageWeight": "وزن العبوة"
+      },
+      "images": {
+        "title": "معرض الصور",
+        "description": "عرض مرئي شامل مع {{count}} صور عالية الجودة"
+      },
+      "variants": {
+        "title": "الأنواع المتاحة",
+        "description": "تصفح جميع الخيارات والإعدادات المتاحة ({{count}} أنواع)",
+        "variant": "النوع",
+        "attributes": "الإعدادات"
+      },
+      "pricing": {
+        "title": "التسعير والرمز",
+        "description": "السعر الأساسي وتتبع رمز المنتج"
+      },
+      "status": {
+        "title": "التوفر",
+        "description": "الحالة الحالية ومزايا الشحن"
+      },
+      "statistics": {
+        "title": "إحصائيات سريعة",
+        "description": "نظرة سريعة على المخزون والأصول"
+      },
+      "stats": {
+        "totalStock": "إجمالي المخزون",
+        "totalVariants": "الأنواع",
+        "totalImages": "الصور",
+        "createdAt": "تاريخ الإضافة"
+      },
+      "specifications": {
+        "title": "المواصفات التقنية",
+        "description": "الأبعاد الفيزيائية، الوزن، والمنشأ"
+      },
+      "similarProducts": {
+        "title": "قد يعجبك أيضاً"
+      },
+      "buttons": {
+        "copy": "نسخ الرمز",
+        "backToList": "العودة للكتالوج",
+        "edit": "تعديل المنتج"
+      },
+      "messages": {
+        "copied": "تم نسخ رمز المنتج إلى الحافظة!"
+      }
     }
   },
   "promos": {

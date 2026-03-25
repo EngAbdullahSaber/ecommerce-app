@@ -249,6 +249,26 @@
   "influencers": {
     "title": "Influencers",
     "description": "Manage our community of influencers and their featured products",
+    "manageProducts": "Manage Products",
+    "assign": {
+      "title": "Assign Products",
+      "influencerLabel": "Influencer",
+      "searchPlaceholder": "Search products by name or SKU...",
+      "searchResults": "Search Results",
+      "loadMore": "Load More Products",
+      "noProducts": "No products found",
+      "searching": "Searching catalog...",
+      "selectedTitle": "Selected",
+      "productsAdded": "{{count}} Products Added",
+      "clearAll": "Clear All",
+      "emptySelection": "No products selected yet",
+      "emptySelectionDesc": "Search and add products from the left",
+      "newAssignment": "New Assignment",
+      "assignedProduct": "Assigned Product",
+      "totalSelection": "Total Selection",
+      "saveSelection": "Save Selection ({{count}})",
+      "loadingData": "Loading Influencer Data..."
+    },
     "refresh": "Refresh",
     "loading": "Loading influencers...",
     "errorTitle": "Error",
@@ -258,6 +278,8 @@
       "active": "Active",
       "inactive": "Inactive"
     },
+    "editTitle": "Update Influencer",
+    "editSubtitle": "Modify the profile and status of the influencer",
     "create": {
       "title": "Add New Influencer",
       "subtitle": "Bring a new influencer into our community",
@@ -301,7 +323,82 @@
     "productsList": "Featured Products",
     "contactInfo": "Contact Information",
     "socialName": "Display Name",
-    "realName": "Real Name"
+    "realName": "Real Name",
+    "deleteTitle": "Remove Influencer",
+    "deleteDescription": "Are you sure you want to remove this influencer? This action cannot be undone."
+  },
+  "homeFilter": {
+    "title": "Home Filter",
+    "description": "Manage the main filter on the home page",
+    "refresh": "Refresh",
+    "loading": "Loading home filter...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load home filter",
+    "tryAgain": "Try Again",
+    "edit": {
+      "title": "Edit Home Filter",
+      "description": "Update the title and filter attribute",
+      "fields": {
+        "titleEn": "English Title",
+        "titleAr": "Arabic Title",
+        "filterAttribute": "Filter Attribute"
+      }
+    },
+    "options": "Filter Options",
+    "attribute": "Attribute",
+    "deleteTitle": "Remove Home Filter",
+    "deleteDescription": "Are you sure you want to remove this home filter? This action cannot be undone.",
+    "create": {
+      "title": "Create Home Filter",
+      "description": "Configure a new main filter for the home page",
+      "success": "Home filter created successfully",
+      "error": "Failed to create home filter"
+    }
+  },
+  "homeCategories": {
+    "title": "Home Categories",
+    "description": "Manage the categories displayed on the home page",
+    "refresh": "Refresh",
+    "loading": "Loading categories...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load categories",
+    "tryAgain": "Try Again",
+    "table": {
+      "columns": {
+        "id": "ID",
+        "category": "Category",
+        "displayOrder": "Order",
+        "type": "Type",
+        "withBestSeller": "Best Seller",
+        "actions": "Actions"
+      }
+    },
+    "fields": {
+      "category": "Category",
+      "displayOrder": "Display Order",
+      "type": "Type",
+      "withBestSeller": "Show Best Seller"
+    },
+    "types": {
+      "SPECIFIC_CATEGORIES": "Specific Categories",
+      "SPECIFIC_CATEGORIES_WITH_SUBCATEGORIES_AND_BRANDS": "Categories with Subs & Brands"
+    },
+    "status": {
+      "withBestSeller": "With Best Seller",
+      "withoutBestSeller": "No Best Seller"
+    },
+    "create": {
+      "title": "Add Home Category",
+      "description": "Configure a specific category to be showcased on the home page",
+      "success": "Home category added successfully",
+      "error": "Failed to add home category"
+    },
+    "edit": {
+      "title": "Update Home Category",
+      "description": "Modify the configuration of a home page category",
+      "success": "Home category updated successfully",
+      "error": "Failed to update home category"
+    }
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -333,7 +430,9 @@
     "homePageSections": "Home Page Sections",
     "todayShopping": "Today Shopping",
     "spotlightBrands": "Spotlight Brands",
-    "influencers": "Influencers"
+    "influencers": "Influencers",
+    "homeFilter": "Home Filter",
+    "homeCategories": "Home Categories"
   },
   "header": {
     "searchPlaceholder": "Search...",
@@ -2102,7 +2201,6 @@
       "editProductDetails": "Edit Product Details",
       "editProduct": "Edit Product",
       "updateProduct": "Update Product",
-      "sku": "SKU",
       "skuPlaceholder": "Enter SKU",
       "skuHelper": "SKU Helper",
       "skuMinLength": "SKU must be at least 2 characters long",
@@ -2204,6 +2302,84 @@
       "variantsHelper": "Add product variants with different attributes and pricing",
 
       "createProduct": "Create Product"
+    },
+    "view": {
+      "back": "Back to Products",
+      "loading": "Loading Product",
+      "loadingMessage": "Retrieving detailed product information...",
+      "error": "Error",
+      "errorMessage": "Unable to load product details at this time.",
+      "retry": "Try Again",
+      "description": "Product Details",
+      "save": "Save",
+      "fields": {
+        "name": "Product Name",
+        "englishName": "English Name",
+        "arabicName": "Arabic Name",
+        "description": "Product Description",
+        "englishDescription": "English Description",
+        "arabicDescription": "Arabic Description",
+        "features": "Key Features",
+        "brand": "Brand",
+        "category": "Categories",
+        "price": "Base Price",
+        "offerPrice": "Offer Price",
+        "status": "Status",
+        "stock": "Stock Quantity",
+        "sku": "SKU",
+        "freeDelivery": "Free Delivery",
+        "fastShipping": "Fast Shipping",
+        "ableToGift": "Gift Packaging Friendly",
+        "productDimensions": "Product Dimensions",
+        "packageDimensions": "Package Dimensions",
+        "countryMade": "Made In",
+        "productWeight": "Product Weight",
+        "recommendedAge": "Recommended Age",
+        "packageWeight": "Package Weight"
+      },
+      "images": {
+        "title": "Product Gallery",
+        "description": "Visual overview with {{count}} high-quality images"
+      },
+      "variants": {
+        "title": "Available Variants",
+        "description": "Browse all available options and configurations ({{count}} variants)",
+        "variant": "Variant",
+        "attributes": "Configuration"
+      },
+      "pricing": {
+        "title": "Pricing & SKU",
+        "description": "Base price and SKU traceability"
+      },
+      "status": {
+        "title": "Availability",
+        "description": "Current status and shipping perks"
+      },
+      "statistics": {
+        "title": "Quick Stats",
+        "description": "Snapshot of inventory and assets"
+      },
+      "stats": {
+        "totalStock": "Total Stock",
+        "totalVariants": "Variants",
+        "totalImages": "Images",
+        "createdAt": "Product Added"
+      },
+      "specifications": {
+        "title": "Technical Specifications",
+        "description": "Physical dimensions, weight, and origins"
+      },
+      "similarProducts": {
+        "title": "You May Also Like"
+      },
+      "buttons": {
+        "copy": "Copy SKU",
+        "backToList": "Back to Catalog",
+        "edit": "Modify Product"
+      },
+      "messages": {
+        "copied": "SKU copied to clipboard!"
+      }
     }
   },
   "promos": {

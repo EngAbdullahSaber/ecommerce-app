@@ -162,9 +162,7 @@ const AppHeader: React.FC = () => {
             {/* <!-- Language Toggler --> */}
             <LanguageToggle />
             {/* <!-- Dark Mode Toggler --> */}
-            <NotificationDropdown />
-            {/* <!-- Notification Menu Area --> */}
-          </div>
+           </div>
           {/* <!-- User Area --> */}
           <UserDropdown />
         </div>

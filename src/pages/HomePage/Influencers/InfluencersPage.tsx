@@ -10,12 +10,20 @@ import {
   XCircle,
   ExternalLink,
   Plus,
+  Trash2,
+  Edit2,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { GetSpecifiedMethod, UpdateMethod } from "../../../services/apis/ApiMethod";
+import { api } from "../../../services/axios";
+import {
+  GetSpecifiedMethod,
+  UpdateMethod,
+  DeleteMethod,
+} from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
 import { motion, AnimatePresence } from "framer-motion";
+import { DeleteDialog } from "../../../components/shared/DeleteDialog";
 
 interface InfluencerProduct {
   id: number;
@@ -63,6 +71,13 @@ export default function InfluencersPage() {
   const queryClient = useQueryClient();
   const toast = useToast();
   const navigate = useNavigate();
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    item: Influencer | null;
+  }>({
+    isOpen: false,
+    item: null,
+  });
 
   const fetchInfluencers = async (): Promise<Influencer[]> => {
     try {
@@ -94,6 +109,34 @@ export default function InfluencersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["influencers"] });
       toast.success(t("common.success"));
+    },
+    onError: () => {
+      toast.error(t("common.error"));
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) =>
+      DeleteMethod("home-page/admin/influencers", id.toString(), lang),
+    onSuccess: () => {
+      toast.success(t("common.success"));
+      queryClient.invalidateQueries({ queryKey: ["influencers"] });
+      setDeleteDialog({ isOpen: false, item: null });
+    },
+    onError: () => {
+      toast.error(t("common.error"));
+    },
+  });
+
+  const deleteProductMutation = useMutation({
+    mutationFn: ({ influencerId, productId }: { influencerId: number; productId: number }) =>
+      api.delete(`home-page/admin/influencers/${influencerId}/products`, {
+        data: { productIds: [productId] },
+        headers: { lang },
+      }),
+    onSuccess: () => {
+      toast.success(t("common.success"));
+      queryClient.invalidateQueries({ queryKey: ["influencers"] });
     },
     onError: () => {
       toast.error(t("common.error"));
@@ -222,7 +265,7 @@ export default function InfluencersPage() {
                   <div className="relative mb-4">
                     <div className="absolute -inset-2 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-[2rem] opacity-0 group-hover:opacity-20 transition-opacity blur-lg" />
                     <img
-                      src={influencer.image}
+                      src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + influencer.image}
                       alt={lang === "ar" ? influencer.disPlayName?.arabic : influencer.disPlayName?.english}
                       className="w-24 h-24 rounded-3xl object-cover border-4 border-white dark:border-slate-700 shadow-md relative z-0"
                       onError={(e) => {
@@ -287,7 +330,16 @@ export default function InfluencersPage() {
                             )}
                           </div>
                         </div>
-                        <ExternalLink size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition-colors" />
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => deleteProductMutation.mutate({ influencerId: influencer.id, productId: prod.product.id })}
+                            disabled={deleteProductMutation.isPending}
+                            className="p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all"
+                          >
+                             <Trash2 size={14} />
+                          </button>
+                          <ExternalLink size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-indigo-400 transition-colors" />
+                        </div>
                       </div>
                     ))}
                     {influencer.products?.length > 3 && (
@@ -307,10 +359,56 @@ export default function InfluencersPage() {
                     {influencer.products?.length || 0} Products
                   </span>
                 </div>
+
+                {/* Actions Overlay for Hover */}
+                <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-slate-800 dark:via-slate-800/95 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 rounded-b-[2.5rem] flex items-center justify-center gap-4">
+                  <button
+                    onClick={() => navigate(`/home-page/influencers/edit/${influencer.id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-colors border border-amber-100 dark:border-amber-500/20 shadow-sm"
+                  >
+                    <Edit2 size={16} />
+                    {t("common.edit")}
+                  </button>
+                  <button
+                    onClick={() => navigate(`/home-page/influencers/products/${influencer.id}`)}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors border border-indigo-100 dark:border-indigo-500/20 shadow-sm"
+                  >
+                    <Package size={16} />
+                    {t("influencers.manageProducts")}
+                  </button>
+                  <button
+                    onClick={() => setDeleteDialog({ isOpen: true, item: influencer })}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-colors border border-rose-100 dark:border-rose-500/20 shadow-sm"
+                  >
+                    <Trash2 size={16} />
+                    {t("common.delete")}
+                  </button>
+                </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Delete Dialog */}
+        <DeleteDialog
+          isOpen={deleteDialog.isOpen}
+          onClose={() => setDeleteDialog({ isOpen: false, item: null })}
+          onConfirm={() => {
+            if (deleteDialog.item) {
+              deleteMutation.mutate(deleteDialog.item.id);
+            }
+          }}
+          title={t("influencers.deleteTitle")}
+          description={t("influencers.deleteDescription")}
+          itemName={
+            deleteDialog.item
+              ? lang === "ar"
+                ? deleteDialog.item.disPlayName.arabic
+                : deleteDialog.item.disPlayName.english
+              : ""
+          }
+          isLoading={deleteMutation.isPending}
+        />
       </div>
     </div>
   );

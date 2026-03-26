@@ -1873,6 +1873,16 @@
       "description": "Are you sure you want to remove this item from the section?",
       "success": "Item removed successfully!",
       "error": "Failed to remove item"
+    },
+    "fields": {
+      "filterAttributes": {
+        "title": "Filter Attributes",
+        "description": "Specify which filter attributes should be available for products in this category. These filters will appear on the category page for customers to narrow down their search.",
+        "id": "Filter Attribute",
+        "isVisible": "Is Visible",
+        "sortOrder": "Sort Order",
+        "add": "Add Filter Attribute"
+      }
     }
   },
 

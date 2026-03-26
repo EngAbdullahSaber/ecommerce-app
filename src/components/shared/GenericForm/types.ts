@@ -26,7 +26,7 @@ export type FieldType =
 
 export interface FieldOption {
   label: string;
-  value: string | number;
+  value: string | number | boolean;
   [key: string]: any;
 }
 

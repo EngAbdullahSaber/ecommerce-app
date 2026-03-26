@@ -18,7 +18,8 @@ export type FieldType =
   | "file"
   | "image"
   | "imageApi"
-  | "custom";
+  | "custom"
+  | "array";
 
 export interface FieldOption {
   label: string;
@@ -26,6 +27,15 @@ export interface FieldOption {
   icon?: React.ReactNode;
   description?: string;
   [key: string]: any;
+}
+
+export interface ArrayFieldConfig {
+  fields: FormField[];
+  minItems?: number;
+  maxItems?: number;
+  addButtonLabel?: string;
+  removeButtonLabel?: string;
+  itemLabel?: (index: number) => string;
 }
 
 export interface PaginatedSelectConfig {
@@ -77,6 +87,7 @@ export interface FormField {
   fullWidth?: boolean;
   step?: number;
   imageUploadConfig?: ImageUploadConfig;
+  arrayConfig?: ArrayFieldConfig;
 }
 
 export interface GenericUpdateFormProps<T = any> {

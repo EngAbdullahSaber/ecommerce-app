@@ -187,6 +187,7 @@ export function UpdateForm<T = any>({
             readOnly={field.readOnly}
             isSubmitting={isSubmitting}
             fetchOptions={fetchOptions}
+            control={control}
             onKeyDown={(e) => {
               if (preventDefaultSubmit && e.key === "Enter") {
                 e.preventDefault();

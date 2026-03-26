@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Users,
+  Star,
   RefreshCw,
-  Mail,
-  Phone,
-  Package,
-  CheckCircle2,
-  XCircle,
-  ExternalLink,
   Plus,
+  Edit,
   Trash2,
-  Edit2,
+  Calendar,
+  Image as ImageIcon,
   TrendingUp,
   Award,
-  Calendar,
-  Star,
+  Clock,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -25,84 +20,63 @@ import {
   SortDesc,
   Eye,
   EyeOff,
-  Sparkles,
-  ShoppingBag,
-  Clock,
-  Crown
+  Sparkles
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../services/axios";
 import {
   GetSpecifiedMethod,
-  UpdateMethod,
   DeleteMethod,
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
-import { motion, AnimatePresence } from "framer-motion";
 
-interface InfluencerProduct {
+interface SpotlightBrand {
   id: number;
-  product: {
+  displayOrder: number;
+  startDate: string | null;
+  endDate: string | null;
+  brand: {
     id: number;
-    name: {
+    title: {
       arabic: string;
       english: string;
     };
-    basePrice: string;
-    offerPrice: string | null;
+    image: string;
   };
 }
 
-interface Influencer {
-  id: number;
-  disPlayName: {
-    arabic: string;
-    english: string;
-  };
-  image: string;
-  isActive: boolean;
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-  };
-  products: InfluencerProduct[];
-}
-
-interface InfluencersResponse {
+interface SpotlightBrandsResponse {
   code: number;
   message: {
     arabic: string;
     english: string;
   };
-  data: Influencer[];
+  data: SpotlightBrand[];
+  totalItems?: number;
+  totalPages?: number;
 }
 
-export default function InfluencersPage() {
+export default function SpotlightBrandsPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language || "en";
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const toast = useToast();
-  const navigate = useNavigate();
-  
+
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
-    item: Influencer | null;
+    brand: SpotlightBrand | null;
   }>({
     isOpen: false,
-    item: null,
+    brand: null,
   });
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
-  const [sortBy, setSortBy] = useState<"name" | "products" | "id">("name");
+  const [sortBy, setSortBy] = useState<"order" | "name" | "date">("order");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(6);
+  const [itemsPerPage] = useState(10);
 
   // Debounce search
   useEffect(() => {
@@ -112,112 +86,111 @@ export default function InfluencersPage() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const fetchInfluencers = async (): Promise<Influencer[]> => {
+  const fetchSpotlightBrands = async (): Promise<SpotlightBrand[]> => {
     try {
       const response = (await GetSpecifiedMethod(
-        "home-page/admin/influencers",
+        "home-page/admin/spotlight-brands",
         lang
-      )) as InfluencersResponse;
+      )) as SpotlightBrandsResponse;
+
       return response.data || [];
     } catch (error) {
-      console.error("Error fetching influencers:", error);
+      console.error("Error fetching spotlight brands:", error);
       return [];
     }
   };
 
   const {
-    data: influencers = [],
+    data: brands = [],
     isLoading,
     isError,
     refetch,
-  } = useQuery({
-    queryKey: ["influencers", lang],
-    queryFn: fetchInfluencers,
-  });
-
-  const toggleStatusMutation = useMutation({
-    mutationFn: async ({ id, isActive }: { id: number; isActive: boolean }) => {
-      return await UpdateMethod("home-page/admin/influencers", { isActive }, id.toString(), lang);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["influencers"] });
-      toast.success(t("common.success"));
-    },
-    onError: () => {
-      toast.error(t("common.error"));
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) =>
-      DeleteMethod("home-page/admin/influencers", id.toString(), lang),
-    onSuccess: () => {
-      toast.success(t("common.success"));
-      queryClient.invalidateQueries({ queryKey: ["influencers"] });
-      setDeleteDialog({ isOpen: false, item: null });
-    },
-    onError: () => {
-      toast.error(t("common.error"));
-    },
-  });
-
-  const deleteProductMutation = useMutation({
-    mutationFn: ({ influencerId, productId }: { influencerId: number; productId: number }) =>
-      api.delete(`home-page/admin/influencers/${influencerId}/products`, {
-        data: { productIds: [productId] },
-        headers: { lang },
-      }),
-    onSuccess: () => {
-      toast.success(t("common.success"));
-      queryClient.invalidateQueries({ queryKey: ["influencers"] });
-    },
-    onError: () => {
-      toast.error(t("common.error"));
-    },
+  } = useQuery<SpotlightBrand[], Error>({
+    queryKey: ["spotlight-brands", lang],
+    queryFn: fetchSpotlightBrands,
   });
 
   const handleRefresh = () => {
     refetch();
   };
 
-  // Filter and sort influencers
-  const filteredInfluencers = influencers.filter(influencer => {
-    const name = lang === "ar" 
-      ? influencer.disPlayName?.arabic 
-      : influencer.disPlayName?.english;
-    const matchesSearch = name?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || false;
-    const matchesStatus = statusFilter === "all" 
-      ? true 
-      : statusFilter === "active" 
-        ? influencer.isActive 
-        : !influencer.isActive;
-    return matchesSearch && matchesStatus;
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) =>
+      DeleteMethod("home-page/admin/spotlight-brands", id.toString(), lang),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["spotlight-brands"] });
+      toast.success(t("spotlightBrands.delete.messages.deleteSuccess"));
+      setDeleteDialog({ isOpen: false, brand: null });
+    },
+    onError: () => {
+      toast.error(t("spotlightBrands.delete.messages.deleteFailed"));
+    },
+  });
+
+  const handleDelete = () => {
+    if (deleteDialog.brand) {
+      deleteMutation.mutate(deleteDialog.brand.id);
+    }
+  };
+
+  // Filter and sort brands
+  const filteredBrands = brands.filter(brand => {
+    const brandTitle = lang === "ar" 
+      ? brand.brand.title?.arabic 
+      : brand.brand.title?.english;
+    return brandTitle?.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) || false;
   }).sort((a, b) => {
-    if (sortBy === "name") {
-      const nameA = lang === "ar" ? a.disPlayName?.arabic : a.disPlayName?.english;
-      const nameB = lang === "ar" ? b.disPlayName?.arabic : b.disPlayName?.english;
+    if (sortBy === "order") {
+      return sortOrder === "asc" 
+        ? a.displayOrder - b.displayOrder 
+        : b.displayOrder - a.displayOrder;
+    } else if (sortBy === "name") {
+      const nameA = lang === "ar" ? a.brand.title?.arabic : a.brand.title?.english;
+      const nameB = lang === "ar" ? b.brand.title?.arabic : b.brand.title?.english;
       return sortOrder === "asc" 
         ? nameA.localeCompare(nameB) 
         : nameB.localeCompare(nameA);
-    } else if (sortBy === "products") {
-      return sortOrder === "asc" 
-        ? (a.products?.length || 0) - (b.products?.length || 0)
-        : (b.products?.length || 0) - (a.products?.length || 0);
     } else {
-      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+      const dateA = new Date(a.startDate || a.endDate || 0).getTime();
+      const dateB = new Date(b.startDate || b.endDate || 0).getTime();
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     }
   });
 
   // Pagination
-  const totalPages = Math.ceil(filteredInfluencers.length / itemsPerPage);
-  const paginatedInfluencers = filteredInfluencers.slice(
+  const totalPages = Math.ceil(filteredBrands.length / itemsPerPage);
+  const paginatedBrands = filteredBrands.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const activeCount = influencers.filter(i => i.isActive).length;
-  const inactiveCount = influencers.filter(i => !i.isActive).length;
-  const totalProducts = influencers.reduce((sum, i) => sum + (i.products?.length || 0), 0);
+  const getActiveStatus = (brand: SpotlightBrand) => {
+    const now = new Date();
+    const start = brand.startDate ? new Date(brand.startDate) : null;
+    const end = brand.endDate ? new Date(brand.endDate) : null;
+    
+    if (start && now < start) return "upcoming";
+    if (end && now > end) return "expired";
+    return "active";
+  };
+
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case "active": return "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400";
+      case "upcoming": return "bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400";
+      case "expired": return "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400";
+      default: return "bg-slate-100 text-slate-600";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch(status) {
+      case "active": return <Sparkles size={12} />;
+      case "upcoming": return <Clock size={12} />;
+      case "expired": return <EyeOff size={12} />;
+      default: return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -229,15 +202,15 @@ export default function InfluencersPage() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
                 <div className="relative p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-xl">
-                  <Users size={32} className="text-white" />
+                  <Star size={32} className="text-white" />
                 </div>
               </div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-slate-900 via-indigo-900 to-purple-900 dark:from-white dark:via-indigo-100 dark:to-purple-100 bg-clip-text text-transparent">
-                  {t("influencers.title")}
+                  {t("spotlightBrands.title")}
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
-                  {t("influencers.description")}
+                  {t("spotlightBrands.description")}
                 </p>
               </div>
             </div>
@@ -255,7 +228,7 @@ export default function InfluencersPage() {
               </button>
 
               <button
-                onClick={() => navigate("/home-page/influencers/create")}
+                onClick={() => navigate("/home-page/spotlight-brands/create")}
                 className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-xl font-medium shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 active:scale-95"
               >
                 <Plus size={18} />
@@ -269,11 +242,11 @@ export default function InfluencersPage() {
             <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Influencers</p>
-                  <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{influencers.length}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Brands</p>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{brands.length}</p>
                 </div>
                 <div className="p-3 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl">
-                  <Crown size={24} className="text-indigo-500" />
+                  <Star size={24} className="text-indigo-500" />
                 </div>
               </div>
             </div>
@@ -281,32 +254,38 @@ export default function InfluencersPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Active</p>
-                  <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">{activeCount}</p>
+                  <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">
+                    {brands.filter(b => getActiveStatus(b) === "active").length}
+                  </p>
                 </div>
                 <div className="p-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl">
-                  <Eye size={24} className="text-emerald-500" />
+                  <Sparkles size={24} className="text-emerald-500" />
                 </div>
               </div>
             </div>
             <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Inactive</p>
-                  <p className="text-3xl font-bold text-slate-500 dark:text-slate-400 mt-1">{inactiveCount}</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Upcoming</p>
+                  <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">
+                    {brands.filter(b => getActiveStatus(b) === "upcoming").length}
+                  </p>
+                </div>
+                <div className="p-3 bg-blue-50 dark:bg-blue-500/10 rounded-xl">
+                  <Clock size={24} className="text-blue-500" />
+                </div>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Expired</p>
+                  <p className="text-3xl font-bold text-slate-500 dark:text-slate-400 mt-1">
+                    {brands.filter(b => getActiveStatus(b) === "expired").length}
+                  </p>
                 </div>
                 <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-xl">
                   <EyeOff size={24} className="text-slate-500" />
-                </div>
-              </div>
-            </div>
-            <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-all">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Products</p>
-                  <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">{totalProducts}</p>
-                </div>
-                <div className="p-3 bg-purple-50 dark:bg-purple-500/10 rounded-xl">
-                  <ShoppingBag size={24} className="text-purple-500" />
                 </div>
               </div>
             </div>
@@ -321,7 +300,7 @@ export default function InfluencersPage() {
               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder={t("influencers.searchPlaceholder") || "Search by name..."}
+                placeholder={t("spotlightBrands.searchPlaceholder") || "Search by brand name..."}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
@@ -336,40 +315,6 @@ export default function InfluencersPage() {
               )}
             </div>
             
-            {/* Status Filter */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setStatusFilter("all")}
-                className={`px-4 py-2.5 rounded-xl font-medium transition-all ${
-                  statusFilter === "all"
-                    ? "bg-indigo-500 text-white shadow-md"
-                    : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setStatusFilter("active")}
-                className={`px-4 py-2.5 rounded-xl font-medium transition-all ${
-                  statusFilter === "active"
-                    ? "bg-emerald-500 text-white shadow-md"
-                    : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
-                }`}
-              >
-                Active
-              </button>
-              <button
-                onClick={() => setStatusFilter("inactive")}
-                className={`px-4 py-2.5 rounded-xl font-medium transition-all ${
-                  statusFilter === "inactive"
-                    ? "bg-slate-600 text-white shadow-md"
-                    : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
-                }`}
-              >
-                Inactive
-              </button>
-            </div>
-
             {/* Sort Controls */}
             <div className="flex gap-2">
               <select
@@ -377,9 +322,9 @@ export default function InfluencersPage() {
                 onChange={(e) => setSortBy(e.target.value as any)}
                 className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
+                <option value="order">Sort by Order</option>
                 <option value="name">Sort by Name</option>
-                <option value="products">Sort by Products</option>
-                <option value="id">Sort by ID</option>
+                <option value="date">Sort by Date</option>
               </select>
               <button
                 onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
@@ -393,12 +338,17 @@ export default function InfluencersPage() {
 
         {/* Loading State */}
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="h-[500px] rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700"
-              />
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white dark:bg-slate-800/50 rounded-2xl p-6 animate-pulse border border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
+                  <div className="flex-1">
+                    <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded-lg w-1/4 mb-2"></div>
+                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded-lg w-1/3"></div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -407,233 +357,160 @@ export default function InfluencersPage() {
         {isError && !isLoading && (
           <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-700">
             <div className="p-4 bg-red-50 dark:bg-red-500/10 rounded-full w-fit mx-auto mb-6">
-              <Users size={48} className="text-red-500" />
+              <Star size={48} className="text-red-500" />
             </div>
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-              {t("influencers.errorTitle")}
+              {t("spotlightBrands.errorTitle")}
             </h3>
             <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
-              {t("influencers.errorMessage")}
+              {t("spotlightBrands.errorMessage")}
             </p>
             <button
               onClick={handleRefresh}
               className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all active:scale-95"
             >
-              {t("common.tryAgain")}
+              {t("spotlightBrands.tryAgain")}
             </button>
           </div>
         )}
 
-        {/* Cards Grid */}
+        {/* Brands Grid */}
         {!isLoading && !isError && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <AnimatePresence mode="popLayout">
-                {paginatedInfluencers.map((influencer, index) => (
-                  <motion.div
-                    key={influencer.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+            <div className="space-y-4">
+              {paginatedBrands.map((item, index) => {
+                const status = getActiveStatus(item);
+                const brandTitle = lang === "ar" 
+                  ? item.brand.title?.arabic 
+                  : item.brand.title?.english;
+                
+                return (
+                  <div
+                    key={item.id}
+                    className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-sm hover:shadow-xl border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-1 overflow-hidden animate-in fade-in slide-in-from-bottom-4"
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     {/* Gradient Border Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-[1px] -z-10" />
                     
-                    {/* Status Badge */}
-                    <div className="absolute top-4 right-4 z-10">
-                      <button
-                        onClick={() => toggleStatusMutation.mutate({ id: influencer.id, isActive: !influencer.isActive })}
-                        disabled={toggleStatusMutation.isPending}
-                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${
-                          influencer.isActive
-                            ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30"
-                            : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400 border border-slate-200 dark:border-slate-600"
-                        }`}
-                      >
-                        <div className={`w-1.5 h-1.5 rounded-full ${influencer.isActive ? "bg-emerald-500 animate-pulse" : "bg-slate-400"}`} />
-                        {influencer.isActive ? "Active" : "Inactive"}
-                      </button>
-                    </div>
+                    <div className="relative p-6">
+                      <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+                        {/* Image */}
+                        <div className="flex-shrink-0">
+                          {item.brand.image ? (
+                            <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 border-slate-100 dark:border-slate-700 shadow-md">
+                              <img
+                                src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + item.brand.image}
+                                alt={brandTitle}
+                                className="w-full h-full object-contain p-2"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = "https://placehold.co/200x200/e2e8f0/94a3b8?text=Brand";
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 flex items-center justify-center border-2 border-indigo-200 dark:border-indigo-500/30">
+                              <Star size={32} className="text-indigo-400" />
+                            </div>
+                          )}
+                        </div>
 
-                    {/* Profile Section */}
-                    <div className="relative p-6 pt-8">
-                      <div className="flex flex-col items-center text-center">
-                        <div className="relative mb-4">
-                          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity blur-lg" />
-                          <img
-                            src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + influencer.image}
-                            alt={lang === "ar" ? influencer.disPlayName?.arabic : influencer.disPlayName?.english}
-                            className="w-28 h-28 rounded-2xl object-cover border-4 border-white dark:border-slate-700 shadow-lg relative"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(influencer.disPlayName?.[lang === 'ar' ? 'arabic' : 'english'] || 'I')}&background=6366f1&color=fff&size=128`;
-                            }}
-                          />
-                        </div>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                          {lang === "ar" ? influencer.disPlayName?.arabic : influencer.disPlayName?.english}
-                        </h3>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                          {influencer.user.firstName} {influencer.user.lastName}
-                        </p>
-                        
-                        {/* Stats Badges */}
-                        <div className="flex items-center gap-2 mt-3">
-                          <div className="flex items-center gap-1 px-2 py-1 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                            <Star size={12} className="text-amber-500" />
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
-                              ID: {influencer.id}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1 px-2 py-1 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                            <Package size={12} className="text-indigo-500" />
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
-                              {influencer.products?.length || 0} Products
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Contact Information */}
-                      <div className="mt-6 space-y-2 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center gap-3 text-sm">
-                          <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-                            <Mail size={14} className="text-indigo-500" />
-                          </div>
-                          <span className="flex-1 text-slate-600 dark:text-slate-300 truncate">
-                            {influencer.user.email}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3 text-sm">
-                          <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-                            <Phone size={14} className="text-indigo-500" />
-                          </div>
-                          <span className="text-slate-600 dark:text-slate-300">
-                            {influencer.user.phone}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Featured Products */}
-                      {influencer.products && influencer.products.length > 0 && (
-                        <div className="mt-6">
-                          <div className="flex items-center gap-2 mb-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                            <ShoppingBag size={14} />
-                            <span>Featured Products</span>
-                          </div>
-                          <div className="space-y-2">
-                            {influencer.products.slice(0, 2).map((prod) => (
-                              <div
-                                key={prod.id}
-                                className="flex items-center justify-between p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-700 group-hover:border-indigo-200 dark:group-hover:border-indigo-800 transition-colors"
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-xs font-medium text-slate-800 dark:text-slate-200 truncate">
-                                    {lang === "ar" ? prod.product.name.arabic : prod.product.name.english}
-                                  </p>
-                                  <div className="flex items-center gap-2 mt-0.5">
-                                    {prod.product.offerPrice ? (
-                                      <>
-                                        <span className="text-indigo-600 dark:text-indigo-400 text-xs font-bold">
-                                          {prod.product.offerPrice} SAR
-                                        </span>
-                                        <span className="text-slate-400 line-through text-[10px]">
-                                          {prod.product.basePrice}
-                                        </span>
-                                      </>
-                                    ) : (
-                                      <span className="text-slate-600 dark:text-slate-400 text-xs font-medium">
-                                        {prod.product.basePrice} SAR
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() => deleteProductMutation.mutate({ 
-                                    influencerId: influencer.id, 
-                                    productId: prod.product.id 
-                                  })}
-                                  disabled={deleteProductMutation.isPending}
-                                  className="p-1 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-all"
-                                >
-                                  <Trash2 size={12} />
-                                </button>
-                              </div>
-                            ))}
-                            {influencer.products.length > 2 && (
-                              <div className="text-center pt-1">
-                                <span className="text-[10px] font-medium text-indigo-500 hover:text-indigo-600 cursor-pointer">
-                                  + {influencer.products.length - 2} more products
+                        {/* Content */}
+                        <div className="flex-1">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                                  {brandTitle}
+                                </h3>
+                                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold ${getStatusColor(status)}`}>
+                                  {getStatusIcon(status)}
+                                  <span className="uppercase">{status}</span>
                                 </span>
                               </div>
-                            )}
+                              
+                              <div className="flex items-center gap-4 text-sm">
+                                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                                  <Award size={14} />
+                                  <span>Order #{item.displayOrder}</span>
+                                </div>
+                                {item.startDate && (
+                                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                                    <Calendar size={14} />
+                                    <span>Start: {new Date(item.startDate).toLocaleDateString()}</span>
+                                  </div>
+                                )}
+                                {item.endDate && (
+                                  <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+                                    <Calendar size={14} />
+                                    <span>End: {new Date(item.endDate).toLocaleDateString()}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => navigate(`/home-page/spotlight-brands/edit/${item.id}`)}
+                                className="group/btn p-2.5 bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 dark:from-blue-500/10 dark:to-indigo-500/10 dark:hover:from-blue-500/20 dark:hover:to-indigo-500/20 text-blue-600 dark:text-blue-400 rounded-xl transition-all border border-blue-200/50 dark:border-blue-500/20 hover:scale-110"
+                                title="Edit"
+                              >
+                                <Edit size={18} />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  const brandToDelete = brands.find(b => b.id === item.id);
+                                  if (brandToDelete) {
+                                    setDeleteDialog({ isOpen: true, brand: brandToDelete });
+                                  }
+                                }}
+                                className="group/btn p-2.5 bg-gradient-to-br from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 dark:from-red-500/10 dark:to-pink-500/10 dark:hover:from-red-500/20 dark:hover:to-pink-500/20 text-red-600 dark:text-red-400 rounded-xl transition-all border border-red-200/50 dark:border-red-500/20 hover:scale-110"
+                                title="Delete"
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      )}
-
-                      {/* Action Buttons */}
-                      <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700 grid grid-cols-3 gap-2">
-                        <button
-                          onClick={() => navigate(`/home-page/influencers/edit/${influencer.id}`)}
-                          className="flex items-center justify-center gap-1.5 py-2 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-500/20 transition-all"
-                        >
-                          <Edit2 size={12} />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          onClick={() => navigate(`/home-page/influencers/products/${influencer.id}`)}
-                          className="flex items-center justify-center gap-1.5 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all"
-                        >
-                          <Package size={12} />
-                          <span>Products</span>
-                        </button>
-                        <button
-                          onClick={() => setDeleteDialog({ isOpen: true, item: influencer })}
-                          className="flex items-center justify-center gap-1.5 py-2 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-all"
-                        >
-                          <Trash2 size={12} />
-                          <span>Delete</span>
-                        </button>
                       </div>
                     </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Empty State */}
-            {filteredInfluencers.length === 0 && (
+            {filteredBrands.length === 0 && (
               <div className="bg-white dark:bg-slate-800/50 backdrop-blur-sm rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-700">
                 <div className="p-6 bg-slate-100 dark:bg-slate-700 rounded-full w-fit mx-auto mb-6">
-                  <Users size={64} className="text-slate-400" />
+                  <Star size={64} className="text-slate-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-                  No influencers found
+                  No spotlight brands found
                 </h3>
                 <p className="text-slate-500 dark:text-slate-400 mb-6">
-                  {searchTerm || statusFilter !== "all" 
-                    ? "Try adjusting your search or filter criteria"
-                    : "Get started by adding your first influencer"}
+                  {searchTerm 
+                    ? "Try adjusting your search criteria"
+                    : "Get started by adding your first spotlight brand"}
                 </p>
-                {!searchTerm && statusFilter === "all" && (
+                {!searchTerm && (
                   <button
-                    onClick={() => navigate("/home-page/influencers/create")}
+                    onClick={() => navigate("/home-page/spotlight-brands/create")}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
                   >
                     <Plus size={18} />
-                    Add Influencer
+                    Add Spotlight Brand
                   </button>
                 )}
               </div>
             )}
 
             {/* Pagination */}
-            {filteredInfluencers.length > 0 && (
+            {filteredBrands.length > 0 && (
               <div className="mt-8 flex items-center justify-between flex-wrap gap-4">
                 <div className="text-sm text-slate-500 dark:text-slate-400">
-                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredInfluencers.length)} of {filteredInfluencers.length} influencers
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredBrands.length)} of {filteredBrands.length} items
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -692,31 +569,20 @@ export default function InfluencersPage() {
                   <Trash2 size={24} className="text-red-600 dark:text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-                  {t("influencers.deleteTitle")}
+                  {t("spotlightBrands.delete.title")}
                 </h3>
-                <p className="text-slate-500 dark:text-slate-400 mb-4">
-                  {t("influencers.deleteDescription")}
+                <p className="text-slate-500 dark:text-slate-400 mb-6">
+                  {t("spotlightBrands.delete.description")}
                 </p>
-                {deleteDialog.item && (
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg mb-6">
-                    {lang === "ar" 
-                      ? deleteDialog.item.disPlayName.arabic 
-                      : deleteDialog.item.disPlayName.english}
-                  </p>
-                )}
                 <div className="flex gap-3">
                   <button
-                    onClick={() => setDeleteDialog({ isOpen: false, item: null })}
+                    onClick={() => setDeleteDialog({ isOpen: false, brand: null })}
                     className="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
                   >
                     {t("common.cancel")}
                   </button>
                   <button
-                    onClick={() => {
-                      if (deleteDialog.item) {
-                        deleteMutation.mutate(deleteDialog.item.id);
-                      }
-                    }}
+                    onClick={handleDelete}
                     disabled={deleteMutation.isPending}
                     className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium transition-all disabled:opacity-50"
                   >

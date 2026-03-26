@@ -189,10 +189,19 @@ export default function CreateCategorySectionPage() {
           labelKey: "name",
           valueKey: "id",
           transformResponse: (data: any) => {
-            // filter-attributes might return the array directly in 'data'
-            const items = data || [];
-            return items.map((item: any) => ({
-              label: lang === 'ar' ? (item.name?.arabic || item.name) : (item.name?.english || item.name),
+            const findItems = (node: any) => {
+              if (Array.isArray(node)) return node;
+              if (!node) return [];
+              return node.data || node.items || node.filterAttributes || [];
+            };
+
+            const items = findItems(data);
+            const finalItems = Array.isArray(items) ? items : (findItems(items) || []);
+
+            return finalItems.map((item: any) => ({
+              label: lang === 'ar' 
+                ? (item.name?.arabic || item.nameAr || item.name) 
+                : (item.name?.english || item.nameEn || item.name),
               value: item.id.toString(),
             }));
           }
@@ -224,23 +233,23 @@ export default function CreateCategorySectionPage() {
               if (Array.isArray(node)) return node;
               if (!node) return [];
               return (
-                node.categories ||
+                node.options ||    // Prioritize options (for filter values)
                 node.brands ||
-                node.options ||
-                node.data ||
+                node.categories ||
                 node.items ||
+                node.data ||
                 []
               );
             };
 
             let items = findItems(data);
-            // If we found an object that has the data in it, go deeper (e.g. res.data.data.categories)
-            if (!Array.isArray(items) && typeof items === "object") {
+            // If we found an object that has the data in it, go deeper (e.g. res.data -> res.data.options)
+            if (items && !Array.isArray(items) && typeof items === "object") {
               items = findItems(items);
             }
 
             if (!Array.isArray(items)) items = [];
-
+            
             return items.map((item: any) => ({
               label: lang === "ar"
                 ? (item.title?.arabic || item.name?.arabic || item.nameAr || item.valueAr || item.title || item.name || item.value)

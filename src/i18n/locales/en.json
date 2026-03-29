@@ -98,14 +98,16 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "currency": "EGP",
+    "searchPlaceholder": "Search...",
     "noData": "No data found",
     "actions": "Actions",
     "date": "Date",
     "status": "Status",
-    "active": "Active",
-    "inactive": "Inactive",
-    "pending": "Pending",
-    "all": "All"
+    "pending": "Pending"
   },
   "homePageSections": {
     "title": "Home Page Sections",
@@ -432,7 +434,48 @@
     "spotlightBrands": "Spotlight Brands",
     "influencers": "Influencers",
     "homeFilter": "Home Filter",
-    "homeCategories": "Home Categories"
+    "homeCategories": "Home Categories",
+    "storeValue": "Store Value"
+  },
+  "storeValue": {
+    "title": "Store Value Products",
+    "description": "Manage products displayed in the store value section",
+    "refresh": "Refresh",
+    "searchPlaceholder": "Search products...",
+    "loading": "Loading products...",
+    "errorTitle": "Error",
+    "errorMessage": "Failed to load store value products",
+    "tryAgain": "Try Again",
+    "noProducts": "No products found",
+    "columns": {
+      "id": "ID",
+      "image": "Image",
+      "title": "Title",
+      "sku": "SKU",
+      "price": "Price",
+      "offerPrice": "Offer Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "remove": {
+      "title": "Remove Products",
+      "subtitle": "Remove Product",
+      "confirmSingle": "Are you sure you want to remove this product from the store value section?",
+      "confirmBulk": "Are you sure you want to remove {{count}} selected products from the store value section?",
+      "undoWarning": "This action cannot be undone.",
+      "button": "Remove"
+    },
+    "add": {
+      "title": "Add Products to Store Value",
+      "subtitle": "Select products from your catalog to display in the Store Value section.",
+      "searchPlaceholder": "Search products by name or SKU...",
+      "selectAll": "Select All Page",
+      "deselectAll": "Deselect All",
+      "submitButton": "Add {{count}} Products",
+      "loading": "Adding products...",
+      "error": "Failed to add products"
+    }
   },
   "header": {
     "searchPlaceholder": "Search...",

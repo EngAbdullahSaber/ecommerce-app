@@ -92,6 +92,8 @@ import UpdateHomeFilterPage from "./pages/HomePage/HomeFilter/UpdateHomeFilterPa
 import HomeCategoriesPage from "./pages/HomePage/HomeCategories/HomeCategoriesPage";
 import CreateHomeCategoryPage from "./pages/HomePage/HomeCategories/CreateHomeCategoryPage";
 import UpdateHomeCategoryPage from "./pages/HomePage/HomeCategories/UpdateHomeCategoryPage";
+import StoreValueProductsPage from "./pages/HomePage/StoreValue/StoreValueProductsPage";
+import AddStoreValueProductsPage from "./pages/HomePage/StoreValue/AddStoreValueProductsPage";
 
 export default function App() {
   useLanguage();
@@ -300,6 +302,14 @@ export default function App() {
             <Route
               path="home-page/home-categories/edit/:id"
               element={<UpdateHomeCategoryPage />}
+            />
+            <Route
+              path="home-page/store-value"
+              element={<StoreValueProductsPage />}
+            />
+            <Route
+              path="home-page/store-value/add"
+              element={<AddStoreValueProductsPage />}
             />
           </Route>
 

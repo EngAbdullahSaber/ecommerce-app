@@ -119,3 +119,14 @@ export async function CreateMethodFormData(url: string, data: any, lang: any) {
   if (res) return res;
   else return false;
 }
+
+export async function DeleteMethodWithBody(url: string, data: any, lang: any) {
+  let res = await api.delete(`${url}`, {
+    headers: {
+      lang: lang,
+    },
+    data: data,
+  });
+  if (res) return res.data;
+  else return false;
+}

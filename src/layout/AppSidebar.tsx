@@ -225,7 +225,10 @@ const AppSidebar: React.FC = () => {
     {
       name: t("sidebar.homePage"),
       subCategories: [
-        {
+      {
+          name: t("sidebar.storeValue"),
+          path: "/home-page/store-value",
+        },  {
           name: t("sidebar.homePageSections"),
           path: "/home-page/sections",
         },
@@ -249,6 +252,7 @@ const AppSidebar: React.FC = () => {
           name: t("sidebar.homeCategories"),
           path: "/home-page/home-categories",
         },
+        
       ],
     },
     {

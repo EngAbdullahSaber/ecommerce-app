@@ -178,6 +178,7 @@ interface Product {
     offerPrice: string | null;
     images: { imageUrl: string; altText: string }[];
   }[];
+  avgRating: number;
 }
 
 interface ProductResponse {
@@ -445,6 +446,16 @@ export default function ViewProductPage() {
                 <span className="font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-sm">
                   {product.sku}
                 </span>
+                {product.isRecommended && (
+                  <span className="px-2 py-1 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 rounded text-xs font-bold uppercase">
+                    {t("products.view.recommended")}
+                  </span>
+                )}
+                {product.isStoreValue && (
+                  <span className="px-2 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 rounded text-xs font-bold uppercase">
+                    {t("products.view.storeValue")}
+                  </span>
+                )}
                 <span>•</span>
                 <span>{t("products.view.description")}</span>
               </p>
@@ -532,7 +543,7 @@ export default function ViewProductPage() {
                           src={formatImageUrl(image.imageUrl)}
                           alt={
                             image.altText ||
-                            `${product.name[lang === "ar" ? "ar" : "en"]} - ${index + 1}`
+                            `${product.name[lang === "ar" ? "arabic" : "english"]} - ${index + 1}`
                           }
                           className="w-full h-full object-cover"
                         />
@@ -1178,6 +1189,49 @@ export default function ViewProductPage() {
                       </div>
                       {product.ableToGift ? (
                         <CheckCircle size={18} className="text-purple-500" />
+                      ) : (
+                        <XCircle size={18} className="text-slate-400" />
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors">
+                      <div
+                        className={`p-2 rounded-lg ${
+                          product.isRecommended
+                            ? "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
+                            : "bg-slate-100 dark:bg-slate-500/20 text-slate-400 dark:text-slate-500"
+                        }`}
+                      >
+                        <Star size={18} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-slate-900 dark:text-white">
+                          {t("products.view.fields.isRecommended")}
+                        </div>
+                      </div>
+                      {product.isRecommended ? (
+                        <CheckCircle size={18} className="text-amber-500" />
+                      ) : (
+                        <XCircle size={18} className="text-slate-400" />
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors">
+                      <div
+                        className={`p-2 rounded-lg ${
+                          product.isStoreValue
+                            ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+                            : "bg-slate-100 dark:bg-slate-500/20 text-slate-400 dark:text-slate-500"
+                        }`}
+                      >
+                        <BarChart3 size={18} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-slate-900 dark:text-white">
+                          {t("products.view.fields.isStoreValue")}
+                        </div>
+                      </div>
+                      {product.isStoreValue ? (
+                        <CheckCircle size={18} className="text-indigo-500" />
                       ) : (
                         <XCircle size={18} className="text-slate-400" />
                       )}

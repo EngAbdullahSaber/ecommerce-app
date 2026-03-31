@@ -27,20 +27,23 @@ import { useToast } from "../../../hooks/useToast";
 
 interface Product {
   id: number;
-  name: {
-    ar: string;
-    en: string;
+  title: {
+    arabic: string;
+    english: string;
   };
   sku: string;
-  basePrice: string;
-  offerPrice: string | null;
+  price: number;
+  offerPrice: number | null;
   stockQuantity: number;
   image: string;
+  avgRating: number;
 }
 
 interface ProductsResponse {
   code: number;
-  data: Product[];
+  data: {
+    products: Product[];
+  };
   totalItems: number;
   totalPages: number;
 }
@@ -106,7 +109,7 @@ export default function AddStoreValueProductsPage() {
     },
   });
 
-  const products = data?.data || [];
+  const products = data?.data?.products || [];
   const totalItems = data?.totalItems || 0;
   const totalPages = data?.totalPages || 1;
 
@@ -258,7 +261,7 @@ export default function AddStoreValueProductsPage() {
                   <div className="relative aspect-square rounded-2xl bg-slate-100 dark:bg-slate-900 overflow-hidden mb-6">
                     <img
                       src={product.image}
-                      alt={lang === 'ar' ? product.name.ar : product.name.en}
+                      alt={lang === 'ar' ? product.title.arabic : product.title.english}
                       className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
                         selectedIds.includes(product.id) ? "scale-105 saturate-[1.2]" : ""
                       }`}
@@ -288,7 +291,7 @@ export default function AddStoreValueProductsPage() {
 
                   <div className="flex flex-col flex-1 px-1">
                     <h3 className="text-lg font-black text-slate-900 dark:text-white line-clamp-2 mb-3 leading-tight group-hover:text-blue-600 transition-colors">
-                      {lang === 'ar' ? product.name.ar : product.name.en}
+                      {lang === 'ar' ? product.title.arabic : product.title.english}
                     </h3>
                     
                     <div className="mt-auto flex items-end justify-between">
@@ -296,7 +299,7 @@ export default function AddStoreValueProductsPage() {
                         <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">Price</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xl font-black text-slate-900 dark:text-white">
-                            {product.offerPrice ? product.offerPrice : product.basePrice}
+                            {product.offerPrice ? product.offerPrice : product.price}
                           </span>
                           <span className="text-[10px] font-bold text-slate-500 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md">EGP</span>
                         </div>

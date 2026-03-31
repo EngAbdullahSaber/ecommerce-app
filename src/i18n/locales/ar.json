@@ -1655,8 +1655,21 @@
         "countryMade": "بلد الصنع",
         "productWeight": "وزن المنتج",
         "recommendedAge": "العمر الموصى به",
-        "packageWeight": "وزن العبوة"
+        "packageWeight": "وزن العبوة",
+        "basePrice": "السعر الأساسي",
+        "isRecommended": "موصى به",
+        "isStoreValue": "قيمة المتجر"
       },
+      "productInfo": {
+        "title": "معلومات المنتج",
+        "description": "التفاصيل الأساسية والتعريف"
+      },
+      "attributes": {
+        "title": "سمات المنتج",
+        "description": "الخصائص والخيارات القابلة للتصفية"
+      },
+      "recommended": "موصى به",
+      "storeValue": "منتج المتجر",
       "images": {
         "title": "معرض الصور",
         "description": "عرض مرئي شامل مع {{count}} صور عالية الجودة"

@@ -1365,7 +1365,7 @@ export default function UpdateProductPage() {
         transformResponse: (data: any) => {
           const brands = data.brands || data.data || data || [];
           return brands.map((brand: any) => ({
-            label: `${brand.title?.en || "N/A"} - ${brand.title?.ar || "N/A"}`,
+            label: `${brand.title?.english || "N/A"} - ${brand.title?.arabic || "N/A"}`,
             value: brand.id.toString(),
             rawData: brand,
           }));
@@ -1392,7 +1392,7 @@ export default function UpdateProductPage() {
         transformResponse: (data: any) => {
           const categories = data.categories || data.data || data || [];
           return categories.map((category: any) => ({
-            label: `${category.title?.en || "N/A"} - ${category.title?.ar || "N/A"}`,
+            label: `${category.title?.english || "N/A"} - ${category.title?.arabic || "N/A"}`,
             value: category.id.toString(),
             rawData: category,
           }));

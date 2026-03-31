@@ -14,6 +14,8 @@ import {
   Filter,
   Check,
   RefreshCw,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../hooks/useToast";
@@ -27,17 +29,19 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface Product {
   id: number;
-  name: {
+  title: {
     arabic: string;
     english: string;
   };
-  basePrice: string;
-  offerPrice: string | null;
+  sku: string;
+  price: number;
+  offerPrice: number | null;
   image?: string;
   images?: {
     imageUrl: string;
     isPrimary: boolean;
   }[];
+  avgRating: number;
 }
 
 interface InfluencerProduct {
@@ -69,16 +73,27 @@ export default function AssignInfluencerProductsPage() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [initialProductIds, setInitialProductIds] = useState<number[]>([]);
 
-  // Fetch influencer and their products
+  // Fetch influencer basic details
   const { data: influencer, isLoading: isInfluencerLoading } = useQuery({
-    queryKey: ["influencer-products", id, lang],
+    queryKey: ["influencer-details", id, lang],
     queryFn: async () => {
       const resp = await GetSpecifiedMethod(`home-page/admin/influencers`, lang);
-      // Find the specific influencer in the list
       const item = Array.isArray(resp?.data)
         ? resp.data.find((inf: any) => inf.id.toString() === id)
         : resp?.data;
       return item as Influencer;
+    },
+    enabled: !!id,
+  });
+
+  // Fetch assigned products for the influencer using the requested API
+  const { data: assignedProductsData, isLoading: isAssignedLoading } = useQuery({
+    queryKey: ["influencer-assigned-products", id, lang],
+    queryFn: async () => {
+      // Use the specific API for influencer products
+      const resp = await GetSpecifiedMethod(`home-page/admin/influencers/${id}/products?page=1&pageSize=100`, lang);
+      // Based on common response patterns: { data: { products: [] } } or { data: [] }
+      return (resp?.data?.products || resp?.data || []) as any[];
     },
     enabled: !!id,
   });
@@ -88,39 +103,37 @@ export default function AssignInfluencerProductsPage() {
     queryKey: ["products-catalog", page, searchTerm, lang],
     queryFn: async () => {
       const resp = await GetPanigationMethod("products/all", page, 12, lang, searchTerm);
-      return resp?.data;
+      return resp;
     },
   });
 
   useEffect(() => {
-    if (productsResponse) {
-      if (page === 1) {
-        setAllProducts(productsResponse);
-      } else {
-        setAllProducts((prev) => [...prev, ...productsResponse]);
-      }
+    if (productsResponse?.data?.products) {
+       setAllProducts(productsResponse.data.products);
     }
-  }, [productsResponse, page]);
-console.log(allProducts);
+  }, [productsResponse]);
+
   // Reset pagination on search
   useEffect(() => {
     setPage(1);
   }, [searchTerm]);
 
-  const handleLoadMore = () => {
-    if (productsResponse?.totalPages > page) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  const totalPages = productsResponse?.totalPages || 0;
+  const totalItems = productsResponse?.totalItems || 0;
+  const pageSize = 12;
 
   // Initialize selected ids from influencer's current products
   useEffect(() => {
-    if (influencer?.products) {
-      const ids = influencer.products.map((p) => p.product.id);
+    if (assignedProductsData) {
+      // Map based on response format (direct id or nested product)
+      const ids = assignedProductsData.map((item: any) => 
+        typeof item === 'number' ? item : (item.id || item.product?.id)
+      ).filter(Boolean);
+      
       setSelectedProductIds(ids);
       setInitialProductIds(ids);
     }
-  }, [influencer]);
+  }, [assignedProductsData]);
 
   const toggleProduct = (productId: number) => {
     setSelectedProductIds((prev) =>
@@ -169,7 +182,7 @@ console.log(allProducts);
     }
   };
 
-  if (isInfluencerLoading) {
+  if (isInfluencerLoading || isAssignedLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="flex flex-col items-center gap-4">
@@ -286,16 +299,16 @@ console.log(allProducts);
                               }`}
                             >
                               {lang === "ar"
-                                ? product.name.arabic
-                                : product.name.english}
+                                ? product.title.arabic
+                                : product.title.english}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               <p className="text-xs text-indigo-600 font-black">
-                                {product.offerPrice || product.basePrice} SAR
+                                {product.offerPrice || product.price} SAR
                               </p>
                               {product.offerPrice && (
                                 <p className="text-[10px] text-slate-400 line-through font-medium">
-                                  {product.basePrice} SAR
+                                  {product.price} SAR
                                 </p>
                               )}
                             </div>
@@ -318,20 +331,53 @@ console.log(allProducts);
                     ))}
                   </div>
 
-                  {productsResponse?.totalPages > page && (
-                    <div className="flex justify-center pt-4">
-                      <button
-                        onClick={handleLoadMore}
-                        disabled={isFetching}
-                        className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95 disabled:opacity-50"
-                      >
-                        {isFetching ? (
-                          <Loader2 size={18} className="animate-spin" />
-                        ) : (
-                          <RefreshCw size={18} />
-                        )}
-                        {t("influencers.assign.loadMore")}
-                      </button>
+                  {totalPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-slate-100 dark:border-slate-700/50">
+                      <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Page {page} of {totalPages}
+                      </div>
+                      
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setPage((p) => Math.max(1, p - 1))}
+                          disabled={page === 1}
+                          className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
+                        >
+                          <ChevronLeft size={18} />
+                        </button>
+                        
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                             let pageNum;
+                             if (totalPages <= 3) pageNum = i + 1;
+                             else if (page === 1) pageNum = i + 1;
+                             else if (page === totalPages) pageNum = totalPages - 2 + i;
+                             else pageNum = page - 1 + i;
+
+                             return (
+                               <button
+                                 key={pageNum}
+                                 onClick={() => setPage(pageNum)}
+                                 className={`w-9 h-9 rounded-xl font-bold transition-all ${
+                                   page === pageNum
+                                     ? "bg-indigo-500 text-white shadow-lg"
+                                     : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                 }`}
+                               >
+                                 {pageNum}
+                               </button>
+                             );
+                          })}
+                        </div>
+
+                        <button
+                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                          disabled={page === totalPages}
+                          className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
+                        >
+                          <ChevronRight size={18} />
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>

@@ -25,24 +25,22 @@ import { useToast } from "../../hooks/useToast";
 import { TableFilters } from "../../components/shared/TableFilters";
 import { useTranslation } from "react-i18next";
 
-interface ProductName {
-  ar: string;
-  en: string;
-}
-
-interface ProductDescription {
-  ar: string;
-  en: string;
+interface ProductTitle {
+  arabic: string;
+  english: string;
 }
 
 interface Product {
   id: number;
-  name: ProductName;
-  description: ProductDescription;
+  title: ProductTitle;
   sku: string;
-  basePrice: string;
-  offerPrice: string | null;
+  image: string;
+  altText?: string;
+  price: number;
+  offerPrice: number | null;
   stockQuantity: number;
+  isActive: boolean;
+  avgRating?: number;
 }
 
 interface ProductsResponse {
@@ -51,7 +49,9 @@ interface ProductsResponse {
     arabic: string;
     english: string;
   };
-  data: Product[];
+  data: {
+    products: Product[];
+  };
   totalItems: number;
   totalPages: number;
 }
@@ -117,7 +117,7 @@ export default function ProductsPage() {
         searchTerm,
       )) as ProductsResponse;
 
-      const products = response.data || [];
+      const products = response.data?.products || [];
       const totalItems = response.totalItems || 0;
       const totalPages = response.totalPages || 0;
 
@@ -243,53 +243,53 @@ export default function ProductsPage() {
       ),
     },
     {
-      key: "name",
+      key: "title",
       label: t("products.table.englishName"),
-      render: (value: ProductName) => (
+      render: (value: ProductTitle) => (
         <div>
           <div className="font-semibold text-slate-900 dark:text-white">
-            {value.en?.trim() || "N/A"}
+            {value.english?.trim() || "N/A"}
           </div>
           <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
-            {value.en
-              ? value.en.substring(0, 60) + (value.en.length > 60 ? "..." : "")
+            {value.english
+              ? value.english.substring(0, 60) + (value.english.length > 60 ? "..." : "")
               : ""}
           </div>
         </div>
       ),
     },
     {
-      key: "name",
+      key: "title",
       label: t("products.table.arabicName"),
-      render: (value: ProductName) => (
+      render: (value: ProductTitle) => (
         <div dir="rtl">
           <div className="font-semibold text-slate-900 dark:text-white">
-            {value.ar?.trim() || "غير متوفر"}
+            {value.arabic?.trim() || "غير متوفر"}
           </div>
           <div
             className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2"
             dir="rtl"
           >
-            {value.ar
-              ? value.ar.substring(0, 60) + (value.ar.length > 60 ? "..." : "")
+            {value.arabic
+              ? value.arabic.substring(0, 60) + (value.arabic.length > 60 ? "..." : "")
               : ""}
           </div>
         </div>
       ),
     },
     {
-      key: "basePrice",
+      key: "price",
       label: t("products.table.basePrice"),
       width: "120px",
-      render: (value: string, row: Product) => (
+      render: (value: number, row: Product) => (
         <div className="text-right">
           <div className="font-bold text-slate-900 dark:text-white">
-            ${parseFloat(value).toFixed(2)}
+            ${Number(value).toFixed(2)}
           </div>
           {row.offerPrice && (
             <div className="text-xs text-green-600 dark:text-green-400 font-semibold">
               {t("products.table.offerPrice")}: $
-              {parseFloat(row.offerPrice).toFixed(2)}
+              {Number(row.offerPrice).toFixed(2)}
             </div>
           )}
         </div>
@@ -497,7 +497,8 @@ export default function ProductsPage() {
               onShowFiltersChange={setShowFilters}
               onClearFilters={clearFilters}
               searchPlaceholder={t("products.searchPlaceholder")}
-              filterOptions={filterOptions}
+              filterOptions={[]}      
+              show={false}
               filterLabel={t("products.filters.stockStatus")}
             />
           </div>
@@ -557,7 +558,7 @@ export default function ProductsPage() {
         title={t("products.deleteTitle")}
         description={t("products.deleteDescription")}
         itemName={
-          deleteDialog.product?.name[lang === "ar" ? "ar" : "en"]?.trim() ||
+          deleteDialog.product?.title[lang === "ar" ? "arabic" : "english"]?.trim() ||
           t("common.unknown")
         }
         isLoading={deleteMutation.isPending}

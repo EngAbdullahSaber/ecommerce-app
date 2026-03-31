@@ -2467,8 +2467,21 @@
         "countryMade": "Made In",
         "productWeight": "Product Weight",
         "recommendedAge": "Recommended Age",
-        "packageWeight": "Package Weight"
+        "packageWeight": "Package Weight",
+        "basePrice": "Base Price",
+        "isRecommended": "Recommended",
+        "isStoreValue": "Store Value"
       },
+      "productInfo": {
+        "title": "Product Information",
+        "description": "Basic details and identification"
+      },
+      "attributes": {
+        "title": "Product Attributes",
+        "description": "Filterable characteristics and options"
+      },
+      "recommended": "Recommended",
+      "storeValue": "Store Value",
       "images": {
         "title": "Product Gallery",
         "description": "Visual overview with {{count}} high-quality images"

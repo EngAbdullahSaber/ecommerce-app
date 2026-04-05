@@ -150,7 +150,15 @@ export default function CountriesPage() {
   }, [searchTerm]);
 
   const formatImageUrl = (url: string) => {
-    return import.meta.env.VITE_IMAGE_BASE_URL + url;
+    if (!url || url === "undefined/images/") {
+      return "/default/country-flag-default.png";
+    }
+    if (url.startsWith("http")) {
+      return url;
+    }
+    return import.meta.env.VITE_IMAGE_BASE_URL
+      ? import.meta.env.VITE_IMAGE_BASE_URL + url
+      : url;
   };
 
   const fetchCountries = async ({

@@ -105,6 +105,20 @@
     "pending": "قيد الانتظار",
     "currency": "ج.م"
   },
+  "userDropdown": {
+    "user": "مستخدم",
+    "editProfile": "تعديل الملف الشخصي",
+    "accountSettings": "إعدادات الحساب",
+    "support": "الدعم",
+    "signOut": "تسجيل الخروج",
+    "noEmail": "لا يوجد بريد إلكتروني",
+    "admin": "مسؤول",
+    "loading": "جاري التحميل...",
+    "logoutSuccess": "تم تسجيل الخروج بنجاح!",
+    "navigatingProfile": "جاري الانتقال إلى الملف الشخصي",
+    "openingSettings": "جاري فتح إعدادات الحساب",
+    "openingSupport": "جاري فتح الدعم"
+  },
   "homePageSections": {
     "title": "أقسام الصفحة الرئيسية",
     "description": "إدارة الأقسام المعروضة في الصفحة الرئيسية",

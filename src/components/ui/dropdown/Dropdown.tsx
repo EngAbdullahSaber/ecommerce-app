@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 interface DropdownProps {
   isOpen: boolean;
@@ -33,12 +34,17 @@ export const Dropdown: React.FC<DropdownProps> = ({
     };
   }, [onClose]);
 
+  const { i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+
   if (!isOpen) return null;
 
   return (
     <div
       ref={dropdownRef}
-      className={`absolute z-40  right-0 mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+      className={`absolute z-40 ${
+        isRTL ? "left-0" : "right-0"
+      } mt-2 rounded-xl border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
     >
       {children}
     </div>

@@ -109,6 +109,20 @@
     "status": "Status",
     "pending": "Pending"
   },
+  "userDropdown": {
+    "user": "User",
+    "editProfile": "Edit profile",
+    "accountSettings": "Account settings",
+    "support": "Support",
+    "signOut": "Sign out",
+    "noEmail": "No email provided",
+    "admin": "ADMIN",
+    "loading": "Loading...",
+    "logoutSuccess": "Logged out successfully!",
+    "navigatingProfile": "Navigating to profile",
+    "openingSettings": "Opening account settings",
+    "openingSupport": "Opening support"
+  },
   "homePageSections": {
     "title": "Home Page Sections",
     "description": "Manage the sections displayed on the home page",

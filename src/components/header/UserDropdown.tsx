@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,6 +27,8 @@ export default function UserDropdown() {
 
   const navigate = useNavigate();
   const toast = useToast();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
 
   // Load user data from storage
   useEffect(() => {
@@ -111,10 +114,10 @@ export default function UserDropdown() {
   const handleLogout = () => {
     // Clear auth data
     clearAuthInfo();
-
+ 
     // Show success message
-    toast.success("Logged out successfully!");
-
+    toast.success(t("userDropdown.logoutSuccess"));
+ 
     // Close dropdown
     closeDropdown();
 
@@ -132,7 +135,7 @@ export default function UserDropdown() {
 
   // Function to get user initials for avatar fallback
   const getUserInitials = (name: string): string => {
-    if (!name) return "U";
+    if (!name || name === "Guest User") return "G";
 
     const names = name.trim().split(" ");
     if (names.length === 1) return names[0].charAt(0).toUpperCase();
@@ -144,7 +147,7 @@ export default function UserDropdown() {
 
   // Function to get first name for display
   const getFirstName = (name: string): string => {
-    if (!name) return "User";
+    if (!name || name === "Guest User") return t("userDropdown.user");
     return name.split(" ")[0];
   };
 
@@ -190,8 +193,8 @@ export default function UserDropdown() {
           )}
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">
-          {isLoading ? "Loading..." : getFirstName(userData.name || "User")}
+        <span className={`block font-medium text-theme-sm ${isRTL ? "ml-1" : "mr-1"}`}>
+          {isLoading ? t("userDropdown.loading") : getFirstName(userData.name || t("userDropdown.user"))}
         </span>
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -217,7 +220,9 @@ export default function UserDropdown() {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark z-50"
+        className={`absolute mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark z-50 ${
+          isRTL ? "left-0 origin-top-left" : "right-0 origin-top-right"
+        }`}
       >
         {isLoading ? (
           <div className="p-4 flex items-center justify-center">
@@ -226,31 +231,31 @@ export default function UserDropdown() {
         ) : (
           <>
             <div className="p-3">
-              <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                {userData.name || "User"}
+              <span className={`block font-medium text-gray-700 text-theme-sm dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}>
+                {userData.name === "Guest User" ? t("userDropdown.user") : (userData.name || t("userDropdown.user"))}
               </span>
-              <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-                {userData.email || "No email provided"}
+              <span className={`mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}>
+                {userData.name === "Guest User" ? "" : (userData.email || t("userDropdown.noEmail"))}
               </span>
 
               {/* Additional user info if available */}
               {(userData.role || userData.position) && (
-                <div className="mt-2">
+                <div className={`mt-2 ${isRTL ? "text-right" : "text-left"}`}>
                   <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded">
-                    {userData.role || userData.position}
+                    {userData.role?.toUpperCase() === "ADMIN" ? t("userDropdown.admin") : (userData.role || userData.position)}
                   </span>
                 </div>
               )}
             </div>
 
-            <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+            {/* <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
               <li>
                 <DropdownItem
                   onItemClick={() =>
-                    handleNavigation("/profile", "Navigating to profile")
+                    handleNavigation("/profile", t("userDropdown.navigatingProfile"))
                   }
                   tag="button"
-                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full text-left"
+                  className={`flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
                 >
                   <svg
                     className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
@@ -268,7 +273,7 @@ export default function UserDropdown() {
                       fill=""
                     />
                   </svg>
-                  Edit profile
+                  {t("userDropdown.editProfile")}
                 </DropdownItem>
               </li>
               <li>
@@ -276,11 +281,11 @@ export default function UserDropdown() {
                   onItemClick={() =>
                     handleNavigation(
                       "/account-settings",
-                      "Opening account settings"
+                      t("userDropdown.openingSettings")
                     )
                   }
                   tag="button"
-                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full text-left"
+                  className={`flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
                 >
                   <svg
                     className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
@@ -298,16 +303,16 @@ export default function UserDropdown() {
                       fill=""
                     />
                   </svg>
-                  Account settings
+                  {t("userDropdown.accountSettings")}
                 </DropdownItem>
               </li>
               <li>
                 <DropdownItem
                   onItemClick={() =>
-                    handleNavigation("/support", "Opening support")
+                    handleNavigation("/support", t("userDropdown.openingSupport"))
                   }
                   tag="button"
-                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full text-left"
+                  className={`flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
                 >
                   <svg
                     className="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
@@ -325,15 +330,15 @@ export default function UserDropdown() {
                       fill=""
                     />
                   </svg>
-                  Support
+                  {t("userDropdown.support")}
                 </DropdownItem>
               </li>
-            </ul>
+            </ul> */}
 
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full text-left"
+              className={`flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 w-full ${isRTL ? "text-right flex-row-reverse" : "text-left"}`}
             >
               <svg
                 className="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-gray-300"
@@ -351,7 +356,7 @@ export default function UserDropdown() {
                   fill=""
                 />
               </svg>
-              Sign out
+              {t("userDropdown.signOut")}
             </button>
           </>
         )}

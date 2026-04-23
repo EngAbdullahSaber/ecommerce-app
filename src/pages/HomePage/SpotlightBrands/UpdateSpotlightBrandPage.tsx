@@ -69,6 +69,17 @@ export default function UpdateSpotlightBrandPage() {
       validation: z.coerce.number().min(0, t("spotlightBrands.create.validations.orderMin")),
     },
     {
+      name: "image",
+      label: t("spotlightBrands.create.form.image") || "Option Image",
+      type: "imageApi",
+      required: true,
+      cols: 12,
+      imageUploadConfig: {
+        uploadEndpoint: "/upload",
+      },
+      validation: z.string().min(1, "Image is required"),
+    },
+    {
       name: "dateRange",
       label: t("spotlightBrands.create.form.dateRange"),
       type: "daterange",
@@ -95,6 +106,7 @@ export default function UpdateSpotlightBrandPage() {
     if (brandDetails) {
       setDefaultValues({
          displayOrder: brandDetails.displayOrder || 1,
+         image: brandDetails.image || "",
         dateRange: {
           startDate: brandDetails.startDate ? new Date(brandDetails.startDate) : new Date(),
           endDate: brandDetails.endDate ? new Date(brandDetails.endDate) : new Date(),
@@ -109,7 +121,8 @@ export default function UpdateSpotlightBrandPage() {
 
     try {
       const payload = {
-         displayOrder: Number(data.displayOrder),
+        displayOrder: Number(data.displayOrder),
+        image: data.image,
         startDate: data.dateRange.startDate.toISOString(),
         endDate: data.dateRange.endDate.toISOString(),
       };

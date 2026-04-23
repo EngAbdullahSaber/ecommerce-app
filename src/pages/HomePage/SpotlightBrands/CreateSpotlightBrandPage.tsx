@@ -83,6 +83,17 @@ export default function CreateSpotlightBrandPage() {
       cols: 6,
       placeholder: t("spotlightBrands.create.form.displayOrderPlaceholder"),
       validation: z.coerce.number().min(0, t("spotlightBrands.create.validations.orderMin")),
+    }, 
+    {
+      name: "image",
+      label: t("spotlightBrands.create.form.image") || "Option Image",
+      type: "imageApi",
+      required: true,
+      cols: 12,
+      imageUploadConfig: {
+        uploadEndpoint: "/upload",
+      },
+      validation: z.string().min(1, "Image is required"),
     },
     {
       name: "dateRange",
@@ -90,7 +101,7 @@ export default function CreateSpotlightBrandPage() {
       type: "daterange",
       required: true,
       icon: <Calendar size={18} />,
-      cols: 6,
+      cols: 12,
       dateRangeConfig: {
         range: true,
         minDate: new Date(),
@@ -108,6 +119,7 @@ export default function CreateSpotlightBrandPage() {
   const defaultValues = {
     brandId: "",
     displayOrder: 1,
+    image: "",
     dateRange: {
       startDate: new Date(),
       endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
@@ -122,6 +134,7 @@ export default function CreateSpotlightBrandPage() {
       const payload = {
         brandId: Number(data.brandId),
         displayOrder: Number(data.displayOrder),
+        image: data.image,
         startDate: data.dateRange.startDate.toISOString(),
         endDate: data.dateRange.endDate.toISOString(),
       };

@@ -421,12 +421,10 @@ export default function HomePageSectionsPage() {
                           {item.isVisible ? (
                             <>
                               <EyeOff size={16} />
-                              <span>Hide</span>
                             </>
                           ) : (
                             <>
                               <Eye size={16} />
-                              <span>Show</span>
                             </>
                           )}
                         </button>

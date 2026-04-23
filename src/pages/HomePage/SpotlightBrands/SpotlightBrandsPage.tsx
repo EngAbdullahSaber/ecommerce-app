@@ -35,6 +35,7 @@ interface SpotlightBrand {
   displayOrder: number;
   startDate: string | null;
   endDate: string | null;
+  image: string | null;
   brand: {
     id: number;
     title: {
@@ -303,7 +304,7 @@ export default function SpotlightBrandsPage() {
                 placeholder={t("spotlightBrands.searchPlaceholder") || "Search by brand name..."}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-slate-100"
               />
               {searchTerm && (
                 <button
@@ -320,7 +321,7 @@ export default function SpotlightBrandsPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100"
               >
                 <option value="order">Sort by Order</option>
                 <option value="name">Sort by Name</option>
@@ -328,7 +329,7 @@ export default function SpotlightBrandsPage() {
               </select>
               <button
                 onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-slate-900 dark:text-slate-100"
               >
                 {sortOrder === "asc" ? <SortAsc size={20} /> : <SortDesc size={20} />}
               </button>
@@ -397,10 +398,10 @@ export default function SpotlightBrandsPage() {
                       <div className="flex flex-col lg:flex-row lg:items-center gap-6">
                         {/* Image */}
                         <div className="flex-shrink-0">
-                          {item.brand.image ? (
+                          {item.image || item.brand.image ? (
                             <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 border-slate-100 dark:border-slate-700 shadow-md">
                               <img
-                                src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + item.brand.image}
+                                src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + (item.image || item.brand.image)}
                                 alt={brandTitle}
                                 className="w-full h-full object-contain p-2"
                                 onError={(e) => {

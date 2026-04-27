@@ -94,6 +94,12 @@ import CreateHomeCategoryPage from "./pages/HomePage/HomeCategories/CreateHomeCa
 import UpdateHomeCategoryPage from "./pages/HomePage/HomeCategories/UpdateHomeCategoryPage";
 import StoreValueProductsPage from "./pages/HomePage/StoreValue/StoreValueProductsPage";
 import AddStoreValueProductsPage from "./pages/HomePage/StoreValue/AddStoreValueProductsPage";
+import ContactUsPage from "./pages/ContactUs/ContactUsPage";
+import FAQsPage from "./pages/FAQs/FAQsPage";
+import CreateFAQPage from "./pages/FAQs/CreateFAQPage";
+import UpdateFAQPage from "./pages/FAQs/UpdateFAQPage";
+import PrivacyPolicyPage from "./pages/StaticViews/PrivacyPolicyPage";
+import TermsAndConditionsPage from "./pages/StaticViews/TermsAndConditionsPage";
 
 export default function App() {
   useLanguage();
@@ -311,6 +317,12 @@ export default function App() {
               path="home-page/store-value/add"
               element={<AddStoreValueProductsPage />}
             />
+            <Route path="contact-us" element={<ContactUsPage />} />
+            <Route path="faqs" element={<FAQsPage />} />
+            <Route path="faqs/create" element={<CreateFAQPage />} />
+            <Route path="faqs/edit/:id" element={<UpdateFAQPage />} />
+            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="terms-and-conditions" element={<TermsAndConditionsPage />} />
           </Route>
 
           {/* Fallback Route */}

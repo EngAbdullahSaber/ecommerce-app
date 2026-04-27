@@ -421,6 +421,10 @@
     "filters": "الفلاتر",
     "products": "المنتجات",
     "promoRules": "قواعد الترويج",
+    "contactUs": "اتصل بنا",
+    "faqs": "الأسئلة الشائعة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsAndConditions": "الشروط والأحكام",
 
     "countries": "الدول",
     "cities": "المدن",
@@ -446,7 +450,8 @@
     "influencers": "المؤثرين",
     "homeFilter": "فلتر الصفحة الرئيسية",
     "homeCategories": "تصنيفات الصفحة الرئيسية",
-    "storeValue": "منتجات المتجر"
+    "storeValue": "منتجات المتجر",
+    "contactUs": "اتصل بنا"
   },
   "storeValue": {
     "title": "منتجات المتجر",
@@ -2709,5 +2714,54 @@
     "required": "هذا الحقل مطلوب",
     "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
     "passwordMismatch": "كلمات المرور غير متطابقة"
+  },
+  "contactUsPage": {
+    "title": "رسائل اتصل بنا",
+    "subtitle": "عرض وإدارة الرسائل الواردة من العملاء",
+    "detailsTitle": "تفاصيل الرسالة",
+    "receivedOn": "تم الاستلام في",
+    "senderName": "اسم المرسل",
+    "emailAddress": "البريد الإلكتروني",
+    "messageContent": "محتوى الرسالة",
+    "noMessages": "لم يتم العثور على رسائل",
+    "noResults": "لم يتم العثور على نتائج لبحثك.",
+    "noMessagesYet": "لا توجد رسائل اتصل بنا بعد.",
+    "deleteTitle": "حذف الرسالة",
+    "deleteDescription": "هل أنت متأكد من حذف هذه الرسالة؟",
+    "deleteSuccess": "تم حذف الرسالة بنجاح",
+    "deleteError": "فشل حذف الرسالة",
+    "searchPlaceholder": "البحث في الرسائل...",
+    "loading": "جاري تحميل الرسائل..."
+  },
+  "faqsPage": {
+    "title": "الأسئلة الشائعة",
+    "subtitle": "إدارة الأسئلة والأجوبة الشائعة",
+    "question": "السؤال",
+    "answer": "الإجابة",
+    "detailsTitle": "تفاصيل السؤال الشائع",
+    "noFaqs": "لم يتم العثور على أسئلة",
+    "searchPlaceholder": "البحث في الأسئلة...",
+    "deleteTitle": "حذف السؤال",
+    "deleteDescription": "هل أنت متأكد من حذف هذا السؤال؟",
+    "deleteSuccess": "تم حذف السؤال بنجاح",
+    "deleteError": "فشل حذف السؤال",
+    "createTitle": "إضافة سؤال جديد",
+    "updateTitle": "تعديل السؤال",
+    "form": {
+      "question": "السؤال",
+      "placeholderQuestion": "أدخل السؤال...",
+      "questionMinLength": "يجب أن يكون السؤال 5 أحرف على الأقل",
+      "answer": "الإجابة",
+      "placeholderAnswer": "أدخل الإجابة...",
+      "answerMinLength": "يجب أن تكون الإجابة 10 أحرف على الأقل",
+      "createDescription": "إضافة سؤال شائع جديد إلى النظام",
+      "updateDescription": "تعديل تفاصيل السؤال الشائع الحالي"
+    },
+    "messages": {
+      "createSuccess": "تم إنشاء السؤال بنجاح",
+      "createError": "فشل إنشاء السؤال",
+      "updateSuccess": "تم تحديث السؤال بنجاح",
+      "updateError": "فشل تحديث السؤال"
+    }
   }
 }

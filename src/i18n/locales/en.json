@@ -423,6 +423,10 @@
     "products": "Products",
     "filters": "Filters",
     "promoRules": "Promo Rules",
+    "contactUs": "Contact Us",
+    "faqs": "FAQs",
+    "privacyPolicy": "Privacy Policy",
+    "termsAndConditions": "Terms & Conditions",
     "ecommerce": "E-Commerce",
     "orders": "Orders",
     "countries": "Countries",
@@ -449,7 +453,8 @@
     "influencers": "Influencers",
     "homeFilter": "Home Filter",
     "homeCategories": "Home Categories",
-    "storeValue": "Store Value"
+    "storeValue": "Store Value",
+    "contactUs": "Contact Us"
   },
   "storeValue": {
     "title": "Store Value Products",
@@ -2687,5 +2692,54 @@
     "required": "This field is required",
     "invalidEmail": "Please enter a valid email address",
     "passwordMismatch": "Passwords do not match"
+  },
+  "contactUsPage": {
+    "title": "Contact Us Messages",
+    "subtitle": "View and manage incoming messages from customers",
+    "detailsTitle": "Message Details",
+    "receivedOn": "Received on",
+    "senderName": "Sender Name",
+    "emailAddress": "Email Address",
+    "messageContent": "Message Content",
+    "noMessages": "No Messages Found",
+    "noResults": "No results found for your search.",
+    "noMessagesYet": "There are no contact messages yet.",
+    "deleteTitle": "Delete Message",
+    "deleteDescription": "Are you sure you want to delete this message?",
+    "deleteSuccess": "Message deleted successfully",
+    "deleteError": "Failed to delete message",
+    "searchPlaceholder": "Search messages...",
+    "loading": "Loading messages..."
+  },
+  "faqsPage": {
+    "title": "FAQs",
+    "subtitle": "Manage frequently asked questions and answers",
+    "question": "Question",
+    "answer": "Answer",
+    "detailsTitle": "FAQ Details",
+    "noFaqs": "No FAQs Found",
+    "searchPlaceholder": "Search FAQs...",
+    "deleteTitle": "Delete FAQ",
+    "deleteDescription": "Are you sure you want to delete this FAQ?",
+    "deleteSuccess": "FAQ deleted successfully",
+    "deleteError": "Failed to delete FAQ",
+    "createTitle": "Create New FAQ",
+    "updateTitle": "Update FAQ",
+    "form": {
+      "question": "Question",
+      "placeholderQuestion": "Enter the question...",
+      "questionMinLength": "Question must be at least 5 characters long",
+      "answer": "Answer",
+      "placeholderAnswer": "Enter the answer...",
+      "answerMinLength": "Answer must be at least 10 characters long",
+      "createDescription": "Add a new frequently asked question to the system",
+      "updateDescription": "Update the details of the existing FAQ"
+    },
+    "messages": {
+      "createSuccess": "FAQ created successfully",
+      "createError": "Failed to create FAQ",
+      "updateSuccess": "FAQ updated successfully",
+      "updateError": "Failed to update FAQ"
+    }
   }
 }

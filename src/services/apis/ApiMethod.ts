@@ -130,3 +130,12 @@ export async function DeleteMethodWithBody(url: string, data: any, lang: any) {
   if (res) return res.data;
   else return false;
 }
+export async function PutMethod(url: string, data: any, lang: any) {
+  let res = await api.put(`${url}`, data, {
+    headers: {
+      lang: lang,
+    },
+  });
+  if (res) return res.data;
+  else return false;
+}

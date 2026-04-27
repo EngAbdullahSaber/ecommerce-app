@@ -21,6 +21,9 @@ import {
   FiLayers,
   FiChevronRight,
   FiChevronDown,
+  FiMail,
+  FiHelpCircle,
+  FiShield,
 } from "react-icons/fi";
 import { Filter } from "lucide-react";
 
@@ -218,6 +221,26 @@ const AppSidebar: React.FC = () => {
       icon: <FiShoppingBag className="w-5 h-5" />,
       name: t("sidebar.promoRules"),
       path: "/promo-rules",
+    },
+    {
+      icon: <FiMail className="w-5 h-5" />,
+      name: t("sidebar.contactUs"),
+      path: "/contact-us",
+    },
+    {
+      icon: <FiHelpCircle className="w-5 h-5" />,
+      name: t("sidebar.faqs"),
+      path: "/faqs",
+    },
+    {
+      icon: <FiShield className="w-5 h-5" />,
+      name: t("sidebar.privacyPolicy"),
+      path: "/privacy-policy",
+    },
+    {
+      icon: <FiFileText className="w-5 h-5" />,
+      name: t("sidebar.termsAndConditions"),
+      path: "/terms-and-conditions",
     },
   ];
 

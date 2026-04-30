@@ -10,7 +10,7 @@ interface StaticViewData {
   type: string;
   contentArabic: string;
   contentEnglish: string;
-  contentSpanish: string;
+  contentKurdish: string;
 }
 
 export default function TermsAndConditionsPage() {
@@ -18,11 +18,11 @@ export default function TermsAndConditionsPage() {
   const lang = i18n.language || "en";
   const toast = useToast();
   
-  const [activeTab, setActiveTab] = useState<"en" | "ar" | "es">("en");
+  const [activeTab, setActiveTab] = useState<"en" | "ar" | "ku">("en");
   const [content, setContent] = useState({
     en: "",
     ar: "",
-    es: "",
+    ku: "",
   });
 
   const { data: viewResponse, isLoading, refetch } = useQuery({
@@ -35,7 +35,7 @@ export default function TermsAndConditionsPage() {
       setContent({
         en: viewResponse.data.contentEnglish || "",
         ar: viewResponse.data.contentArabic || "",
-        es: viewResponse.data.contentSpanish || "",
+        ku: viewResponse.data.contentKurdish || "",
       });
     }
   }, [viewResponse]);
@@ -56,7 +56,7 @@ export default function TermsAndConditionsPage() {
       type: "TERMS_AND_CONDITIONS",
       contentEnglish: content.en,
       contentArabic: content.ar,
-      contentSpanish: content.es,
+      contentKurdish: content.ku,
     });
   };
 
@@ -129,15 +129,15 @@ export default function TermsAndConditionsPage() {
               العربية
             </button>
             <button
-              onClick={() => setActiveTab("es")}
+              onClick={() => setActiveTab("ku")}
               className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl font-bold transition-all ${
-                activeTab === "es"
+                activeTab === "ku"
                   ? "bg-white dark:bg-slate-700 text-purple-600 dark:text-purple-400 shadow-sm"
                   : "text-slate-500 hover:bg-white/50 dark:hover:bg-slate-700/50"
               }`}
             >
               <Globe size={18} />
-              Spanish
+              Kurdish
             </button>
           </div>
 
@@ -148,7 +148,7 @@ export default function TermsAndConditionsPage() {
               </div>
               <div>
                 <h3 className="font-bold text-slate-900 dark:text-white">
-                  {activeTab === "en" ? "English Content" : activeTab === "ar" ? "المحتوى العربي" : "Spanish Content"}
+                  {activeTab === "en" ? "English Content" : activeTab === "ar" ? "المحتوى العربي" : "Kurdish Content"}
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   {lang === "ar" ? "استخدم المحرر أدناه لتنسيق النص" : "Use the editor below to format your content"}

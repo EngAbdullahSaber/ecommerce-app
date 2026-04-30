@@ -238,9 +238,8 @@ export default function App() {
             <Route path="promo-rules/edit/:id" element={<UpdatePromoRules />} />
             {/* <Route path="promo-rules/view/:id" element={<ViewPromoRulePage />} /> */}
 
-            <Route path="create-order" element={<CreateOrderPage />} />
-            <Route path="update-order/:id" element={<UpdateOrderPage />} />
-            <Route path="view-order/:id" element={<ViewOrderPage />} />
+           
+            <Route path="orders" element={<OrdersPage />} />
             <Route path="alerts" element={<Alerts />} />
             <Route path="avatars" element={<Avatars />} />
             <Route path="badge" element={<Badges />} />

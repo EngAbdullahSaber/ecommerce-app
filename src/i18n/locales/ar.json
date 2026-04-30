@@ -2749,9 +2749,15 @@
     "updateTitle": "تعديل السؤال",
     "form": {
       "question": "السؤال",
+      "questionEn": "السؤال (الإنجليزية)",
+      "questionAr": "السؤال (العربية)",
+      "questionKu": "السؤال (الكردية)",
       "placeholderQuestion": "أدخل السؤال...",
       "questionMinLength": "يجب أن يكون السؤال 5 أحرف على الأقل",
       "answer": "الإجابة",
+      "answerEn": "الإجابة (الإنجليزية)",
+      "answerAr": "الإجابة (العربية)",
+      "answerKu": "الإجابة (الكردية)",
       "placeholderAnswer": "أدخل الإجابة...",
       "answerMinLength": "يجب أن تكون الإجابة 10 أحرف على الأقل",
       "createDescription": "إضافة سؤال شائع جديد إلى النظام",
@@ -2763,5 +2769,60 @@
       "updateSuccess": "تم تحديث السؤال بنجاح",
       "updateError": "فشل تحديث السؤال"
     }
+  },
+  "ordersPage": {
+    "title": "إدارة الطلبات",
+    "subtitle": "تتبع وإدارة طلبات المتجر الخاص بك",
+    "createOrder": "إنشاء طلب",
+    "exportOrders": "تصدير الطلبات",
+    "searchPlaceholder": "البحث في الطلبات...",
+    "stats": {
+      "totalRevenue": "إجمالي الإيرادات",
+      "totalOrders": "إجمالي الطلبات",
+      "delivered": "تم التوصيل",
+      "processing": "قيد المعالجة",
+      "pending": "قيد الانتظار"
+    },
+    "table": {
+      "order": "الطلب",
+      "customer": "العميل",
+      "items": "العناصر",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "date": "التاريخ",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "PENDING": "قيد الانتظار",
+      "PROCESSING": "قيد المعالجة",
+      "SHIPPED": "تم الشحن",
+      "DELIVERED": "تم التوصيل",
+      "CANCELLED": "ملغي"
+    },
+    "payment": {
+      "CASH_ON_DELIVERY": "الدفع عند الاستلام",
+      "CREDIT_CARD": "بطاقة ائتمان",
+      "PENDING": "قيد الانتظار",
+      "PAID": "تم الدفع",
+      "FAILED": "فشل الدفع"
+    },
+    "delete": {
+      "title": "حذف الطلب",
+      "description": "هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء.",
+      "success": "تم حذف الطلب بنجاح",
+      "error": "فشل حذف الطلب"
+    }
+  },
+  "reviews": {
+    "title": "تقييمات العملاء",
+    "description": "شاهد ما يقوله عملاؤنا عن هذا المنتج",
+    "avgRating": "متوسط التقييم",
+    "noReviews": "لا توجد تقييمات لهذا المنتج حتى الآن.",
+    "beTheFirst": "كن أول من يقيم هذا المنتج!",
+    "totalReviews": "{{count}} تقييمات",
+    "rating": "التقييم",
+    "comment": "التعليق",
+    "date": "نشر في",
+    "user": "العميل"
   }
 }

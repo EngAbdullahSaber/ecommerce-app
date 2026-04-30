@@ -34,25 +34,29 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface Collection {
   id: number;
-  categorySectionId: number;
-  collectionId: number;
+  categorySectionId?: number;
+  collectionId?: number;
   image: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+  nameAr?: string;
+  nameEn?: string;
+  collectionType?: string;
 }
 
 interface Section {
   id: number;
   title: string;
   type: string;
-  refId: number;
   isActive: boolean;
   key: string;
   keyAr: string;
-  categoryId: number;
-  createdAt: string;
-  updatedAt: string;
   collections: Collection[];
+  collectionItems?: any[];
+  refId?: number;
+  categoryId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface SectionsResponse {
@@ -142,7 +146,7 @@ export default function ParentCategorySectionsPage() {
       const response = (await GetSpecifiedMethod(
         `categories/${id}/sections`,
         "en"
-      )) as SectionsResponse;
+      )) as any;
 
       if (!response || response.code !== 200) {
         throw new Error(
@@ -150,7 +154,20 @@ export default function ParentCategorySectionsPage() {
         );
       }
 
-      return response.data?.sections || [];
+      const rawSections = response.data?.sections || [];
+      
+      // Normalize sections to ensure collections array exists and handle collectionItems
+      return rawSections.map((section: any) => ({
+        ...section,
+        collections: section.collections || (section.collectionItems || []).map((item: any) => ({
+          id: item.id,
+          collectionId: item.id,
+          image: item.image,
+          nameAr: item.nameAr,
+          nameEn: item.nameEn,
+          collectionType: item.collectionType
+        })) || []
+      }));
     } catch (error) {
       console.error("Error fetching sections:", error);
       toast.error(t("categorySections.errorMessage"));
@@ -501,7 +518,7 @@ export default function ParentCategorySectionsPage() {
                               <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                                 <Calendar size={14} />
                                 <span className="text-xs">
-                                  Updated: {new Date(section.updatedAt).toLocaleDateString()}
+                                  Updated: {section.updatedAt ? new Date(section.updatedAt).toLocaleDateString() : "N/A"}
                                 </span>
                               </div>
                             </div>
@@ -578,7 +595,7 @@ export default function ParentCategorySectionsPage() {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex flex-col items-center justify-end p-3">
                                           <span className="text-white text-xs font-bold bg-blue-600/80 px-2 py-1 rounded-lg mb-2">
-                                            ID: {col.collectionId}
+                                            ID: {col.collectionId || col.id}
                                           </span>
                                           <button
                                             onClick={() => setDeleteCollectionDialog({

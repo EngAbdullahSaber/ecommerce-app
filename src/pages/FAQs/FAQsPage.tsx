@@ -20,8 +20,12 @@ import { useTranslation } from "react-i18next";
 
 interface FAQ {
   id: string;
-  question: string;
-  answer: string;
+  questionAr: string;
+  questionEn: string;
+  questionKu: string;
+  answerAr: string;
+  answerEn: string;
+  answerKu: string;
   createdById: number;
   createdAt: string;
   updatedAt: string;
@@ -63,47 +67,69 @@ function FAQDetailsDialog({
           <X size={20} className="text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" />
         </button>
 
-        <div className="p-8 space-y-6">
-          <div>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white">
-              {t("faqsPage.detailsTitle")}
-            </h3>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">
-              Created on {new Date(faq.createdAt).toLocaleString()}
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                {t("faqsPage.question")}
+        <div className="max-h-[80vh] overflow-y-auto custom-scrollbar">
+          <div className="p-8 space-y-6">
+            <div>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white">
+                {t("faqsPage.detailsTitle")}
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 mt-1">
+                Created on {new Date(faq.createdAt).toLocaleString()}
               </p>
-              <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
-                <p className="text-lg font-bold text-slate-900 dark:text-white">
-                  {faq.question}
-                </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">English Question</p>
+                  <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{faq.questionEn}</p>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">السؤال بالعربية</p>
+                  <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 text-right">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{faq.questionAr}</p>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">پسیار بە کوردی</p>
+                  <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 text-right">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{faq.questionKu}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">English Answer</p>
+                  <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{faq.answerEn}</p>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 text-right">الإجابة بالعربية</p>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 text-right">
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{faq.answerAr}</p>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 text-right">وەڵام بە کوردی</p>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 text-right">
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{faq.answerKu}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="space-y-1">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                {t("faqsPage.answer")}
-              </p>
-              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 min-h-[150px]">
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                  {faq.answer}
-                </p>
-              </div>
+            <div className="pt-4">
+              <button
+                onClick={onClose}
+                className="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:opacity-90 transition-opacity"
+              >
+                {t("common.Close")}
+              </button>
             </div>
-          </div>
-
-          <div className="pt-4">
-            <button
-              onClick={onClose}
-              className="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold hover:opacity-90 transition-opacity"
-            >
-              {t("common.Close")}
-            </button>
           </div>
         </div>
       </div>
@@ -156,32 +182,42 @@ export default function FAQsPage() {
 
   const filteredFaqs = faqs.filter(
     (faq) =>
-      faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+      faq.questionEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.questionAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.questionKu.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.answerEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.answerAr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.answerKu.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const columns = [
     {
       key: "question",
       label: t("faqsPage.question"),
-      render: (value: string, row: FAQ) => (
-        <div className="max-w-md">
-          <p className="font-bold text-slate-900 dark:text-white line-clamp-2">
-            {value}
-          </p>
-        </div>
-      ),
+      render: (_: string, row: FAQ) => {
+        const question = lang === "ar" ? row.questionAr : lang === "ku" ? row.questionKu : row.questionEn;
+        return (
+          <div className="max-w-md">
+            <p className="font-bold text-slate-900 dark:text-white line-clamp-2">
+              {question}
+            </p>
+          </div>
+        );
+      },
     },
     {
       key: "answer",
       label: t("faqsPage.answer"),
-      render: (value: string) => (
-        <div className="max-w-xs">
-          <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
-            {value}
-          </p>
-        </div>
-      ),
+      render: (_: string, row: FAQ) => {
+        const answer = lang === "ar" ? row.answerAr : lang === "ku" ? row.answerKu : row.answerEn;
+        return (
+          <div className="max-w-xs">
+            <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+              {answer}
+            </p>
+          </div>
+        );
+      },
     },
     {
       key: "createdAt",
@@ -357,7 +393,7 @@ export default function FAQsPage() {
         }}
         title={lang === "ar" ? "حذف السؤال" : "Delete FAQ"}
         description={lang === "ar" ? "هل أنت متأكد من حذف هذا السؤال؟" : "Are you sure you want to delete this FAQ?"}
-        itemName={deleteDialog.faq?.question}
+        itemName={lang === "ar" ? deleteDialog.faq?.questionAr : lang === "ku" ? deleteDialog.faq?.questionKu : deleteDialog.faq?.questionEn}
         isLoading={deleteMutation.isPending}
       />
     </div>

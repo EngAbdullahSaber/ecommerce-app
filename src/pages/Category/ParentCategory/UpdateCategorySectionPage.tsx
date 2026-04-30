@@ -70,8 +70,8 @@ export default function UpdateCategorySectionPage() {
             type: currentSection.type,
             title: currentSection.title,
             filterId: currentSection.refId?.toString(),
-            collections: currentSection.collections?.map((c: any) => ({
-              collectionId: c.collectionId?.toString(),
+            collections: (currentSection.collections || currentSection.collectionItems || []).map((c: any) => ({
+              collectionId: (c.collectionId || c.id)?.toString(),
               image: c.image
             })) || []
           };

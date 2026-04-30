@@ -27,7 +27,7 @@ import {
   Layers,
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
-import { GetSpecifiedMethod } from "../../services/apis/ApiMethod";
+import { GetPanigationMethod, GetSpecifiedMethod } from "../../services/apis/ApiMethod";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
@@ -154,6 +154,8 @@ interface Product {
   isActive: boolean;
   stockQuantity: number;
   sku: string;
+  isRecommended: boolean;
+  isStoreValue: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -179,6 +181,31 @@ interface Product {
     images: { imageUrl: string; altText: string }[];
   }[];
   avgRating: number;
+}
+
+interface Review {
+  id: number;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string | null;
+  };
+}
+
+interface ReviewsResponse {
+  code: number;
+  data: {
+    reviews: Review[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+    avgRating: number;
+  };
 }
 
 interface ProductResponse {
@@ -235,6 +262,15 @@ export default function ViewProductPage() {
     queryFn: () => fetchProductById(productId, lang),
     enabled: !!productId,
   });
+
+  const { data: reviewsData, isLoading: isLoadingReviews } = useQuery<ReviewsResponse>({
+    queryKey: ["product-reviews", productId, lang],
+    queryFn: () => GetPanigationMethod(`/products/${productId}/reviews`, 1, 10, lang, ""),
+    enabled: !!productId,
+  });
+
+  const reviews = reviewsData?.data?.reviews || [];
+  const avgRating = reviewsData?.data?.avgRating || 0;
 
   // Set first variant as selected when product loads
   useEffect(() => {
@@ -1369,7 +1405,7 @@ export default function ViewProductPage() {
                     navigate(`/products/view/${p.id}`);
                     window.scrollTo(0, 0);
                   }}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group group"
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
                 >
                   <div className="aspect-square rounded-t-2xl overflow-hidden bg-slate-50 dark:bg-slate-800">
                     {p.images && p.images.length > 0 ? (
@@ -1404,6 +1440,125 @@ export default function ViewProductPage() {
             </div>
           </div>
         )}
+
+        {/* Reviews Section */}
+        <div className="mt-12 mb-12">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl shadow-lg">
+                <Star size={20} className="text-white" />
+              </div>
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                {t("reviews.title")}
+              </h2>
+            </div>
+            
+            {reviews.length > 0 && (
+              <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg">
+                <div className="flex flex-col items-center border-r border-slate-200 dark:border-slate-700 pr-4">
+                  <div className="text-3xl font-black text-amber-500">{avgRating.toFixed(1)}</div>
+                  <div className="flex items-center gap-0.5 mt-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star 
+                        key={s} 
+                        size={12} 
+                        fill={s <= Math.round(avgRating) ? "currentColor" : "none"}
+                        className={s <= Math.round(avgRating) ? "text-amber-500" : "text-slate-300 dark:text-slate-600"}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-slate-900 dark:text-white">
+                    {t("reviews.avgRating")}
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    {t("reviews.totalReviews", { count: reviewsData?.data?.total || 0 })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {isLoadingReviews ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[1, 2].map((i) => (
+                <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 animate-pulse">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800" />
+                    <div className="space-y-2">
+                      <div className="w-24 h-4 bg-slate-200 dark:bg-slate-800 rounded" />
+                      <div className="w-32 h-3 bg-slate-200 dark:bg-slate-800 rounded" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="w-full h-4 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="w-3/4 h-4 bg-slate-200 dark:bg-slate-800 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : reviews.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {reviews.map((review) => (
+                <div 
+                  key={review.id}
+                  className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-all duration-300 border-t-4 border-t-amber-500"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-inner uppercase font-bold text-slate-500">
+                        {review.user.name.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 dark:text-white leading-none mb-1">
+                          {review.user.name}
+                        </h4>
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star 
+                              key={s} 
+                              size={12} 
+                              fill={s <= Math.round(review.rating) ? "currentColor" : "none"}
+                              className={s <= Math.round(review.rating) ? "text-amber-500" : "text-slate-300 dark:text-slate-600"}
+                            />
+                          ))}
+                          <span className="text-xs font-bold text-amber-500 ml-1">
+                            {review.rating.toFixed(1)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-[10px] text-slate-400 font-medium">
+                      {new Date(review.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US')}
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="absolute -left-2 -top-1 text-slate-100 dark:text-slate-800 pointer-events-none select-none">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.899 14.899 16 16.017 16L19.017 16C19.569 16 20.017 15.552 20.017 15L20.017 13C20.017 12.448 19.569 12 19.017 12L15.017 12C13.914 12 13.017 11.103 13.017 10L13.017 5C13.017 3.897 13.914 3 15.017 3L19.017 3C20.12 3 21.017 3.897 21.017 5L21.017 15C21.017 18.312 18.329 21 15.017 21L14.017 21ZM5.017 21L5.017 18C5.017 16.899 5.899 16 7.017 16L10.017 16C10.569 16 11.017 15.552 11.017 15L11.017 13C11.017 12.448 10.569 12 10.017 12L6.017 12C4.914 12 4.017 11.103 4.017 10L4.017 5C4.017 3.897 4.914 3 6.017 3L10.017 3C11.12 3 12.017 3.897 12.017 5L12.017 15C12.017 18.312 9.329 21 6.017 21L5.017 21Z"></path></svg>
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed relative z-10 italic">
+                      "{review.comment}"
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 border-2 border-dashed border-slate-200 dark:border-slate-800 text-center">
+              <div className="w-20 h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-6 text-slate-300">
+                <Star size={40} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                {t("reviews.noReviews")}
+              </h3>
+              <p className="text-slate-500">
+                {t("reviews.beTheFirst")}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

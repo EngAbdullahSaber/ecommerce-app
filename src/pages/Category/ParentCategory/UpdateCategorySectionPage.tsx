@@ -93,7 +93,7 @@ export default function UpdateCategorySectionPage() {
   useEffect(() => {
     const fields: FormField[] = [];
     const sectionType = initialData?.type;
-    const isSpecialType = ["CATEGORIES", "BRANDS", "BILL_CATEGORIES"].includes(sectionType);
+    const isSpecialType = [].includes(sectionType as never);
 
     if (!isSpecialType && sectionType) {
       fields.push({
@@ -164,11 +164,11 @@ export default function UpdateCategorySectionPage() {
           label: t("categorySections.create.fields.collectionId"),
           type: "paginatedSelect",
           required: true,
-          cols: 6,
+          cols: sectionType === "SPECIFIC_FILTERS" ? 6 : 12,
           paginatedSelectConfig: {
-            endpoint: sectionType === "SPECIFIC_CATEGORIES" ? "categories" : 
-                      sectionType === "SPECIFIC_BRANDS" ? "brands" : 
-                      `filter-attributes/${selectedFilterId}`,
+            endpoint: (sectionType === "SPECIFIC_CATEGORIES" || sectionType === "CATEGORIES" || sectionType === "BILL_CATEGORIES") ? "categories" : 
+                      (sectionType === "SPECIFIC_BRANDS" || sectionType === "BRANDS") ? "brands" : 
+                      sectionType === "SPECIFIC_FILTERS" ? `filter-attributes/${selectedFilterId}` : "",
             pageSize: 10,
             labelKey: "label",
             valueKey: "value",
@@ -188,14 +188,17 @@ export default function UpdateCategorySectionPage() {
               }));
             }
           }
-        },
-        {
+        }
+      ];
+
+      if (sectionType === "SPECIFIC_FILTERS") {
+        collectionSubFields.push({
           name: "image",
           label: t("categorySections.create.fields.image"),
           type: "imageApi",
           cols: 6
-        }
-      ];
+        });
+      }
 
       fields.push({
         name: "collections",
@@ -219,7 +222,7 @@ export default function UpdateCategorySectionPage() {
 
     try {
       const sectionType = initialData?.type;
-      const isSpecialType = ["CATEGORIES", "BRANDS", "BILL_CATEGORIES"].includes(sectionType);
+      const isSpecialType = [].includes(sectionType as never);
 
       let payload: any;
       if (isSpecialType) {
@@ -235,12 +238,15 @@ export default function UpdateCategorySectionPage() {
           key: data.key,
           keyAr: data.keyAr,
           isActive: !!data.isActive,
-          refId: data.filterId ? Number(data.filterId) : undefined,
           collections: data.collections?.map((col: any) => ({
             collectionId: Number(col.collectionId),
-            ...(col.image && { image: col.image })
+            ...(sectionType === "SPECIFIC_FILTERS" && col.image && { image: col.image })
           })) || []
         };
+
+        if (sectionType === "SPECIFIC_FILTERS" && data.filterId) {
+          payload.refId = Number(data.filterId);
+        }
       }
 
       const response = await UpdateMethod(

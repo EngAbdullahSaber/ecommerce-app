@@ -18,7 +18,7 @@ export default function UpdateFAQPage() {
   const queryClient = useQueryClient();
 
   const fetchFAQById = async (id: string, lang: string) => {
-    const response = await GetSpecifiedMethod(`/faqs/${id}`, lang);
+    const response = await GetSpecifiedMethod(`faqs/${id}`, lang);
     if (!response || response.code !== 200) {
       throw new Error("FAQ not found");
     }
@@ -95,7 +95,7 @@ export default function UpdateFAQPage() {
   ];
 
   const handleUpdate = async (id: string, data: any) => {
-    const response = await UpdateMethod("/faqs", data, id, lang);
+    const response = await UpdateMethod("faqs", data, id, lang);
     if (!response || response.code !== 200) {
       const errorMsg = lang === "ar" ? response?.message?.arabic : response?.message?.english;
       throw new Error(errorMsg || t("faqsPage.messages.updateError"));
@@ -118,7 +118,7 @@ export default function UpdateFAQPage() {
           onClick={() => navigate("/faqs")}
           className="flex items-center gap-2 px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors mb-6 group"
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
           <span className="font-semibold">{t("common.back")}</span>
         </button>
 

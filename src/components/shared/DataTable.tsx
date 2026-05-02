@@ -273,14 +273,16 @@ export function DataTable({
                   <th
                     key={column.key}
                     className={`px-6 py-5 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider  
-                      ${currentLang === "en" ? "text-center" : "text-center"}`}
+                      ${column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : "text-left"}`}
                     style={{ width: column.width }}
                   >
                     <div
                       className={`flex items-center gap-2 ${
-                        currentLang === "ar"
+                        column.align === "right"
+                          ? "justify-end"
+                          : column.align === "center"
                           ? "justify-center"
-                          : "justify-center"
+                          : "justify-start"
                       }`}
                     >
                       {column.label}

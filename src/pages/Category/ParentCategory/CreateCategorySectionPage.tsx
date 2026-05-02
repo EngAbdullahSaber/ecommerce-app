@@ -220,8 +220,8 @@ export default function CreateCategorySectionPage() {
         cols: sectionType === "SPECIFIC_FILTERS" ? 6 : 12,
         paginatedSelectConfig: {
           endpoint: 
-            sectionType === "SPECIFIC_CATEGORIES" ? "categories" : 
-            sectionType === "SPECIFIC_BRANDS" ? "brands" :
+            (sectionType === "SPECIFIC_CATEGORIES" || sectionType === "CATEGORIES" || sectionType === "BILL_CATEGORIES") ? "categories" : 
+            (sectionType === "SPECIFIC_BRANDS" || sectionType === "BRANDS") ? "brands" :
             sectionType === "SPECIFIC_FILTERS" ? `filter-attributes/${selectedFilterId}`:"",
           labelKey: "title",
           valueKey: "id",
@@ -295,7 +295,7 @@ export default function CreateCategorySectionPage() {
     const loadingToast = toast.loading(t("categorySections.create.form.loading"));
 
     try {
-      const payload = {
+      const payload: any = {
         title: data.title,
         type: data.type,
         key: data.key,
@@ -303,9 +303,13 @@ export default function CreateCategorySectionPage() {
         isActive: !!data.isActive,
         collections: data.collections.map((col: any) => ({
           collectionId: Number(col.collectionId),
-          ...(col.image && { image: col.image })
+          ...(data.type === "SPECIFIC_FILTERS" && col.image && { image: col.image })
         }))
       };
+
+      if (data.type === "SPECIFIC_FILTERS" && data.filterId) {
+        payload.refId = Number(data.filterId);
+      }
 
       const response = await CreateMethod(
         `categories/${id}/sections`,

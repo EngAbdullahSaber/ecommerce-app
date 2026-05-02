@@ -86,7 +86,7 @@ export default function CreateFAQPage() {
 
   const handleSubmit = async (data: any) => {
     try {
-      const response = await CreateMethod("/faqs", data, lang);
+      const response = await CreateMethod("faqs", data, lang);
 
       if (response && (response.code === 200 || response.code === 201)) {
         toast.success(t("faqsPage.messages.createSuccess"));
@@ -112,7 +112,7 @@ export default function CreateFAQPage() {
           onClick={() => navigate("/faqs")}
           className="flex items-center gap-2 px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors mb-6 group"
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />
           <span className="font-semibold">{t("common.back")}</span>
         </button>
 

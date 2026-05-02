@@ -182,11 +182,11 @@ const AppSidebar: React.FC = () => {
       name: t("sidebar.areas"),
       path: "/areas",
     },
-    {
-      icon: <FiCalendar className="w-5 h-5" />,
-      name: t("sidebar.events"),
-      path: "/events",
-    },
+    // {
+    //   icon: <FiCalendar className="w-5 h-5" />,
+    //   name: t("sidebar.events"),
+    //   path: "/events",
+    // },
     {
       icon: <FiShoppingBag className="w-5 h-5" />,
       name: t("sidebar.stores"),

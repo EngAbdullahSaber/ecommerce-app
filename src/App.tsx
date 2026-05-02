@@ -98,6 +98,7 @@ import ContactUsPage from "./pages/ContactUs/ContactUsPage";
 import FAQsPage from "./pages/FAQs/FAQsPage";
 import CreateFAQPage from "./pages/FAQs/CreateFAQPage";
 import UpdateFAQPage from "./pages/FAQs/UpdateFAQPage";
+import ViewFAQPage from "./pages/FAQs/ViewFAQPage";
 import PrivacyPolicyPage from "./pages/StaticViews/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/StaticViews/TermsAndConditionsPage";
 
@@ -320,6 +321,7 @@ export default function App() {
             <Route path="faqs" element={<FAQsPage />} />
             <Route path="faqs/create" element={<CreateFAQPage />} />
             <Route path="faqs/edit/:id" element={<UpdateFAQPage />} />
+            <Route path="faqs/view/:id" element={<ViewFAQPage />} />
             <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="terms-and-conditions" element={<TermsAndConditionsPage />} />
           </Route>

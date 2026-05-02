@@ -98,9 +98,9 @@ interface Product {
   id: number;
   name: Name;
   description: Name;
-  features: string;
+  features: Name;
   brandId: number;
-  categoryId: number;
+  categories: any[];
   basePrice: number;
   offerPrice?: number;
   isFreeDelivery: boolean;
@@ -112,6 +112,13 @@ interface Product {
   images: ProductImage[];
   filterValues: any[];
   variants: any[];
+  productDimensions?: Name;
+  packageDimensions?: Name;
+  countryMade?: Name;
+  productWeight?: Name;
+  recommendedAge?: Name;
+  packageWeight?: Name;
+  similarProducts?: any[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -136,9 +143,10 @@ const fetchProductById = async (id: string, lang: string): Promise<any> => {
       nameArabic: product.name?.arabic || "",
       descriptionEnglish: product.description?.english || "",
       descriptionArabic: product.description?.arabic || "",
-      features: product.features || "",
+      featuresEnglish: product.features?.english || "",
+      featuresArabic: product.features?.arabic || "",
       brandId: product.brandId?.toString() || "",
-      categoryId: product.categoryId?.toString() || "",
+      categoryIds: (product as any).categories?.map((c: any) => c.categoryId.toString()) || [],
       basePrice: product.basePrice
         ? parseFloat(product.basePrice.toString())
         : 0,
@@ -151,6 +159,19 @@ const fetchProductById = async (id: string, lang: string): Promise<any> => {
       isActive: product.isActive ? "true" : "false",
       stockQuantity: product.stockQuantity || 0,
       sku: product.sku || "",
+      productDimensionsArabic: product.productDimensions?.arabic || "",
+      productDimensionsEnglish: product.productDimensions?.english || "",
+      packageDimensionsArabic: product.packageDimensions?.arabic || "",
+      packageDimensionsEnglish: product.packageDimensions?.english || "",
+      countryMadeArabic: product.countryMade?.arabic || "",
+      countryMadeEnglish: product.countryMade?.english || "",
+      productWeightArabic: product.productWeight?.arabic || "",
+      productWeightEnglish: product.productWeight?.english || "",
+      recommendedAgeArabic: product.recommendedAge?.arabic || "",
+      recommendedAgeEnglish: product.recommendedAge?.english || "",
+      packageWeightArabic: product.packageWeight?.arabic || "",
+      packageWeightEnglish: product.packageWeight?.english || "",
+      similarProductIds: (product as any).similarProducts?.map((p: any) => p.id.toString()) || [],
       mainImage:
         product.images?.find((img) => img.isMain)?.imageUrl ||
         product.images?.find((img) => img.isPrimary)?.imageUrl ||
@@ -326,99 +347,6 @@ export default function UpdateProductPage() {
     </div>
   );
 
-  const renderFeaturesField = ({
-    value = "",
-    onChange,
-    disabled,
-    error,
-  }: any) => {
-    const handleChange = (htmlContent: string) => {
-      onChange(htmlContent);
-    };
-
-    const htmlValue = value || "";
-
-    const extractTextFromHtml = (html: string): string => {
-      if (!html) return "";
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = html;
-      return tempDiv.textContent || tempDiv.innerText || "";
-    };
-
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Tag size={18} className="text-slate-600 dark:text-slate-400" />
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-            {t("products.form.features")}
-          </label>
-        </div>
-
-        <div className="space-y-3">
-          <div className="border border-slate-300 dark:border-slate-600 rounded-lg overflow-hidden">
-            <RichTextEditor
-              value={htmlValue}
-              onChange={handleChange}
-              placeholder={t("products.form.featurePlaceholder")}
-              height="200px"
-              disabled={disabled}
-              toolbarOptions={{
-                options: ["bold", "italic", "bulletList", "orderedList"],
-                bulletList: {
-                  icon: "list",
-                  title: "Bullet List",
-                },
-                orderedList: {
-                  icon: "listOrdered",
-                  title: "Numbered List",
-                },
-              }}
-              onValidate={(content) => {
-                const text = extractTextFromHtml(content);
-                if (!text.trim()) {
-                  return t("products.form.featureRequired");
-                }
-                return null;
-              }}
-            />
-          </div>
-
-          {htmlValue && (
-            <div className="mt-3">
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                {t("products.form.featurePreview")}
-              </label>
-              <div className="p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-sm">
-                <div
-                  className="prose prose-sm max-w-none dark:prose-invert"
-                  dangerouslySetInnerHTML={{ __html: htmlValue }}
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <p className="text-xs text-blue-700 dark:text-blue-300 font-medium mb-1">
-              {t("products.form.featureFormattingGuide")}
-            </p>
-            <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1 ml-4 list-disc">
-              <li>{t("products.form.useBulletPoints")}</li>
-              <li>{t("products.form.useNumberedLists")}</li>
-              <li>{t("products.form.addDescriptions")}</li>
-              <li>{t("products.form.htmlWillBePreserved")}</li>
-            </ul>
-          </div>
-        </div>
-
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          {t("products.form.featuresHelper")}
-        </p>
-        {error && (
-          <p className="text-xs text-red-600 dark:text-red-400 mt-2">{error}</p>
-        )}
-      </div>
-    );
-  };
 
   const renderMainImageField = ({
     value = "",
@@ -1265,6 +1193,24 @@ export default function UpdateProductPage() {
     );
   };
 
+  const ProductSelectConfig: PaginatedSelectConfig = {
+    endpoint: "/products/all",
+    searchParam: "search",
+    labelKey: "name.english",
+    valueKey: "id",
+    pageSize: 10,
+    debounceTime: 300,
+    additionalParams: {},
+    transformResponse: (data: any) => {
+      const products = data.products || data.data || data || [];
+      return products.map((product: any) => ({
+        label: `${product.title?.english || "N/A"} - ${product.title?.arabic || "N/A"}`,
+        value: product.id.toString(),
+        rawData: product,
+      }));
+    },
+  };
+
   const productFields: FormField[] = [
     // Basic Information Section Header
     {
@@ -1340,12 +1286,22 @@ export default function UpdateProductPage() {
       validation: z.string().min(10, t("products.form.descriptionMinLength")),
     },
     {
-      name: "features",
-      label: t("products.form.features"),
-      type: "custom",
-      cols: 12,
-      renderCustom: renderFeaturesField,
+      name: "featuresEnglish",
+      label: t("products.form.featuresEnglish"),
+      type: "textarea",
+      placeholder: t("products.form.featuresEnglishPlaceholder"),
+      cols: 6,
       validation: z.string().min(1, t("products.form.featureRequired")),
+      helperText: t("products.form.featuresHelper"),
+    },
+    {
+      name: "featuresArabic",
+      label: t("products.form.featuresArabic"),
+      type: "textarea",
+      placeholder: t("products.form.featuresArabicPlaceholder"),
+      cols: 6,
+      validation: z.string().min(1, t("products.form.featureRequired")),
+      helperText: t("products.form.featuresHelper"),
     },
     {
       name: "brandId",
@@ -1375,10 +1331,11 @@ export default function UpdateProductPage() {
       helperText: t("products.form.selectBrandHelper"),
     },
     {
-      name: "categoryId",
-      label: t("products.form.category"),
+      name: "categoryIds",
+      label: t("products.form.categories"),
       type: "paginatedSelect",
       required: true,
+      multiple: true,
       placeholder: t("products.form.searchCategory"),
       icon: <Layers size={18} />,
       cols: 6,
@@ -1398,7 +1355,7 @@ export default function UpdateProductPage() {
           }));
         },
       },
-      validation: z.string().min(1, t("products.form.selectCategoryRequired")),
+      validation: z.array(z.string()).min(1, t("products.form.selectCategoryRequired")),
       helperText: t("products.form.selectCategoryHelper"),
     },
     // Pricing Section Header
@@ -1580,6 +1537,124 @@ export default function UpdateProductPage() {
       renderCustom: renderMainImageField,
       validation: z.string().min(1, t("products.form.mainImageRequired")),
     },
+    // Technical Details Section Header
+    {
+      name: "technicalDetailsHeader",
+      label: t("products.form.technicalDetails"),
+      type: "custom",
+      cols: 12,
+      renderCustom: () => (
+        <div className="space-y-3 mb-6 mt-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-500/10 dark:to-blue-500/10 rounded-lg">
+              <Info size={20} className="text-cyan-600 dark:text-cyan-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                {t("products.form.technicalDetails")}
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {t("products.form.enterTechnicalDetails")}
+              </p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      name: "productDimensionsEnglish",
+      label: t("products.form.productDimensionsEnglish"),
+      type: "text",
+      placeholder: t("products.form.productDimensionsPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "productDimensionsArabic",
+      label: t("products.form.productDimensionsArabic"),
+      type: "text",
+      placeholder: t("products.form.productDimensionsPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "packageDimensionsEnglish",
+      label: t("products.form.packageDimensionsEnglish"),
+      type: "text",
+      placeholder: t("products.form.packageDimensionsPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "packageDimensionsArabic",
+      label: t("products.form.packageDimensionsArabic"),
+      type: "text",
+      placeholder: t("products.form.packageDimensionsPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "countryMadeEnglish",
+      label: t("products.form.countryMadeEnglish"),
+      type: "text",
+      placeholder: t("products.form.countryMadePlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "countryMadeArabic",
+      label: t("products.form.countryMadeArabic"),
+      type: "text",
+      placeholder: t("products.form.countryMadePlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "productWeightEnglish",
+      label: t("products.form.productWeightEnglish"),
+      type: "text",
+      placeholder: t("products.form.productWeightPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "productWeightArabic",
+      label: t("products.form.productWeightArabic"),
+      type: "text",
+      placeholder: t("products.form.productWeightPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "recommendedAgeEnglish",
+      label: t("products.form.recommendedAgeEnglish"),
+      type: "text",
+      placeholder: t("products.form.recommendedAgePlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "recommendedAgeArabic",
+      label: t("products.form.recommendedAgeArabic"),
+      type: "text",
+      placeholder: t("products.form.recommendedAgePlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "packageWeightEnglish",
+      label: t("products.form.packageWeightEnglish"),
+      type: "text",
+      placeholder: t("products.form.packageWeightPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "packageWeightArabic",
+      label: t("products.form.packageWeightArabic"),
+      type: "text",
+      placeholder: t("products.form.packageWeightPlaceholder"),
+      cols: 6,
+    },
+    {
+      name: "similarProductIds",
+      label: t("products.form.similarProductIds"),
+      type: "paginatedSelect",
+      multiple: true,
+      placeholder: t("products.form.searchProduct"),
+      cols: 12,
+      paginatedSelectConfig: ProductSelectConfig,
+      helperText: t("products.form.similarProductIdsHelper"),
+    },
     {
       name: "filterValues",
       label: t("products.form.filterValues"),
@@ -1698,13 +1773,16 @@ export default function UpdateProductPage() {
           english: processedData.descriptionEnglish,
           arabic: processedData.descriptionArabic,
         },
-        features: processedData.features,
+        features: {
+          english: processedData.featuresEnglish,
+          arabic: processedData.featuresArabic,
+        },
         brandId: processedData.brandId
           ? parseInt(processedData.brandId)
           : undefined,
-        categoryId: processedData.categoryId
-          ? parseInt(processedData.categoryId)
-          : undefined,
+        categoryIds: Array.isArray(processedData.categoryIds)
+          ? processedData.categoryIds.map((id: any) => parseInt(id))
+          : [],
         basePrice:
           processedData.basePrice !== undefined &&
           processedData.basePrice !== ""
@@ -1733,6 +1811,33 @@ export default function UpdateProductPage() {
           : [],
         variants: validVariants.length > 0 ? validVariants : undefined,
         sku: processedData.sku,
+        productDimensions: {
+          arabic: processedData.productDimensionsArabic,
+          english: processedData.productDimensionsEnglish,
+        },
+        packageDimensions: {
+          arabic: processedData.packageDimensionsArabic,
+          english: processedData.packageDimensionsEnglish,
+        },
+        countryMade: {
+          arabic: processedData.countryMadeArabic,
+          english: processedData.countryMadeEnglish,
+        },
+        productWeight: {
+          arabic: processedData.productWeightArabic,
+          english: processedData.productWeightEnglish,
+        },
+        recommendedAge: {
+          arabic: processedData.recommendedAgeArabic,
+          english: processedData.recommendedAgeEnglish,
+        },
+        packageWeight: {
+          arabic: processedData.packageWeightArabic,
+          english: processedData.packageWeightEnglish,
+        },
+        similarProductIds: Array.isArray(processedData.similarProductIds)
+          ? processedData.similarProductIds.map((id: any) => parseInt(id))
+          : [],
       };
 
       console.log("Final request data:", requestData);
@@ -1792,9 +1897,6 @@ export default function UpdateProductPage() {
     // Ensure brandId and categoryId are numbers
     if (rest.brandId) {
       rest.brandId = parseInt(rest.brandId);
-    }
-    if (rest.categoryId) {
-      rest.categoryId = parseInt(rest.categoryId);
     }
 
     console.log("After transformation:", rest);

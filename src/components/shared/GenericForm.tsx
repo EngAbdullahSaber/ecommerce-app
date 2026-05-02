@@ -1295,6 +1295,7 @@ interface PaginatedSelectProps {
   disabled?: boolean;
   readOnly?: boolean;
   fetchOptions?: GenericFormProps["fetchOptions"];
+  multiple?: boolean;
 }
 
 const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
@@ -1305,6 +1306,7 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
   disabled = false,
   readOnly = false,
   fetchOptions,
+  multiple = false,
 }) => {
   const { options, loading, hasMore, search, setSearch, loadMore, total } =
     usePaginatedSelect(config, fetchOptions);
@@ -1357,17 +1359,40 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
   };
 
   const handleSelect = (option: FieldOption) => {
-    onChange(option.value);
-    setInputValue(option.label);
-    setSelectedLabel(option.label);
-    setIsOpen(false);
+    if (multiple) {
+      const currentValues = Array.isArray(value) ? value : [];
+      const isSelected = currentValues.includes(option.value);
+      const newValues = isSelected
+        ? currentValues.filter((v) => v !== option.value)
+        : [...currentValues, option.value];
+      onChange(newValues);
+      setInputValue("");
+    } else {
+      onChange(option.value);
+      setInputValue(option.label);
+      setSelectedLabel(option.label);
+      setIsOpen(false);
+    }
   };
 
   const clearSelection = () => {
-    onChange("");
+    onChange(multiple ? [] : "");
     setInputValue("");
     setSelectedLabel("");
     setIsOpen(false);
+  };
+
+  const removeOption = (optionValue: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const currentValues = Array.isArray(value) ? value : [];
+    onChange(currentValues.filter((v) => v !== optionValue));
+  };
+
+  const isSelected = (optionValue: any) => {
+    if (multiple) {
+      return Array.isArray(value) && value.includes(optionValue);
+    }
+    return value === optionValue;
   };
 
   // For read-only mode
@@ -1381,35 +1406,76 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <div className="relative">
+      <div
+        className={`w-full px-4 py-3 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 
+        focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-500 
+        disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
+        border-slate-300 dark:border-slate-600 flex flex-wrap gap-2 items-center min-h-[50px] ${
+          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        }`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+      >
+        {multiple && Array.isArray(value) && value.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {value.map((val) => {
+              const opt = options.find((o) => o.value === val);
+              return (
+                <span
+                  key={val}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium border border-blue-100 dark:border-blue-800 animate-in fade-in zoom-in duration-200"
+                >
+                  {opt?.label || val}
+                  {!disabled && (
+                    <button
+                      type="button"
+                      onClick={(e) => removeOption(val, e)}
+                      className="hover:text-blue-900 dark:hover:text-blue-100 p-0.5 rounded-full hover:bg-blue-200/50 transition-colors"
+                    >
+                      <X size={12} />
+                    </button>
+                  )}
+                </span>
+              );
+            })}
+          </div>
+        )}
         <input
           type="text"
           value={inputValue}
           onChange={handleSearchChange}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          placeholder={placeholder}
+          placeholder={
+            multiple && Array.isArray(value) && value.length > 0
+              ? ""
+              : placeholder
+          }
           disabled={disabled}
-          className="w-full px-4  py-3 border rounded-xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 
-            focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 
-            disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300
-            border-slate-300 dark:border-slate-600 pr-12"
+          className="bg-transparent border-none outline-none flex-1 min-w-[120px] placeholder-slate-400"
         />
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <div className="flex items-center gap-2 pr-1">
           {loading ? (
             <Loader2 size={18} className="animate-spin text-slate-400" />
           ) : (
-            <ChevronDown size={18} className="text-slate-400" />
+            <ChevronDown
+              size={18}
+              className={`text-slate-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+            />
           )}
+          {value &&
+            ((multiple && Array.isArray(value) && value.length > 0) ||
+              (!multiple && value)) &&
+            !disabled && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clearSelection();
+                }}
+                className="text-slate-400 hover:text-red-500 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            )}
         </div>
-        {value && !disabled && (
-          <button
-            type="button"
-            onClick={clearSelection}
-            className="absolute inset-y-0 right-8 flex items-center pr-2 text-slate-400 hover:text-red-500 transition-colors"
-          >
-            <X size={16} />
-          </button>
-        )}
       </div>
 
       {isOpen && !disabled && (
@@ -1448,14 +1514,14 @@ const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
                   key={option.value}
                   onClick={() => handleSelect(option)}
                   className={`px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 ${
-                    value === option.value
+                    isSelected(option.value)
                       ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                       : "text-slate-700 dark:text-slate-300"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{option.label}</span>
-                    {value === option.value && (
+                    {isSelected(option.value) && (
                       <Check
                         size={16}
                         className="text-blue-600 dark:text-blue-400"
@@ -2120,6 +2186,7 @@ export function GenericForm({
                 disabled={field.disabled || isLoading}
                 readOnly={field.readOnly}
                 fetchOptions={fetchOptions}
+                multiple={field.multiple}
               />
             )}
           />

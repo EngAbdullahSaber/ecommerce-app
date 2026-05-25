@@ -114,10 +114,10 @@ export default function UserDropdown() {
   const handleLogout = () => {
     // Clear auth data
     clearAuthInfo();
- 
+
     // Show success message
     toast.success(t("userDropdown.logoutSuccess"));
- 
+
     // Close dropdown
     closeDropdown();
 
@@ -179,10 +179,10 @@ export default function UserDropdown() {
                   "justify-center",
                   "bg-brand-500",
                   "text-white",
-                  "font-bold"
+                  "font-bold",
                 );
                 e.currentTarget.parentElement!.innerHTML = `<span>${getUserInitials(
-                  userData.name || ""
+                  userData.name || "",
                 )}</span>`;
               }}
             />
@@ -193,8 +193,12 @@ export default function UserDropdown() {
           )}
         </span>
 
-        <span className={`block font-medium text-theme-sm ${isRTL ? "ml-1" : "mr-1"}`}>
-          {isLoading ? t("userDropdown.loading") : getFirstName(userData.name || t("userDropdown.user"))}
+        <span
+          className={`block font-medium text-theme-sm ${isRTL ? "ml-1" : "mr-1"}`}
+        >
+          {isLoading
+            ? t("userDropdown.loading")
+            : getFirstName(userData.name || t("userDropdown.user"))}
         </span>
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -220,7 +224,7 @@ export default function UserDropdown() {
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
-        className={`absolute mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark z-50 ${
+        className={`absolute mt-[17px] flex z-[9999999] w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark z-50 ${
           isRTL ? "left-0 origin-top-left" : "right-0 origin-top-right"
         }`}
       >
@@ -231,18 +235,28 @@ export default function UserDropdown() {
         ) : (
           <>
             <div className="p-3">
-              <span className={`block font-medium text-gray-700 text-theme-sm dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}>
-                {userData.name === "Guest User" ? t("userDropdown.user") : (userData.name || t("userDropdown.user"))}
+              <span
+                className={`block font-medium text-gray-700 text-theme-sm dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}
+              >
+                {userData.name === "Guest User"
+                  ? t("userDropdown.user")
+                  : userData.name || t("userDropdown.user")}
               </span>
-              <span className={`mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}>
-                {userData.name === "Guest User" ? "" : (userData.email || t("userDropdown.noEmail"))}
+              <span
+                className={`mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400 ${isRTL ? "text-right" : "text-left"}`}
+              >
+                {userData.name === "Guest User"
+                  ? ""
+                  : userData.email || t("userDropdown.noEmail")}
               </span>
 
               {/* Additional user info if available */}
               {(userData.role || userData.position) && (
                 <div className={`mt-2 ${isRTL ? "text-right" : "text-left"}`}>
                   <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded">
-                    {userData.role?.toUpperCase() === "ADMIN" ? t("userDropdown.admin") : (userData.role || userData.position)}
+                    {userData.role?.toUpperCase() === "ADMIN"
+                      ? t("userDropdown.admin")
+                      : userData.role || userData.position}
                   </span>
                 </div>
               )}

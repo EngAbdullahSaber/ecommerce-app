@@ -18,7 +18,7 @@ const LayoutContent: React.FC = () => {
         <Backdrop />
       </div>
       <div
-        className={`flex-1 transition-all duration-300 overflow-hidden ease-in-out ${
+        className={`flex-1 transition-all duration-300 overflow-x-hidden ease-in-out ${
           isExpanded || isHovered
             ? isRTL
               ? "lg:mr-[260px]"

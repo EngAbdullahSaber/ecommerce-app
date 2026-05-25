@@ -242,7 +242,7 @@ export const FileUploadComponent: React.FC<FileUploadProps> = ({
                 style={fullWidth ? { height: "300px" } : {}}
               >
                 <img
-                  src={import.meta.env.VITE_IMAGE_BASE_URL + url}
+                  src={url.startsWith('http') ? url : import.meta.env.VITE_IMAGE_BASE_URL + url}
                   alt={`Preview ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -358,7 +358,7 @@ export const FileUploadComponent: React.FC<FileUploadProps> = ({
                 style={fullWidth ? { height: "400px" } : { height: "200px" }}
               >
                 <img
-                  src={import.meta.env.VITE_IMAGE_BASE_URL+'/' + url}
+                  src={url.startsWith('http') ? url : import.meta.env.VITE_IMAGE_BASE_URL + url}
                   alt={`Preview ${index + 1}`}
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />

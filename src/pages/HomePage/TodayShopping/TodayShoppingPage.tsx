@@ -638,7 +638,7 @@ export default function TodayShoppingPage() {
         {/* Edit Modal */}
         {editingItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar rounded-2xl animate-in zoom-in-95 duration-300">
               <UpdateForm
                 title={t("todayShopping.edit.title")}
                 description={t("todayShopping.edit.description")}

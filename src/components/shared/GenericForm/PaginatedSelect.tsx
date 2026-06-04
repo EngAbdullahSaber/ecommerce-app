@@ -34,7 +34,9 @@ export const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
 
   // Find selected option label
   useEffect(() => {
-    const selectedOption = options.find((opt) => opt.value === value);
+    const selectedOption = options.find(
+      (opt) => String(opt.value) === String(value),
+    );
     setSelectedLabel(selectedOption?.label || "");
     if (selectedOption) {
       setInputValue(selectedOption.label);
@@ -162,14 +164,14 @@ export const PaginatedSelectComponent: React.FC<PaginatedSelectProps> = ({
                   key={option.value}
                   onClick={() => handleSelect(option)}
                   className={`px-4 py-3 cursor-pointer transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 ${
-                    value === option.value
+                    String(value) === String(option.value)
                       ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                       : "text-slate-700 dark:text-slate-300"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{option.label}</span>
-                    {value === option.value && (
+                    {String(value) === String(option.value) && (
                       <Check
                         size={16}
                         className="text-blue-600 dark:text-blue-400"

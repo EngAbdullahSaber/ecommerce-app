@@ -270,30 +270,7 @@ export default function StoreGiftColorsPage() {
         </div>
       ),
     },
-    {
-      key: "isActive",
-      label: t("storeGiftColors.columns.isActive"),
-      width: "100px",
-      render: (value: boolean, row: StoreGiftColor) => (
-        <button
-          onClick={() =>
-            toggleActiveMutation.mutate({ id: row.id, isActive: !value })
-          }
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none ${
-            value
-              ? "bg-emerald-500 dark:bg-emerald-600"
-              : "bg-slate-300 dark:bg-slate-600"
-          }`}
-          title={value ? t("common.active") : t("common.inactive")}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-200 ${
-              value ? "translate-x-6" : "translate-x-1"
-            }`}
-          />
-        </button>
-      ),
-    },
+
     {
       key: "sortOrder",
       label: t("storeGiftColors.columns.sortOrder"),

@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { z } from "zod";
-import {
-  Filter,
-  ArrowLeft,
-} from "lucide-react";
+import { Filter, ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   UpdateMethod,
@@ -27,11 +24,13 @@ export default function UpdateHomeFilterPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch filter details
-  const { data: filterDetailsResponse, isLoading: isDetailsLoading } = useQuery({
-    queryKey: ["home-filter-details", id, lang],
-    queryFn: () => GetSpecifiedMethod(`home-page/admin/home-filter`, lang), // Since it might be a single config
-    enabled: !!id,
-  });
+  const { data: filterDetailsResponse, isLoading: isDetailsLoading } = useQuery(
+    {
+      queryKey: ["home-filter-details", id, lang],
+      queryFn: () => GetSpecifiedMethod(`home-page/admin/home-filter`, lang), // Since it might be a single config
+      enabled: !!id,
+    },
+  );
 
   const filterDetails = filterDetailsResponse?.data;
 
@@ -42,7 +41,7 @@ export default function UpdateHomeFilterPage() {
         params.page,
         params.pageSize,
         lang,
-        params.search || ""
+        params.search || "",
       );
       return response;
     } catch (error) {
@@ -90,7 +89,7 @@ export default function UpdateHomeFilterPage() {
       setDefaultValues({
         titleEn: filterDetails.titleEn || "",
         titleAr: filterDetails.titleAr || "",
-        filterAttributeId: filterDetails.filterAttributeId?.toString() || "",
+        filterAttributeId: filterDetails.filterAttribute?.id ?? "",
       });
     }
   }, [filterDetails]);
@@ -104,16 +103,18 @@ export default function UpdateHomeFilterPage() {
         "home-page/admin/home-filter",
         data,
         id!,
-        lang
+        lang,
       );
 
       if (response && (response.code === 200 || response.code === 204)) {
         toast.dismiss(loadingToast);
         toast.success(t("homeFilter.edit.success") || t("common.success"));
-        
+
         queryClient.invalidateQueries({ queryKey: ["home-filter"] });
-        queryClient.invalidateQueries({ queryKey: ["home-filter-details", id] });
-        
+        queryClient.invalidateQueries({
+          queryKey: ["home-filter-details", id],
+        });
+
         setTimeout(() => {
           navigate("/home-page/home-filter");
         }, 1500);
@@ -133,7 +134,9 @@ export default function UpdateHomeFilterPage() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-600 dark:text-slate-400 font-medium">{t("homeFilter.loading")}</p>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">
+            {t("homeFilter.loading")}
+          </p>
         </div>
       </div>
     );
@@ -149,7 +152,10 @@ export default function UpdateHomeFilterPage() {
               onClick={() => navigate("/home-page/home-filter")}
               className="p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-xl transition-colors"
             >
-              <ArrowLeft size={24} className="text-slate-600 dark:text-slate-400" />
+              <ArrowLeft
+                size={24}
+                className="text-slate-600 dark:text-slate-400"
+              />
             </button>
             <div className="flex items-center gap-3">
               <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-xl">

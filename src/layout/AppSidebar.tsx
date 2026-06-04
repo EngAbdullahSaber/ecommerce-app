@@ -25,7 +25,7 @@ import {
   FiHelpCircle,
   FiShield,
 } from "react-icons/fi";
-import { Filter } from "lucide-react";
+import { Filter, Gift } from "lucide-react";
 
 // Mock components for demonstration
 const ChevronDownIcon = ({ className }: { className?: string }) => (
@@ -245,6 +245,11 @@ const AppSidebar: React.FC = () => {
       icon: <FiFileText className="w-5 h-5" />,
       name: t("sidebar.termsAndConditions"),
       path: "/terms-and-conditions",
+    },
+    {
+      icon: <Gift className="w-5 h-5" />,
+      name: t("sidebar.storeGiftColors"),
+      path: "/store-gift-colors",
     },
     
   ];

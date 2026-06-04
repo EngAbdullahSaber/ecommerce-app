@@ -451,7 +451,8 @@
     "homeFilter": "فلتر الصفحة الرئيسية",
     "homeCategories": "تصنيفات الصفحة الرئيسية",
     "storeValue": "منتجات المتجر",
-    "contactUs": "اتصل بنا"
+    "contactUs": "اتصل بنا",
+    "storeGiftColors": "ألوان هدايا المتجر"
   },
   "storeValue": {
     "title": "منتجات المتجر",
@@ -2860,5 +2861,81 @@
     "comment": "التعليق",
     "date": "نشر في",
     "user": "العميل"
+  },
+  "storeGiftColors": {
+    "management": "ألوان هدايا المتجر",
+    "managementSubtitle": "إدارة خيارات ألوان ورق تغليف الهدايا لكل متجر",
+    "addColor": "إضافة لون",
+    "searchPlaceholder": "البحث عن الألوان بالاسم...",
+    "allStores": "جميع المتاجر",
+    "allStatus": "جميع الحالات",
+    "noColorsFound": "لا توجد ألوان هدايا",
+    "noColorsMatch": "لا توجد ألوان تطابق بحثك",
+    "noColorsInDB": "لا توجد ألوان هدايا في قاعدة البيانات بعد",
+    "createFirstColor": "إنشاء أول لون",
+    "failedToLoad": "فشل تحميل ألوان الهدايا",
+    "fetchError": "حدث خطأ أثناء جلب بيانات ألوان الهدايا.",
+    "unknownColor": "لون غير معروف",
+    "untitledColor": "لون بلا عنوان",
+    "deleteConfirmTitle": "حذف لون الهدية",
+    "deleteConfirmDescription": "هل أنت متأكد من حذف لون الهدية هذا؟ لا يمكن التراجع عن هذا الإجراء.",
+    "backToList": "العودة إلى ألوان الهدايا",
+    "create": {
+      "title": "إنشاء لون هدية جديد",
+      "subtitle": "إضافة خيار لون ورق تغليف هدايا جديد لمتجر"
+    },
+    "updateTitle": "تعديل لون الهدية",
+    "columns": {
+      "store": "المتجر",
+      "colorSwatch": "اللون",
+      "nameEnglish": "الاسم (إنجليزي)",
+      "nameArabic": "الاسم (عربي)",
+      "fee": "الرسوم",
+      "isActive": "الحالة",
+      "sortOrder": "ترتيب العرض"
+    },
+    "form": {
+      "title": "تفاصيل لون الهدية",
+      "description": "أدخل معلومات لون الهدية أدناه.",
+      "store": "المتجر",
+      "storePlaceholder": "ابحث واختر متجراً...",
+      "storeCannotChange": "لا يمكن تغيير المتجر بعد الإنشاء",
+      "nameEnglish": "الاسم (إنجليزي)",
+      "nameEnglishPlaceholder": "مثال: Red",
+      "nameArabic": "الاسم (عربي)",
+      "nameArabicPlaceholder": "مثال: أحمر",
+      "hexCode": "كود اللون السداسي",
+      "hexCodePlaceholder": "#FF0000",
+      "image": "الصورة",
+      "imagePlaceholder": "https://...",
+      "imageHelper": "اتركه فارغاً للحفاظ على الصورة الحالية",
+      "fee": "الرسوم",
+      "feePlaceholder": "0.00",
+      "isActive": "الحالة",
+      "sortOrder": "ترتيب العرض",
+      "sortOrderPlaceholder": "0",
+      "actions": {
+        "create": "إنشاء اللون",
+        "update": "تعديل اللون"
+      }
+    },
+    "validations": {
+      "storeRequired": "يرجى اختيار متجر",
+      "nameRequired": "الاسم مطلوب",
+      "feeMin": "يجب أن تكون الرسوم 0 أو أكثر",
+      "sortOrderMin": "يجب أن يكون الترتيب 0 أو أكثر"
+    },
+    "messages": {
+      "creating": "جاري إنشاء لون الهدية...",
+      "createSuccess": "تم إنشاء لون الهدية بنجاح!",
+      "createFailed": "فشل إنشاء لون الهدية",
+      "updating": "جاري تعديل لون الهدية...",
+      "updateSuccess": "تم تعديل لون الهدية بنجاح!",
+      "updateFailed": "فشل تعديل لون الهدية",
+      "deleteSuccess": "تم حذف لون الهدية بنجاح!",
+      "deleteFailed": "فشل حذف لون الهدية",
+      "colorNotFound": "لون الهدية غير موجود",
+      "colorIdMissing": "معرّف لون الهدية مفقود"
+    }
   }
 }

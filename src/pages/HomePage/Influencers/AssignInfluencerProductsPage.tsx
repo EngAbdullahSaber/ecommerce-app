@@ -45,8 +45,8 @@ interface Product {
 }
 
 interface InfluencerProduct {
-    id: number;
-    product: Product;
+  id: number;
+  product: Product;
 }
 
 interface Influencer {
@@ -77,7 +77,10 @@ export default function AssignInfluencerProductsPage() {
   const { data: influencer, isLoading: isInfluencerLoading } = useQuery({
     queryKey: ["influencer-details", id, lang],
     queryFn: async () => {
-      const resp = await GetSpecifiedMethod(`home-page/admin/influencers`, lang);
+      const resp = await GetSpecifiedMethod(
+        `home-page/admin/influencers`,
+        lang,
+      );
       const item = Array.isArray(resp?.data)
         ? resp.data.find((inf: any) => inf.id.toString() === id)
         : resp?.data;
@@ -87,29 +90,44 @@ export default function AssignInfluencerProductsPage() {
   });
 
   // Fetch assigned products for the influencer using the requested API
-  const { data: assignedProductsData, isLoading: isAssignedLoading } = useQuery({
-    queryKey: ["influencer-assigned-products", id, lang],
-    queryFn: async () => {
-      // Use the specific API for influencer products
-      const resp = await GetSpecifiedMethod(`home-page/admin/influencers/${id}/products?page=1&pageSize=100`, lang);
-      // Based on common response patterns: { data: { products: [] } } or { data: [] }
-      return (resp?.data?.products || resp?.data || []) as any[];
+  const { data: assignedProductsData, isLoading: isAssignedLoading } = useQuery(
+    {
+      queryKey: ["influencer-assigned-products", id, lang],
+      queryFn: async () => {
+        // Use the specific API for influencer products
+        const resp = await GetSpecifiedMethod(
+          `home-page/admin/influencers/${id}/products?page=1&pageSize=100`,
+          lang,
+        );
+        // Based on common response patterns: { data: { products: [] } } or { data: [] }
+        return (resp?.data?.products || resp?.data || []) as any[];
+      },
+      enabled: !!id,
     },
-    enabled: !!id,
-  });
+  );
 
   // Fetch products with pagination and search
-  const { data: productsResponse, isLoading: isSearching, isFetching } = useQuery({
+  const {
+    data: productsResponse,
+    isLoading: isSearching,
+    isFetching,
+  } = useQuery({
     queryKey: ["products-catalog", page, searchTerm, lang],
     queryFn: async () => {
-      const resp = await GetPanigationMethod("products/all", page, 12, lang, searchTerm);
+      const resp = await GetPanigationMethod(
+        "products/all",
+        page,
+        10,
+        lang,
+        searchTerm,
+      );
       return resp;
     },
   });
 
   useEffect(() => {
     if (productsResponse?.data?.products) {
-       setAllProducts(productsResponse.data.products);
+      setAllProducts(productsResponse.data.products);
     }
   }, [productsResponse]);
 
@@ -126,10 +144,12 @@ export default function AssignInfluencerProductsPage() {
   useEffect(() => {
     if (assignedProductsData) {
       // Map based on response format (direct id or nested product)
-      const ids = assignedProductsData.map((item: any) => 
-        typeof item === 'number' ? item : (item.id || item.product?.id)
-      ).filter(Boolean);
-      
+      const ids = assignedProductsData
+        .map((item: any) =>
+          typeof item === "number" ? item : item.id || item.product?.id,
+        )
+        .filter(Boolean);
+
       setSelectedProductIds(ids);
       setInitialProductIds(ids);
     }
@@ -139,16 +159,22 @@ export default function AssignInfluencerProductsPage() {
     setSelectedProductIds((prev) =>
       prev.includes(productId)
         ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
+        : [...prev, productId],
     );
   };
 
   const handleSave = async () => {
     setIsSubmitting(true);
-    const loadingToast = toast.loading(t("common.loading") || "Saving assigned products...");
+    const loadingToast = toast.loading(
+      t("common.loading") || "Saving assigned products...",
+    );
 
-    const addedIds = selectedProductIds.filter(id => !initialProductIds.includes(id));
-    const removedIds = initialProductIds.filter(id => !selectedProductIds.includes(id));
+    const addedIds = selectedProductIds.filter(
+      (id) => !initialProductIds.includes(id),
+    );
+    const removedIds = initialProductIds.filter(
+      (id) => !selectedProductIds.includes(id),
+    );
 
     try {
       // 1. ADD NEW PRODUCTS
@@ -156,15 +182,15 @@ export default function AssignInfluencerProductsPage() {
         await CreateMethod(
           `home-page/admin/influencers/${id}/products`,
           { productIds: addedIds },
-          lang
+          lang,
         );
       }
 
       // 2. REMOVE PRODUCTS
       if (removedIds.length > 0) {
         await api.delete(`home-page/admin/influencers/${id}/products`, {
-            data: { productIds: removedIds },
-            headers: { lang }
+          data: { productIds: removedIds },
+          headers: { lang },
         });
       }
 
@@ -175,7 +201,10 @@ export default function AssignInfluencerProductsPage() {
       setTimeout(() => navigate("/home-page/influencers"), 1500);
     } catch (error: any) {
       toast.dismiss(loadingToast);
-      const errorMsg = error.response?.data?.message || t("common.error") || "Failed to update assigned products";
+      const errorMsg =
+        error.response?.data?.message ||
+        t("common.error") ||
+        "Failed to update assigned products";
       toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
@@ -187,7 +216,9 @@ export default function AssignInfluencerProductsPage() {
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-600 dark:text-slate-400 font-medium">{t("influencers.assign.loadingData")}</p>
+          <p className="text-slate-600 dark:text-slate-400 font-medium">
+            {t("influencers.assign.loadingData")}
+          </p>
         </div>
       </div>
     );
@@ -203,7 +234,10 @@ export default function AssignInfluencerProductsPage() {
               onClick={() => navigate("/home-page/influencers")}
               className="p-3 hover:bg-white dark:hover:bg-slate-800 rounded-2xl transition-all hover:shadow-lg active:scale-95"
             >
-              <ArrowLeft size={24} className="text-slate-600 dark:text-slate-400" />
+              <ArrowLeft
+                size={24}
+                className="text-slate-600 dark:text-slate-400"
+              />
             </button>
             <div className="flex items-center gap-3">
               <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-xl">
@@ -214,8 +248,11 @@ export default function AssignInfluencerProductsPage() {
                   {t("influencers.assign.title")}
                 </h1>
                 <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  {t("influencers.assign.influencerLabel")}: <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                    {lang === 'ar' ? influencer?.disPlayName.arabic : influencer?.disPlayName.english}
+                  {t("influencers.assign.influencerLabel")}:{" "}
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                    {lang === "ar"
+                      ? influencer?.disPlayName.arabic
+                      : influencer?.disPlayName.english}
                   </span>
                 </p>
               </div>
@@ -227,8 +264,14 @@ export default function AssignInfluencerProductsPage() {
             disabled={isSubmitting}
             className="flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-indigo-500/25 transition-all hover:-translate-y-1 active:scale-95 disabled:opacity-50"
           >
-            {isSubmitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={18} />}
-            {t("influencers.assign.saveSelection", { count: selectedProductIds.length })}
+            {isSubmitting ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <CheckCircle2 size={18} />
+            )}
+            {t("influencers.assign.saveSelection", {
+              count: selectedProductIds.length,
+            })}
           </button>
         </div>
 
@@ -237,7 +280,10 @@ export default function AssignInfluencerProductsPage() {
           <div className="lg:col-span-7 space-y-6">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search size={20} className="text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                <Search
+                  size={20}
+                  className="text-slate-400 group-focus-within:text-indigo-500 transition-colors"
+                />
               </div>
               <input
                 type="text"
@@ -264,7 +310,9 @@ export default function AssignInfluencerProductsPage() {
             <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-xl rounded-[2.5rem] border border-slate-200/60 dark:border-slate-700/60 p-6 min-h-[400px]">
               <div className="flex items-center gap-2 mb-6">
                 <Filter size={16} className="text-indigo-500" />
-                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">{t("influencers.assign.searchResults")}</h3>
+                <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                  {t("influencers.assign.searchResults")}
+                </h3>
               </div>
 
               {isSearching && page === 1 ? (
@@ -278,7 +326,9 @@ export default function AssignInfluencerProductsPage() {
                 <div className="space-y-8">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {allProducts.map((product: Product) => {
-                      const isSelected = selectedProductIds.includes(product.id);
+                      const isSelected = selectedProductIds.includes(
+                        product.id,
+                      );
                       return (
                         <motion.div
                           layout
@@ -295,15 +345,24 @@ export default function AssignInfluencerProductsPage() {
                             {product.image ? (
                               <img
                                 src={formatImageUrl(product.image)}
-                                alt={product.altText || (lang === "ar" ? product.title.arabic : product.title.english)}
+                                alt={
+                                  product.altText ||
+                                  (lang === "ar"
+                                    ? product.title.arabic
+                                    : product.title.english)
+                                }
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 onError={(e) => {
-                                  (e.target as HTMLImageElement).src = "/default/placeholder-banner.png";
+                                  (e.target as HTMLImageElement).src =
+                                    "/default/placeholder-banner.png";
                                 }}
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
-                                <Package size={32} className="text-slate-300 dark:text-slate-600" />
+                                <Package
+                                  size={32}
+                                  className="text-slate-300 dark:text-slate-600"
+                                />
                               </div>
                             )}
                             {/* Selected overlay */}
@@ -311,39 +370,64 @@ export default function AssignInfluencerProductsPage() {
                               <div className="absolute inset-0 bg-indigo-500/20" />
                             )}
                             {/* Check badge */}
-                            <div className={`absolute top-2 ${lang === "ar" ? "left-2" : "right-2"} w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-lg ${
-                              isSelected
-                                ? "bg-indigo-500 text-white scale-110"
-                                : "bg-white/80 dark:bg-slate-800/80 text-slate-400 opacity-0 group-hover:opacity-100"
-                            }`}>
-                              {isSelected ? <Check size={14} /> : <Plus size={14} />}
+                            <div
+                              className={`absolute top-2 ${lang === "ar" ? "left-2" : "right-2"} w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-lg ${
+                                isSelected
+                                  ? "bg-indigo-500 text-white scale-110"
+                                  : "bg-white/80 dark:bg-slate-800/80 text-slate-400 opacity-0 group-hover:opacity-100"
+                              }`}
+                            >
+                              {isSelected ? (
+                                <Check size={14} />
+                              ) : (
+                                <Plus size={14} />
+                              )}
                             </div>
                             {/* Rating */}
                             {product.avgRating > 0 && (
-                              <div className={`absolute bottom-2 ${lang === "ar" ? "right-2" : "left-2"} flex items-center gap-1 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full`}>
-                                <Star size={10} className="text-yellow-400 fill-yellow-400" />
-                                <span className="text-[10px] font-bold text-white">{product.avgRating}</span>
+                              <div
+                                className={`absolute bottom-2 ${lang === "ar" ? "right-2" : "left-2"} flex items-center gap-1 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full`}
+                              >
+                                <Star
+                                  size={10}
+                                  className="text-yellow-400 fill-yellow-400"
+                                />
+                                <span className="text-[10px] font-bold text-white">
+                                  {product.avgRating}
+                                </span>
                               </div>
                             )}
                           </div>
 
                           {/* Info */}
                           <div className="p-3">
-                            <p className={`text-sm font-bold truncate mb-1 ${
-                              isSelected ? "text-indigo-700 dark:text-indigo-300" : "text-slate-800 dark:text-slate-200"
-                            }`}>
-                              {lang === "ar" ? product.title.arabic : product.title.english}
+                            <p
+                              className={`text-sm font-bold truncate mb-1 ${
+                                isSelected
+                                  ? "text-indigo-700 dark:text-indigo-300"
+                                  : "text-slate-800 dark:text-slate-200"
+                              }`}
+                            >
+                              {lang === "ar"
+                                ? product.title.arabic
+                                : product.title.english}
                             </p>
                             <div className="flex items-center gap-1 mb-2">
                               <Tag size={10} className="text-slate-400" />
-                              <span className="text-[10px] text-slate-400 font-mono truncate">{product.sku}</span>
+                              <span className="text-[10px] text-slate-400 font-mono truncate">
+                                {product.sku}
+                              </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm font-black ${isSelected ? "text-indigo-600 dark:text-indigo-400" : "text-indigo-600 dark:text-indigo-400"}`}>
+                              <span
+                                className={`text-sm font-black ${isSelected ? "text-indigo-600 dark:text-indigo-400" : "text-indigo-600 dark:text-indigo-400"}`}
+                              >
                                 {product.offerPrice ?? product.price} SAR
                               </span>
                               {product.offerPrice && (
-                                <span className="text-xs text-slate-400 line-through">{product.price} SAR</span>
+                                <span className="text-xs text-slate-400 line-through">
+                                  {product.price} SAR
+                                </span>
                               )}
                             </div>
                           </div>
@@ -364,39 +448,53 @@ export default function AssignInfluencerProductsPage() {
                           disabled={page === 1}
                           className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
                         >
-                          {lang === "ar" ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+                          {lang === "ar" ? (
+                            <ChevronRight size={18} />
+                          ) : (
+                            <ChevronLeft size={18} />
+                          )}
                         </button>
 
                         <div className="flex items-center gap-1">
-                          {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
-                             let pageNum;
-                             if (totalPages <= 3) pageNum = i + 1;
-                             else if (page === 1) pageNum = i + 1;
-                             else if (page === totalPages) pageNum = totalPages - 2 + i;
-                             else pageNum = page - 1 + i;
+                          {Array.from(
+                            { length: Math.min(3, totalPages) },
+                            (_, i) => {
+                              let pageNum;
+                              if (totalPages <= 3) pageNum = i + 1;
+                              else if (page === 1) pageNum = i + 1;
+                              else if (page === totalPages)
+                                pageNum = totalPages - 2 + i;
+                              else pageNum = page - 1 + i;
 
-                             return (
-                               <button
-                                 key={pageNum}
-                                 onClick={() => setPage(pageNum)}
-                                 className={`w-9 h-9 rounded-xl font-bold transition-all ${
-                                   page === pageNum
-                                     ? "bg-indigo-500 text-white shadow-lg"
-                                     : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
-                                 }`}
-                               >
-                                 {pageNum}
-                               </button>
-                             );
-                          })}
+                              return (
+                                <button
+                                  key={pageNum}
+                                  onClick={() => setPage(pageNum)}
+                                  className={`w-9 h-9 rounded-xl font-bold transition-all ${
+                                    page === pageNum
+                                      ? "bg-indigo-500 text-white shadow-lg"
+                                      : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                  }`}
+                                >
+                                  {pageNum}
+                                </button>
+                              );
+                            },
+                          )}
                         </div>
 
                         <button
-                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                          onClick={() =>
+                            setPage((p) => Math.min(totalPages, p + 1))
+                          }
                           disabled={page === totalPages}
                           className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
                         >
-                          {lang === "ar" ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+                          {lang === "ar" ? (
+                            <ChevronLeft size={18} />
+                          ) : (
+                            <ChevronRight size={18} />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -404,7 +502,10 @@ export default function AssignInfluencerProductsPage() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-                  <Package size={48} className="text-slate-300 dark:text-slate-700" />
+                  <Package
+                    size={48}
+                    className="text-slate-300 dark:text-slate-700"
+                  />
                   <p className="text-slate-500 text-sm">
                     {t("influencers.assign.noProducts")}
                   </p>
@@ -415,78 +516,92 @@ export default function AssignInfluencerProductsPage() {
 
           {/* Right: Selected Summary */}
           <div className="lg:col-span-5">
-             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-3xl rounded-[2.5rem] border border-white/20 dark:border-slate-700/60 shadow-2xl p-8 sticky top-8 max-h-[calc(100vh-4rem)] flex flex-col overflow-hidden">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/30">
-                      <Check size={20} className="text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-black text-slate-900 dark:text-white">{t("influencers.assign.selectedTitle")}</h2>
-                      <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1">
-                        {t("influencers.assign.productsAdded", { count: selectedProductIds.length })}
-                      </p>
-                    </div>
+            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-3xl rounded-[2.5rem] border border-white/20 dark:border-slate-700/60 shadow-2xl p-8 sticky top-8 max-h-[calc(100vh-4rem)] flex flex-col overflow-hidden">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 bg-emerald-500 rounded-xl shadow-lg shadow-emerald-500/30">
+                    <Check size={20} className="text-white" />
                   </div>
-                  {selectedProductIds.length > 0 && (
-                    <button
-                      onClick={() => setSelectedProductIds([])}
-                      className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:underline transition-all"
+                  <div>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white">
+                      {t("influencers.assign.selectedTitle")}
+                    </h2>
+                    <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none mt-1">
+                      {t("influencers.assign.productsAdded", {
+                        count: selectedProductIds.length,
+                      })}
+                    </p>
+                  </div>
+                </div>
+                {selectedProductIds.length > 0 && (
+                  <button
+                    onClick={() => setSelectedProductIds([])}
+                    className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:underline transition-all"
+                  >
+                    {t("influencers.assign.clearAll")}
+                  </button>
+                )}
+              </div>
+
+              <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                <AnimatePresence mode="popLayout">
+                  {selectedProductIds.length === 0 ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex flex-col items-center justify-center py-20 text-slate-400"
                     >
-                      {t("influencers.assign.clearAll")}
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                  <AnimatePresence mode="popLayout">
-                    {selectedProductIds.length === 0 ? (
+                      <Package size={40} className="mb-3 opacity-20" />
+                      <p className="text-sm font-bold">
+                        {t("influencers.assign.emptySelection")}
+                      </p>
+                      <p className="text-xs opacity-60">
+                        {t("influencers.assign.emptySelectionDesc")}
+                      </p>
+                    </motion.div>
+                  ) : (
+                    selectedProductIds.map((pid) => (
                       <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="flex flex-col items-center justify-center py-20 text-slate-400"
+                        layout
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        key={pid}
+                        className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl group shadow-sm hover:shadow-md transition-all"
                       >
-                        <Package size={40} className="mb-3 opacity-20" />
-                        <p className="text-sm font-bold">{t("influencers.assign.emptySelection")}</p>
-                        <p className="text-xs opacity-60">{t("influencers.assign.emptySelectionDesc")}</p>
-                      </motion.div>
-                    ) : (
-                      selectedProductIds.map((pid) => (
-                        <motion.div
-                          layout
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          key={pid}
-                          className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl group shadow-sm hover:shadow-md transition-all"
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-indigo-500 shadow-inner">
+                            #{pid}
+                          </div>
+                          <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate pr-4">
+                            {initialProductIds.includes(pid)
+                              ? t("influencers.assign.assignedProduct")
+                              : t("influencers.assign.newAssignment")}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => toggleProduct(pid)}
+                          className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-all"
                         >
-                           <div className="flex items-center gap-3 min-w-0">
-                               <div className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-indigo-500 shadow-inner">
-                                 #{pid}
-                               </div>
-                               <span className="text-sm font-bold text-slate-700 dark:text-slate-300 truncate pr-4">
-                                 {initialProductIds.includes(pid) ? t("influencers.assign.assignedProduct") : t("influencers.assign.newAssignment")}
-                               </span>
-                           </div>
-                           <button
-                             onClick={() => toggleProduct(pid)}
-                             className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl transition-all"
-                           >
-                             <Trash2 size={16} />
-                           </button>
-                        </motion.div>
-                      ))
-                    )}
-                  </AnimatePresence>
-                </div>
+                          <Trash2 size={16} />
+                        </button>
+                      </motion.div>
+                    ))
+                  )}
+                </AnimatePresence>
+              </div>
 
-                <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-700/50">
-                   <div className="flex items-center justify-between p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20">
-                      <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{t("influencers.assign.totalSelection")}</div>
-                      <div className="text-lg font-black text-indigo-900 dark:text-indigo-100">{selectedProductIds.length}</div>
-                   </div>
+              <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-700/50">
+                <div className="flex items-center justify-between p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/20">
+                  <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                    {t("influencers.assign.totalSelection")}
+                  </div>
+                  <div className="text-lg font-black text-indigo-900 dark:text-indigo-100">
+                    {selectedProductIds.length}
+                  </div>
                 </div>
-             </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -454,7 +454,8 @@
     "homeFilter": "Home Filter",
     "homeCategories": "Home Categories",
     "storeValue": "Store Value",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "storeGiftColors": "Store Gift Colors"
   },
   "storeValue": {
     "title": "Store Value Products",
@@ -2838,5 +2839,81 @@
     "comment": "Comment",
     "date": "Posted on",
     "user": "Customer"
+  },
+  "storeGiftColors": {
+    "management": "Store Gift Colors",
+    "managementSubtitle": "Manage per-store gift wrap color options",
+    "addColor": "Add Color",
+    "searchPlaceholder": "Search colors by name...",
+    "allStores": "All Stores",
+    "allStatus": "All Status",
+    "noColorsFound": "No gift colors found",
+    "noColorsMatch": "No colors match your search",
+    "noColorsInDB": "No gift colors in the database yet",
+    "createFirstColor": "Create First Color",
+    "failedToLoad": "Failed to load gift colors",
+    "fetchError": "There was an error fetching the gift colors data.",
+    "unknownColor": "Unknown Color",
+    "untitledColor": "Untitled Color",
+    "deleteConfirmTitle": "Delete Gift Color",
+    "deleteConfirmDescription": "Are you sure you want to delete this gift color? This action cannot be undone.",
+    "backToList": "Back to Gift Colors",
+    "create": {
+      "title": "Create New Gift Color",
+      "subtitle": "Add a new gift wrap color option for a store"
+    },
+    "updateTitle": "Update Gift Color",
+    "columns": {
+      "store": "Store",
+      "colorSwatch": "Color",
+      "nameEnglish": "Name (English)",
+      "nameArabic": "Name (Arabic)",
+      "fee": "Fee",
+      "isActive": "Status",
+      "sortOrder": "Sort Order"
+    },
+    "form": {
+      "title": "Gift Color Details",
+      "description": "Enter the gift color information below.",
+      "store": "Store",
+      "storePlaceholder": "Search and select a store...",
+      "storeCannotChange": "Store cannot be changed after creation",
+      "nameEnglish": "Name (English)",
+      "nameEnglishPlaceholder": "e.g. Red",
+      "nameArabic": "Name (Arabic)",
+      "nameArabicPlaceholder": "e.g. أحمر",
+      "hexCode": "Hex Color Code",
+      "hexCodePlaceholder": "#FF0000",
+      "image": "Image",
+      "imagePlaceholder": "https://...",
+      "imageHelper": "Leave empty to keep the current image",
+      "fee": "Fee",
+      "feePlaceholder": "0.00",
+      "isActive": "Status",
+      "sortOrder": "Sort Order",
+      "sortOrderPlaceholder": "0",
+      "actions": {
+        "create": "Create Color",
+        "update": "Update Color"
+      }
+    },
+    "validations": {
+      "storeRequired": "Please select a store",
+      "nameRequired": "Name is required",
+      "feeMin": "Fee must be 0 or greater",
+      "sortOrderMin": "Sort order must be 0 or greater"
+    },
+    "messages": {
+      "creating": "Creating gift color...",
+      "createSuccess": "Gift color created successfully!",
+      "createFailed": "Failed to create gift color",
+      "updating": "Updating gift color...",
+      "updateSuccess": "Gift color updated successfully!",
+      "updateFailed": "Failed to update gift color",
+      "deleteSuccess": "Gift color deleted successfully!",
+      "deleteFailed": "Failed to delete gift color",
+      "colorNotFound": "Gift color not found",
+      "colorIdMissing": "Gift color ID is missing"
+    }
   }
 }

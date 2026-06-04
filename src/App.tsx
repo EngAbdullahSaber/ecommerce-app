@@ -101,6 +101,9 @@ import UpdateFAQPage from "./pages/FAQs/UpdateFAQPage";
 import ViewFAQPage from "./pages/FAQs/ViewFAQPage";
 import PrivacyPolicyPage from "./pages/StaticViews/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/StaticViews/TermsAndConditionsPage";
+import StoreGiftColorsPage from "./pages/StoreGiftColors/StoreGiftColorsPage";
+import CreateStoreGiftColorPage from "./pages/StoreGiftColors/CreateStoreGiftColorPage";
+import UpdateStoreGiftColorPage from "./pages/StoreGiftColors/UpdateStoreGiftColorPage";
 
 export default function App() {
   useLanguage();
@@ -324,6 +327,10 @@ export default function App() {
             <Route path="faqs/view/:id" element={<ViewFAQPage />} />
             <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="terms-and-conditions" element={<TermsAndConditionsPage />} />
+
+            <Route path="store-gift-colors" element={<StoreGiftColorsPage />} />
+            <Route path="store-gift-colors/create" element={<CreateStoreGiftColorPage />} />
+            <Route path="store-gift-colors/edit/:id" element={<UpdateStoreGiftColorPage />} />
           </Route>
 
           {/* Fallback Route */}

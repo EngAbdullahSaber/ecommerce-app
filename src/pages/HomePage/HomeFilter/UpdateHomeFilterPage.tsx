@@ -5,13 +5,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   UpdateMethod,
   GetSpecifiedMethod,
-  GetPanigationMethod,
 } from "../../../services/apis/ApiMethod";
+import { api } from "../../../services/axios";
 import { useToast } from "../../../hooks/useToast";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CreateForm } from "../../../components/shared/GenericForm/CreateForm";
 import { FormField } from "../../../components/shared/GenericForm/types";
+import { MultiSelect } from "../../../components/shared/MultiSelect";
 
 export default function UpdateHomeFilterPage() {
   const { id } = useParams();
@@ -22,28 +23,45 @@ export default function UpdateHomeFilterPage() {
   const lang = i18n.language || "en";
 
   const [isLoading, setIsLoading] = useState(false);
+  const [filterAttributeOptions, setFilterAttributeOptions] = useState<any[]>([]);
 
-  // Fetch filter details
   const { data: filterDetailsResponse, isLoading: isDetailsLoading } = useQuery(
     {
       queryKey: ["home-filter-details", id, lang],
-      queryFn: () => GetSpecifiedMethod(`home-page/admin/home-filter`, lang), // Since it might be a single config
+      queryFn: () => GetSpecifiedMethod(`home-page/admin/home-filter`, lang),
       enabled: !!id,
     },
   );
 
   const filterDetails = filterDetailsResponse?.data;
 
+  // Fetch all options for the selected filter attribute (same pattern as product page)
+  useEffect(() => {
+    if (!filterDetails?.filterAttributeId) return;
+    GetSpecifiedMethod(
+      `/filter-attributes/${filterDetails.filterAttributeId}`,
+      lang,
+    )
+      .then((res) => setFilterAttributeOptions(res?.data?.options || []))
+      .catch(() => setFilterAttributeOptions([]));
+  }, [filterDetails?.filterAttributeId, lang]);
+
   const fetchOptions = async (endpoint: string, params: any) => {
     try {
-      const response = await GetPanigationMethod(
-        endpoint,
-        params.page,
-        params.pageSize,
-        lang,
-        params.search || "",
-      );
-      return response;
+      const { page, pageSize, ...rest } = params;
+      const urlParams = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+      });
+      Object.entries(rest).forEach(([key, val]) => {
+        if (val !== undefined && val !== null) {
+          urlParams.append(key, String(val));
+        }
+      });
+      const response = await api.get(`${endpoint}?${urlParams}`, {
+        headers: { lang },
+      });
+      return response.data;
     } catch (error) {
       console.error(`Error fetching ${endpoint}:`, error);
       throw error;
@@ -80,6 +98,28 @@ export default function UpdateHomeFilterPage() {
       },
       validation: z.coerce.number().min(1),
     },
+    {
+      name: "filterOptionIds",
+      label: t("homeFilter.edit.fields.filterOptions") || "Filter Options",
+      type: "custom",
+      cols: 12,
+      validation: z.array(z.number()).optional(),
+      render: ({ value, onChange }) => (
+        <MultiSelect
+          options={filterAttributeOptions}
+          value={value || []}
+          onChange={onChange}
+          getOptionLabel={(opt: any) =>
+            lang === "ar" ? opt.nameAr || opt.name : opt.name
+          }
+          getOptionValue={(opt: any) => opt.id}
+          placeholder={
+            t("homeFilter.edit.fields.filterOptionsPlaceholder") ||
+            "Select filter options"
+          }
+        />
+      ),
+    },
   ];
 
   const [defaultValues, setDefaultValues] = useState<any>(null);
@@ -90,6 +130,8 @@ export default function UpdateHomeFilterPage() {
         titleEn: filterDetails.titleEn || "",
         titleAr: filterDetails.titleAr || "",
         filterAttributeId: filterDetails.filterAttribute?.id ?? "",
+        filterOptionIds:
+          filterDetails.options?.map((opt: any) => opt.filterOption.id) ?? [],
       });
     }
   }, [filterDetails]);

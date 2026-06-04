@@ -5,6 +5,7 @@ import { FormField } from "./types";
 import { DateRangeInputComponent } from "./DateRangeInput";
 import { ImageInputComponent } from "./ImageInput";
 import { PaginatedSelectComponent } from "./PaginatedSelect";
+import { PaginatedMultiSelectComponent } from "./PaginatedMultiSelect";
 import DateTimePicker from "./DateTimePicker";
 import { FileUploadComponent } from "./FileUpload";
 
@@ -62,6 +63,24 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
         <PaginatedSelectComponent
           config={field.paginatedSelectConfig!}
           value={controllerField.value}
+          onChange={(value) => {
+            controllerField.onChange(value);
+            if (onFieldChange) {
+              onFieldChange(field.name, value);
+            }
+          }}
+          placeholder={field.placeholder || `Select ${field.label}`}
+          disabled={field.disabled || disabled}
+          readOnly={field.readOnly}
+          fetchOptions={fetchOptions}
+        />
+      );
+
+    case "paginatedMultiSelect":
+      return (
+        <PaginatedMultiSelectComponent
+          config={field.paginatedSelectConfig!}
+          value={controllerField.value ?? []}
           onChange={(value) => {
             controllerField.onChange(value);
             if (onFieldChange) {

@@ -354,10 +354,14 @@
     "edit": {
       "title": "Edit Home Filter",
       "description": "Update the title and filter attribute",
+      "success": "Home filter updated successfully",
+      "error": "Failed to update home filter",
       "fields": {
         "titleEn": "English Title",
         "titleAr": "Arabic Title",
-        "filterAttribute": "Filter Attribute"
+        "filterAttribute": "Filter Attribute",
+        "filterOptions": "Filter Options",
+        "filterOptionsPlaceholder": "Select filter options"
       }
     },
     "options": "Filter Options",

@@ -10,6 +10,7 @@ export type FieldType =
   | "textarea"
   | "select"
   | "paginatedSelect"
+  | "paginatedMultiSelect"
   | "multiselect"
   | "date"
   | "datetime"

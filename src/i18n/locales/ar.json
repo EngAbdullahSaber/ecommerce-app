@@ -350,10 +350,14 @@
     "edit": {
       "title": "تعديل الفلتر",
       "description": "تحديث العنوان وخاصية الفلتر",
+      "success": "تم تحديث الفلتر بنجاح",
+      "error": "فشل في تحديث الفلتر",
       "fields": {
         "titleEn": "العنوان بالإنجليزية",
         "titleAr": "العنوان بالعربية",
-        "filterAttribute": "خاصية الفلتر"
+        "filterAttribute": "خاصية الفلتر",
+        "filterOptions": "خيارات الفلتر",
+        "filterOptionsPlaceholder": "اختر خيارات الفلتر"
       }
     },
     "options": "خيارات الفلتر",

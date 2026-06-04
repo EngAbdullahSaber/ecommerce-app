@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "../../hooks/useToast";
+import { formatImageUrl } from "../../services/utils";
 import {
   GetSpecifiedMethod,
   UpdateMethodFormData,
@@ -62,7 +63,7 @@ const fetchBrandById = async (id: string, lang: string): Promise<any> => {
       arabicTitle: brand.title.arabic,
       englishDescription: brand.description.english,
       arabicDescription: brand.description.arabic,
-      image: import.meta.env.VITE_IMAGE_BASE_URL + brand.image, // URL for display
+      image: formatImageUrl(brand.image), // URL for display
       currentimage: brand.image, // Original image path
       createdAt: new Date(brand.createdAt).toLocaleDateString("en-US", {
         year: "numeric",
@@ -88,13 +89,6 @@ export default function UpdateBrandPage() {
   const toast = useToast();
   const brandId = params.id as string;
   const queryClient = useQueryClient();
-
-  // Format image URL
-  const formatImageUrl = (url: string) => {
-    if (!url) return "";
-    if (url.startsWith("http")) return url;
-    return import.meta.env.VITE_IMAGE_BASE_URL + url;
-  };
 
   // Define form fields for updating brand
   const brandFields: FormField[] = [

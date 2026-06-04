@@ -25,6 +25,7 @@ import {
   DeleteMethod,
 } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
+import { formatImageUrl } from "../../services/utils";
 import { TableFilters } from "../../components/shared/TableFilters";
 import { useTranslation } from "react-i18next";
 
@@ -107,21 +108,7 @@ export default function BannersPage() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const formatImageUrl = (url: string) => {
-    console.log(url);
-    if (!url) {
-      return "/default/placeholder-banner.png";
-    }
-    if (url === "undefined/images/") {
-      return "/default/placeholder-banner.png";
-    }
-    if (url.startsWith("http")) {
-      return url;
-    }
-    return import.meta.env.VITE_IMAGE_BASE_URL
-      ? import.meta.env.VITE_IMAGE_BASE_URL + url
-      : url;
-  };
+
 
   const fetchBanners = async ({
     page,

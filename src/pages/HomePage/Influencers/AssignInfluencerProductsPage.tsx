@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Users,
   Package,
   Search,
   CheckCircle2,
@@ -13,9 +12,10 @@ import {
   Loader2,
   Filter,
   Check,
-  RefreshCw,
   ChevronLeft,
   ChevronRight,
+  Star,
+  Tag,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../../hooks/useToast";
@@ -25,6 +25,7 @@ import {
   CreateMethod,
 } from "../../../services/apis/ApiMethod";
 import { api } from "../../../services/axios";
+import { formatImageUrl } from "../../../services/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Product {
@@ -37,10 +38,9 @@ interface Product {
   price: number;
   offerPrice: number | null;
   image?: string;
-  images?: {
-    imageUrl: string;
-    isPrimary: boolean;
-  }[];
+  altText?: string;
+  stockQuantity?: number;
+  isActive?: boolean;
   avgRating: number;
 }
 
@@ -277,75 +277,96 @@ export default function AssignInfluencerProductsPage() {
               ) : allProducts && allProducts.length > 0 ? (
                 <div className="space-y-8">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {allProducts.map((product: Product) => (
-                      <motion.div
-                        layout
-                        key={product.id}
-                        onClick={() => toggleProduct(product.id)}
-                        className={`group relative p-3 rounded-2xl border transition-all duration-300 cursor-pointer ${
-                          selectedProductIds.includes(product.id)
-                            ? "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-md"
-                            : "bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:border-indigo-300 hover:shadow-lg"
-                        }`}
-                      >
-                        <div className="flex gap-3">
-                          
-                          <div className="flex-1 min-w-0 pr-6">
-                            <p
-                              className={`text-sm font-bold truncate ${
-                                selectedProductIds.includes(product.id)
-                                  ? "text-indigo-700 dark:text-indigo-400"
-                                  : "text-slate-800 dark:text-slate-200"
-                              }`}
-                            >
-                              {lang === "ar"
-                                ? product.title.arabic
-                                : product.title.english}
+                    {allProducts.map((product: Product) => {
+                      const isSelected = selectedProductIds.includes(product.id);
+                      return (
+                        <motion.div
+                          layout
+                          key={product.id}
+                          onClick={() => toggleProduct(product.id)}
+                          className={`group relative rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden ${
+                            isSelected
+                              ? "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-md shadow-indigo-500/20"
+                              : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-300 hover:shadow-lg"
+                          }`}
+                        >
+                          {/* Image */}
+                          <div className="relative h-36 bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                            {product.image ? (
+                              <img
+                                src={formatImageUrl(product.image)}
+                                alt={product.altText || (lang === "ar" ? product.title.arabic : product.title.english)}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = "/default/placeholder-banner.png";
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Package size={32} className="text-slate-300 dark:text-slate-600" />
+                              </div>
+                            )}
+                            {/* Selected overlay */}
+                            {isSelected && (
+                              <div className="absolute inset-0 bg-indigo-500/20" />
+                            )}
+                            {/* Check badge */}
+                            <div className={`absolute top-2 ${lang === "ar" ? "left-2" : "right-2"} w-7 h-7 rounded-full flex items-center justify-center transition-all shadow-lg ${
+                              isSelected
+                                ? "bg-indigo-500 text-white scale-110"
+                                : "bg-white/80 dark:bg-slate-800/80 text-slate-400 opacity-0 group-hover:opacity-100"
+                            }`}>
+                              {isSelected ? <Check size={14} /> : <Plus size={14} />}
+                            </div>
+                            {/* Rating */}
+                            {product.avgRating > 0 && (
+                              <div className={`absolute bottom-2 ${lang === "ar" ? "right-2" : "left-2"} flex items-center gap-1 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full`}>
+                                <Star size={10} className="text-yellow-400 fill-yellow-400" />
+                                <span className="text-[10px] font-bold text-white">{product.avgRating}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Info */}
+                          <div className="p-3">
+                            <p className={`text-sm font-bold truncate mb-1 ${
+                              isSelected ? "text-indigo-700 dark:text-indigo-300" : "text-slate-800 dark:text-slate-200"
+                            }`}>
+                              {lang === "ar" ? product.title.arabic : product.title.english}
                             </p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <p className="text-xs text-indigo-600 font-black">
-                                {product.offerPrice || product.price} SAR
-                              </p>
+                            <div className="flex items-center gap-1 mb-2">
+                              <Tag size={10} className="text-slate-400" />
+                              <span className="text-[10px] text-slate-400 font-mono truncate">{product.sku}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm font-black ${isSelected ? "text-indigo-600 dark:text-indigo-400" : "text-indigo-600 dark:text-indigo-400"}`}>
+                                {product.offerPrice ?? product.price} SAR
+                              </span>
                               {product.offerPrice && (
-                                <p className="text-[10px] text-slate-400 line-through font-medium">
-                                  {product.price} SAR
-                                </p>
+                                <span className="text-xs text-slate-400 line-through">{product.price} SAR</span>
                               )}
                             </div>
                           </div>
-                        </div>
-                        <div
-                          className={`absolute top-2 right-2 p-1 rounded-full transition-all ${
-                            selectedProductIds.includes(product.id)
-                              ? "bg-indigo-500 text-white scale-110"
-                              : "bg-slate-100 dark:bg-slate-700 text-slate-400 opacity-0 group-hover:opacity-100"
-                          }`}
-                        >
-                          {selectedProductIds.includes(product.id) ? (
-                            <Check size={12} />
-                          ) : (
-                            <Plus size={12} />
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
+                        </motion.div>
+                      );
+                    })}
                   </div>
 
                   {totalPages > 1 && (
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-slate-100 dark:border-slate-700/50">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-100 dark:border-slate-700/50">
                       <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Page {page} of {totalPages}
+                        {t("common.page")} {page} / {totalPages}
                       </div>
-                      
+
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => setPage((p) => Math.max(1, p - 1))}
                           disabled={page === 1}
                           className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
                         >
-                          <ChevronLeft size={18} />
+                          {lang === "ar" ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                         </button>
-                        
+
                         <div className="flex items-center gap-1">
                           {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
                              let pageNum;
@@ -375,7 +396,7 @@ export default function AssignInfluencerProductsPage() {
                           disabled={page === totalPages}
                           className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl disabled:opacity-30 transition-all"
                         >
-                          <ChevronRight size={18} />
+                          {lang === "ar" ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
                         </button>
                       </div>
                     </div>

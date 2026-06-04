@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../../hooks/useToast";
 import { GetPanigationMethod, GetSpecifiedMethod } from "../../services/apis/ApiMethod";
+import { formatImageUrl } from "../../services/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
@@ -234,11 +235,6 @@ const fetchProductById = async (id: string, lang: string): Promise<Product> => {
     console.error("Error fetching product:", error);
     throw error;
   }
-};
-
-const formatImageUrl = (url: string) => {
-  if (url.startsWith("http")) return url;
-  return import.meta.env.VITE_IMAGE_BASE_URL + url;
 };
 
 export default function ViewProductPage() {

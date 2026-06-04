@@ -187,3 +187,12 @@ export function isRememberMeEnabled(): boolean {
 
 // Export BASE_URL for use in api.ts
 export { BASE_URL };
+
+export function formatImageUrl(url: string): string {
+  if (!url) return "/default/placeholder-banner.png";
+  if (url === "undefined/images/") return "/default/placeholder-banner.png";
+  if (url.startsWith("http")) return url;
+  return import.meta.env.VITE_IMAGE_BASE_URL
+    ? import.meta.env.VITE_IMAGE_BASE_URL + url
+    : url;
+}

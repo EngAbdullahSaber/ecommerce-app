@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import {
   Package,
   Eye,
@@ -139,7 +139,7 @@ export default function ProductsPage() {
 
       return {
         data: filteredProducts,
-        total: filteredProducts.length,
+        total: totalItems,
         page: page,
         pageSize: pageSize,
         totalPages: totalPages,
@@ -203,7 +203,7 @@ export default function ProductsPage() {
         searchTerm: debouncedSearchTerm,
         stockFilter: stockFilter,
       }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,
   });
 

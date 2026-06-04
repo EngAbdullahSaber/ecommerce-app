@@ -22,6 +22,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
 import { useTranslation } from "react-i18next";
+import { formatImageUrl } from "../../../services/utils";
 
 // Third Category Interface
 interface Name {
@@ -59,7 +60,7 @@ const fetchThirdCategoryById = async (id: string, t: any): Promise<any> => {
       englishTitle: category?.title?.english || "",
       arabicTitle: category?.title?.arabic || "",
       image: category.image
-        ? `${import.meta.env.VITE_IMAGE_BASE_URL}${category.image}`
+        ? formatImageUrl(category.image)
         : null,
       filterAttributes: category.filterAttributes?.map((item: any) => ({
         attributeId: item.attributeId,

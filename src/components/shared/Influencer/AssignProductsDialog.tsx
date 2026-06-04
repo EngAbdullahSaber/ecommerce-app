@@ -19,6 +19,7 @@ import {
   CreateMethod,
 } from "../../../services/apis/ApiMethod";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatImageUrl } from "../../../services/utils";
 
 interface Product {
   id: number;
@@ -182,7 +183,7 @@ export function AssignProductsDialog({
                     >
                       <div className="flex items-center gap-3">
                         <img
-                          src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + product.image}
+                          src={formatImageUrl(product.image)}
                           alt=""
                           className="w-12 h-12 rounded-xl object-cover bg-slate-100 dark:bg-slate-900 shadow-sm"
                         />

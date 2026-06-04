@@ -1288,20 +1288,34 @@ export default function UpdateProductPage() {
     {
       name: "featuresEnglish",
       label: t("products.form.featuresEnglish"),
-      type: "textarea",
-      placeholder: t("products.form.featuresEnglishPlaceholder"),
+      type: "custom",
       cols: 6,
       validation: z.string().min(1, t("products.form.featureRequired")),
       helperText: t("products.form.featuresHelper"),
+      renderCustom: ({ value, onChange }) => (
+        <RichTextEditor
+          value={value || ""}
+          onChange={onChange}
+          placeholder={t("products.form.featuresEnglishPlaceholder")}
+          height="200px"
+        />
+      ),
     },
     {
       name: "featuresArabic",
       label: t("products.form.featuresArabic"),
-      type: "textarea",
-      placeholder: t("products.form.featuresArabicPlaceholder"),
+      type: "custom",
       cols: 6,
       validation: z.string().min(1, t("products.form.featureRequired")),
       helperText: t("products.form.featuresHelper"),
+      renderCustom: ({ value, onChange }) => (
+        <RichTextEditor
+          value={value || ""}
+          onChange={onChange}
+          placeholder={t("products.form.featuresArabicPlaceholder")}
+          height="200px"
+        />
+      ),
     },
     {
       name: "brandId",

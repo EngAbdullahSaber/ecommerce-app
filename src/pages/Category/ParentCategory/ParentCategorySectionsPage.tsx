@@ -29,6 +29,7 @@ import {
 import { GetSpecifiedMethod, DeleteMethod } from "../../../services/apis/ApiMethod";
 import { DeleteDialog } from "../../../components/shared/DeleteDialog";
 import { useToast } from "../../../hooks/useToast";
+import { formatImageUrl } from "../../../services/utils";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -196,18 +197,6 @@ export default function ParentCategorySectionsPage() {
         ? prev.filter(id => id !== sectionId)
         : [...prev, sectionId]
     );
-  };
-
-  const formatImageUrl = (url: string) => {
-    if (!url || url === "undefined/images/" || url.includes("undefined")) {
-      return "/placeholder-category.png";
-    }
-    if (url.startsWith("http")) {
-      return url;
-    }
-    return import.meta.env.VITE_IMAGE_BASE_URL
-      ? `${import.meta.env.VITE_IMAGE_BASE_URL}/${url.replace(/^\/+/, "")}`
-      : url;
   };
 
   // Filter and sort sections

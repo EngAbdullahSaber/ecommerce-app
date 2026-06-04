@@ -18,6 +18,7 @@ import {
 } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
 import { TableFilters } from "../../components/shared/TableFilters";
+import { formatImageUrl } from "../../services/utils";
 import { useTranslation } from "react-i18next";
 
 interface Name {
@@ -91,21 +92,6 @@ export default function StoresPage() {
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
-
-  const formatImageUrl = (url: string | null) => {
-    if (!url) {
-      return "/placeholder-store.png";
-    }
-    if (url === "undefined/images/") {
-      return "/placeholder-store.png";
-    }
-    if (url.startsWith("http")) {
-      return url;
-    }
-    return import.meta.env.VITE_IMAGE_BASE_URL
-      ? import.meta.env.VITE_IMAGE_BASE_URL + url
-      : url;
-  };
 
   const fetchStores = async ({
     page,

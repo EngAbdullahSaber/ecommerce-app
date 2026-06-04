@@ -20,6 +20,7 @@ import {
   DeleteMethod,
 } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
+import { formatImageUrl } from "../../services/utils";
 import { TableFilters } from "../../components/shared/TableFilters";
 
 interface Name {
@@ -87,18 +88,6 @@ export default function AreasPage() {
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
-
-  const formatImageUrl = (url: string) => {
-    if (!url || url === "undefined/images/") {
-      return "/placeholder-flag.png";
-    }
-    if (url.startsWith("http")) {
-      return url;
-    }
-    return import.meta.env.VITE_IMAGE_BASE_URL
-      ? import.meta.env.VITE_IMAGE_BASE_URL + url
-      : url;
-  };
 
   const fetchAreas = async ({
     page,

@@ -24,6 +24,7 @@ import {
   CreateMethod,
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
+import { formatImageUrl } from "../../../services/utils";
 
 interface Product {
   id: number;
@@ -260,7 +261,7 @@ export default function AddStoreValueProductsPage() {
                   {/* Image Holder */}
                   <div className="relative aspect-square rounded-2xl bg-slate-100 dark:bg-slate-900 overflow-hidden mb-6">
                     <img
-                      src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + product.image}
+                      src={formatImageUrl(product.image)}
                       alt={lang === 'ar' ? product.title.arabic : product.title.english}
                       className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
                         selectedIds.includes(product.id) ? "scale-105 saturate-[1.2]" : ""

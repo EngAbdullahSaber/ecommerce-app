@@ -23,6 +23,7 @@ import {
 } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
 import { UpdateForm } from "../../components/shared/GenericUpdateForm/UpdateForm";
+import { formatImageUrl } from "../../services/utils";
 
 // Store Interface
 interface StoreData {
@@ -66,10 +67,10 @@ const fetchStoreById = async (id: string, lang: string): Promise<any> => {
       arabicName: store.name.arabic,
       englishDescription: store.description.english,
       arabicDescription: store.description.arabic,
-      logo: import.meta.env.VITE_IMAGE_BASE_URL + store.logo, // URL string for display
+      logo: formatImageUrl(store.logo), // URL string for display
       currentLogo: store.logo, // For display purposes
       image: store.image
-        ? import.meta.env.VITE_IMAGE_BASE_URL + store.image
+        ? formatImageUrl(store.image)
         : null,
       currentImage: store.image, // For display purposes
       createdAt: new Date(store.createdAt).toLocaleDateString("en-US", {
@@ -103,13 +104,6 @@ export default function UpdateStorePage() {
   const toast = useToast();
   const storeId = params.id as string;
   const queryClient = useQueryClient();
-
-  // Format image URL
-  const formatImageUrl = (url: string) => {
-    if (!url) return "";
-    if (url.startsWith("http")) return url;
-    return import.meta.env.VITE_IMAGE_BASE_URL + url;
-  };
 
   // Define form fields for updating store
   const storeFields: FormField[] = [

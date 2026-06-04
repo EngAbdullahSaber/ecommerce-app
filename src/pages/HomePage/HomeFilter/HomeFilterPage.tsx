@@ -28,6 +28,7 @@ import {
   DeleteMethod,
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
+import { formatImageUrl } from "../../../services/utils";
 import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
 import { DeleteDialog } from "../../../components/shared/DeleteDialog";
 import { FormField } from "../../../components/shared/GenericUpdateForm/types";
@@ -397,7 +398,7 @@ export default function HomeFilterPage() {
                       {/* Image Container */}
                       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
                         <img
-                          src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + option.image}
+                          src={formatImageUrl(option.image)}
                           alt={lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                           onError={(e) => {

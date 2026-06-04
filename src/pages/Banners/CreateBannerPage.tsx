@@ -88,8 +88,8 @@ export default function CreateBannerPage() {
     transformResponse: (data: any) => {
       const brands = data.brands || data.data || data || [];
       return brands.map((brand: any) => ({
-        label: `${brand.title?.en || t("common.na")} - ${
-          brand.title?.ar || t("common.na")
+        label: `${brand.title?.english || t("common.na")} - ${
+          brand.title?.arabic || t("common.na")
         }`,
         value: brand.id.toString(),
         rawData: brand,
@@ -112,8 +112,8 @@ export default function CreateBannerPage() {
     transformResponse: (data: any) => {
       const categories = data.categories || data.data || data || [];
       return categories.map((category: any) => ({
-        label: `${category.title?.en || t("common.na")} - ${
-          category.title?.ar || t("common.na")
+        label: `${category.title?.english || t("common.na")} - ${
+          category.title?.arabic || t("common.na")
         }`,
         value: category.id.toString(),
         rawData: category,

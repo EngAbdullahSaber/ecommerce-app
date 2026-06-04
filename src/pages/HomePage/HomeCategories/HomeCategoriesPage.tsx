@@ -31,6 +31,7 @@ import {
   DeleteMethod,
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
+import { formatImageUrl } from "../../../services/utils";
 import { DeleteDialog } from "../../../components/shared/DeleteDialog";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -385,7 +386,7 @@ export default function HomeCategoriesPage() {
                           {/* Image */}
                           <div className="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-700">
                             <img
-                              src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + category.category.image}
+                              src={formatImageUrl(category.category.image)}
                               alt={lang === "ar" ? category.category.title.arabic : category.category.title.english}
                               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                               onError={(e) => {

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { ImageUploadConfig } from "./types";
 import { api } from "../../../services/axios";
+import { formatImageUrl } from "../../../services/utils";
 
 interface FileUploadProps {
   name: string;
@@ -242,7 +243,7 @@ export const FileUploadComponent: React.FC<FileUploadProps> = ({
                 style={fullWidth ? { height: "300px" } : {}}
               >
                 <img
-                  src={url.startsWith('http') ? url : import.meta.env.VITE_IMAGE_BASE_URL + url}
+                  src={formatImageUrl(url)}
                   alt={`Preview ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -358,7 +359,7 @@ export const FileUploadComponent: React.FC<FileUploadProps> = ({
                 style={fullWidth ? { height: "400px" } : { height: "200px" }}
               >
                 <img
-                  src={url.startsWith('http') ? url : import.meta.env.VITE_IMAGE_BASE_URL + url}
+                  src={formatImageUrl(url)}
                   alt={`Preview ${index + 1}`}
                   className="w-full h-full object-cover transition-transform group-hover:scale-105"
                 />

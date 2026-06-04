@@ -19,6 +19,7 @@ import {
   DeleteMethod,
 } from "../../services/apis/ApiMethod";
 import { useToast } from "../../hooks/useToast";
+import { formatImageUrl } from "../../services/utils";
 import { TableFilters } from "../../components/shared/TableFilters";
 import { useTranslation } from "react-i18next";
 
@@ -103,21 +104,6 @@ export default function BrandsPage() {
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
-
-  const formatImageUrl = (url: string | null) => {
-    if (!url) {
-      return "/placeholder-brand.png";
-    }
-    if (url === "undefined/images/") {
-      return "/placeholder-brand.png";
-    }
-    if (url.startsWith("http")) {
-      return url;
-    }
-    return import.meta.env.VITE_IMAGE_BASE_URL
-      ? import.meta.env.VITE_IMAGE_BASE_URL + url
-      : url;
-  };
 
   const fetchBrands = async ({
     page,

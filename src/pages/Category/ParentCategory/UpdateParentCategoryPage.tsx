@@ -24,6 +24,7 @@ import {
 } from "../../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
 import { UpdateForm } from "../../../components/shared/GenericUpdateForm/UpdateForm";
+import { formatImageUrl } from "../../../services/utils";
 
 // Parent Category Interface
 interface Name {
@@ -66,7 +67,7 @@ const fetchParentCategoryById = async (
       englishTitle: category?.title?.english || "",
       arabicTitle: category?.title?.arabic || "",
       image: category.image
-        ? `${import.meta.env.VITE_IMAGE_BASE_URL}${category.image}`
+        ? formatImageUrl(category.image)
         : null,
       imageUrl: category.image,
       createdAt: new Date(category.createdAt).toLocaleDateString("en-US", {

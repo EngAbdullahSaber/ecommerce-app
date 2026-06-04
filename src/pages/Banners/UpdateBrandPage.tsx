@@ -29,6 +29,7 @@ import {
   GenericUpdateForm,
 } from "../../components/shared/GenericUpdateForm";
 import { useQueryClient } from "@tanstack/react-query";
+import { formatImageUrl } from "../../services/utils";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
@@ -92,7 +93,7 @@ const fetchBannerById = async (id: string): Promise<any> => {
       endDate: new Date(banner.endDate).toISOString().slice(0, 16),
       order: banner.order,
       placements: JSON.stringify(placements),
-      image: import.meta.env.VITE_IMAGE_BASE_URL  + banner.image, // URL for display
+      image: formatImageUrl(banner.image), // URL for display
       currentImage: banner.image, // Original image path
       parsedPlacements: placements, // For internal use
       createdAt: new Date(banner.createdAt).toLocaleDateString("en-US", {
@@ -312,13 +313,6 @@ export default function UpdateBannerPage() {
       console.error(`Error fetching ${endpoint}:`, error);
       throw error;
     }
-  };
-
-  // Format image URL
-  const formatImageUrl = (url: string) => {
-    if (!url) return "";
-    if (url.startsWith("http")) return url;
-    return import.meta.env.VITE_IMAGE_BASE_URL  + url;
   };
 
   // Define form fields for updating banner

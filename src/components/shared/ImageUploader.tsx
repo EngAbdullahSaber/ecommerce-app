@@ -5,6 +5,7 @@ import { Upload, X, Download, FileArchive } from "lucide-react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { CreateMethodFormData } from "../../services/apis/ApiMethod";
+import { formatImageUrl } from "../../services/utils";
 import { useTranslation } from "react-i18next";
 
 interface ImageUploaderProps {
@@ -450,7 +451,7 @@ export function ImageUploader({
             {images.map((url, index) => (
               <div key={index} className="relative">
                 <img
-                  src={import.meta.env.VITE_IMAGE_BASE_URL + url}
+                  src={formatImageUrl(url)}
                   alt={t("imageUploader.uploadedAlt", { number: index + 1 })}
                   className="w-full h-48 object-cover rounded-lg border-2 border-slate-300 dark:border-slate-600"
                 />

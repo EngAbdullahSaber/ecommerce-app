@@ -40,6 +40,7 @@ import {
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatImageUrl } from "../../../services/utils";
 
 interface InfluencerProduct {
   id: number;
@@ -464,7 +465,7 @@ export default function InfluencersPage() {
                         <div className="relative mb-4">
                           <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity blur-lg" />
                           <img
-                            src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + influencer.image}
+                            src={formatImageUrl(influencer.image)}
                             alt={lang === "ar" ? influencer.disPlayName?.arabic : influencer.disPlayName?.english}
                             className="w-28 h-28 rounded-2xl object-cover border-4 border-white dark:border-slate-700 shadow-lg relative"
                             onError={(e) => {

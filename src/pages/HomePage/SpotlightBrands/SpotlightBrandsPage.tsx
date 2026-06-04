@@ -29,6 +29,7 @@ import {
   DeleteMethod,
 } from "../../../services/apis/ApiMethod";
 import { useToast } from "../../../hooks/useToast";
+import { formatImageUrl } from "../../../services/utils";
 
 interface SpotlightBrand {
   id: number;
@@ -401,7 +402,7 @@ export default function SpotlightBrandsPage() {
                           {item.image || item.brand.image ? (
                             <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 border-slate-100 dark:border-slate-700 shadow-md">
                               <img
-                                src={import.meta.env.VITE_IMAGE_BASE_URL + "/" + (item.image || item.brand.image)}
+                                src={formatImageUrl(item.image || item.brand.image)}
                                 alt={brandTitle}
                                 className="w-full h-full object-contain p-2"
                                 onError={(e) => {

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import { useToast } from "../../hooks/useToast";
+import { formatImageUrl } from "../../services/utils";
 import { useTranslation } from "react-i18next";
 import {
   GetSpecifiedMethod,
@@ -48,13 +49,6 @@ export default function UpdateCountryPage() {
   const queryClient = useQueryClient();
   const lang = i18n.language || "en";
 
-  // Format image URL
-  const formatImageUrl = (url: string) => {
-    if (!url) return "";
-    if (url.startsWith("http")) return url;
-    return import.meta.env.VITE_IMAGE_BASE_URL + url;
-  };
-
   const fetchCountryById = async (id: string): Promise<any> => {
     try {
       const response = await GetSpecifiedMethod(`/countries/${id}`, lang);
@@ -68,7 +62,7 @@ export default function UpdateCountryPage() {
         id: country.id,
         nameEnglish: country?.name?.english,
         nameArabic: country?.name?.arabic,
-        flag: import.meta.env.VITE_IMAGE_BASE_URL + country.flag,
+        flag: formatImageUrl(country.flag),
         currentFlag: country.flag,
         createdAt: new Date(country.createdAt).toLocaleDateString("en-US", {
           year: "numeric",

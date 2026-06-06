@@ -5,20 +5,12 @@ import {
   Edit2,
   Tag,
   Hash,
-  Activity,
   ChevronRight,
   Trash2,
   Plus,
-  Image as ImageIcon,
   Layers,
   Sparkles,
   Settings,
-  Eye,
-  EyeOff,
-  Clock,
-  TrendingUp,
-  Award,
-  Zap
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -96,13 +88,13 @@ export default function HomeFilterPage() {
     try {
       const response = (await GetSpecifiedMethod(
         "home-page/admin/home-filter",
-        lang
+        lang,
       )) as HomeFilterResponse;
 
       if (!response || response.code !== 200) {
         throw new Error(
-          response?.message?.[lang === "ar" ? "arabic" : "english"] || 
-          t("homeFilter.errorMessage")
+          response?.message?.[lang === "ar" ? "arabic" : "english"] ||
+            t("homeFilter.errorMessage"),
         );
       }
 
@@ -126,7 +118,11 @@ export default function HomeFilterPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await DeleteMethod("home-page/admin/home-filter", id.toString(), lang);
+      return await DeleteMethod(
+        "home-page/admin/home-filter",
+        id.toString(),
+        lang,
+      );
     },
     onSuccess: () => {
       toast.success(t("common.success"));
@@ -144,7 +140,7 @@ export default function HomeFilterPage() {
       "home-page/admin/home-filter/options",
       data,
       id.toString(),
-      lang
+      lang,
     );
   };
 
@@ -167,12 +163,16 @@ export default function HomeFilterPage() {
   };
 
   // Filter options based on search
-  const filteredOptions = homeFilter?.options.filter(option => {
-    const name = lang === "ar" ? option.filterOption.nameAr : option.filterOption.name;
-    const value = option.filterOption.value;
-    return name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-           value.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
-  }) || [];
+  const filteredOptions =
+    homeFilter?.options.filter((option) => {
+      const name =
+        lang === "ar" ? option.filterOption.nameAr : option.filterOption.name;
+      const value = option.filterOption.value;
+      return (
+        name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        value.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+      );
+    }) || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
@@ -202,9 +202,9 @@ export default function HomeFilterPage() {
               disabled={isLoading}
               className="group relative px-5 py-2.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-medium shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:border-indigo-300 dark:hover:border-indigo-700 disabled:opacity-50"
             >
-              <RefreshCw 
-                size={18} 
-                className={`${isLoading ? "animate-spin" : "group-hover:rotate-180"} transition-all duration-500`} 
+              <RefreshCw
+                size={18}
+                className={`${isLoading ? "animate-spin" : "group-hover:rotate-180"} transition-all duration-500`}
               />
             </button>
           </div>
@@ -216,7 +216,10 @@ export default function HomeFilterPage() {
             <div className="h-80 rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-64 rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700" />
+                <div
+                  key={i}
+                  className="h-64 rounded-2xl bg-white dark:bg-slate-800/50 animate-pulse border border-slate-200 dark:border-slate-700"
+                />
               ))}
             </div>
           </div>
@@ -253,13 +256,17 @@ export default function HomeFilterPage() {
               {t("common.noData") || "No Home Filter Configured"}
             </h2>
             <p className="text-slate-500 dark:text-slate-400 mb-10 max-w-md mx-auto">
-              {t("homeFilter.emptyDescription") || "You haven't set up a main filter for your home page yet. Create one now to help users find products easily."}
+              {t("homeFilter.emptyDescription") ||
+                "You haven't set up a main filter for your home page yet. Create one now to help users find products easily."}
             </p>
             <button
               onClick={() => navigate("/home-page/home-filter/create")}
               className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-indigo-500/25 hover:scale-105 transition-all active:scale-95"
             >
-              <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+              <Plus
+                size={20}
+                className="group-hover:rotate-90 transition-transform duration-500"
+              />
               {t("homeFilter.create.title").toUpperCase()}
             </button>
           </div>
@@ -276,7 +283,7 @@ export default function HomeFilterPage() {
             >
               {/* Gradient Border Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-[1px] -z-10" />
-              
+
               <div className="relative p-8">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
                   <div className="space-y-6">
@@ -291,7 +298,8 @@ export default function HomeFilterPage() {
                       <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
                         <Tag size={14} className="text-emerald-500" />
                         <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                          {t("homeFilter.attribute")}: {homeFilter.filterAttribute.name}
+                          {t("homeFilter.attribute")}:{" "}
+                          {homeFilter.filterAttribute.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 rounded-lg">
@@ -305,10 +313,14 @@ export default function HomeFilterPage() {
                     {/* Titles */}
                     <div>
                       <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2">
-                        {lang === "ar" ? homeFilter.titleAr : homeFilter.titleEn}
+                        {lang === "ar"
+                          ? homeFilter.titleAr
+                          : homeFilter.titleEn}
                       </h2>
                       <p className="text-lg text-slate-500 dark:text-slate-400">
-                        {lang === "ar" ? homeFilter.titleEn : homeFilter.titleAr}
+                        {lang === "ar"
+                          ? homeFilter.titleEn
+                          : homeFilter.titleAr}
                       </p>
                     </div>
 
@@ -329,14 +341,22 @@ export default function HomeFilterPage() {
                       onClick={() => setIsDeleteOpen(true)}
                       className="group/btn flex items-center justify-center gap-2 px-5 py-3 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-xl font-semibold transition-all active:scale-95"
                     >
-                      <Trash2 size={18} className="group-hover/btn:rotate-12 transition-transform" />
+                      <Trash2
+                        size={18}
+                        className="group-hover/btn:rotate-12 transition-transform"
+                      />
                       <span>{t("common.delete")}</span>
                     </button>
                     <button
-                      onClick={() => navigate(`/home-page/home-filter/edit/${homeFilter.id}`)}
+                      onClick={() =>
+                        navigate(`/home-page/home-filter/edit/${homeFilter.id}`)
+                      }
                       className="group/btn flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-indigo-500/25 transition-all active:scale-95"
                     >
-                      <Edit2 size={18} className="group-hover/btn:rotate-12 transition-transform" />
+                      <Edit2
+                        size={18}
+                        className="group-hover/btn:rotate-12 transition-transform"
+                      />
                       <span>{t("common.edit")}</span>
                     </button>
                   </div>
@@ -373,7 +393,12 @@ export default function HomeFilterPage() {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -394,18 +419,23 @@ export default function HomeFilterPage() {
                     >
                       {/* Gradient Border Effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl blur-[1px] -z-10" />
-                      
+
                       {/* Image Container */}
                       <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
                         <img
                           src={formatImageUrl(option.image)}
-                          alt={lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
+                          alt={
+                            lang === "ar"
+                              ? option.filterOption.nameAr
+                              : option.filterOption.name
+                          }
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = "https://placehold.co/400x400/e2e8f0/94a3b8?text=No+Image";
+                            (e.target as HTMLImageElement).src =
+                              "https://placehold.co/400x400/e2e8f0/94a3b8?text=No+Image";
                           }}
                         />
-                        
+
                         {/* Hover Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <button
@@ -416,7 +446,7 @@ export default function HomeFilterPage() {
                             Change Image
                           </button>
                         </div>
-                        
+
                         {/* Value Badge */}
                         <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-lg">
                           <span className="text-[10px] font-bold text-white uppercase">
@@ -424,19 +454,28 @@ export default function HomeFilterPage() {
                           </span>
                         </div>
                       </div>
-                      
+
                       {/* Content */}
                       <div className="p-4 text-center">
                         <h4 className="text-base font-bold text-slate-900 dark:text-white mb-1 line-clamp-1">
-                          {lang === "ar" ? option.filterOption.nameAr : option.filterOption.name}
+                          {lang === "ar"
+                            ? option.filterOption.nameAr
+                            : option.filterOption.name}
                         </h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
-                          {lang === "ar" ? option.filterOption.name : option.filterOption.nameAr}
+                          {lang === "ar"
+                            ? option.filterOption.name
+                            : option.filterOption.nameAr}
                         </p>
                         <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="text-slate-400 font-mono">ID: {option.filterOption.id}</span>
-                            <ChevronRight size={12} className="text-slate-400" />
+                            <span className="text-slate-400 font-mono">
+                              ID: {option.filterOption.id}
+                            </span>
+                            <ChevronRight
+                              size={12}
+                              className="text-slate-400"
+                            />
                           </div>
                         </div>
                       </div>
@@ -464,7 +503,10 @@ export default function HomeFilterPage() {
             onClose={() => setIsDeleteOpen(false)}
             onConfirm={() => deleteMutation.mutate(homeFilter.id)}
             title={t("homeFilter.deleteTitle") || "Remove Filter"}
-            description={t("homeFilter.deleteDescription") || "Are you sure you want to remove this home filter? This action cannot be undone."}
+            description={
+              t("homeFilter.deleteDescription") ||
+              "Are you sure you want to remove this home filter? This action cannot be undone."
+            }
             itemName={lang === "ar" ? homeFilter.titleAr : homeFilter.titleEn}
             isLoading={deleteMutation.isPending}
           />
@@ -473,10 +515,17 @@ export default function HomeFilterPage() {
         {/* Edit Option Image Modal */}
         {editingOption && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="relative w-full max-w-xl max-h-[90vh] overflow-hidden rounded-2xl animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl overflow-x-hidden !hideScrollbar animate-in zoom-in-95 duration-300">
               <UpdateForm
-                title={lang === "ar" ? editingOption.filterOption.nameAr : editingOption.filterOption.name}
-                description={t("homeFilter.editOptionDescription") || "Update the image for this filter option"}
+                title={
+                  lang === "ar"
+                    ? editingOption.filterOption.nameAr
+                    : editingOption.filterOption.name
+                }
+                description={
+                  t("homeFilter.editOptionDescription") ||
+                  "Update the image for this filter option"
+                }
                 fields={optionFields}
                 entityId={editingOption.id}
                 fetchData={async () => editingOption}

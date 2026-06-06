@@ -1733,13 +1733,12 @@ export default function UpdateProductPage() {
     try {
       console.log("Update product called with data:", data);
 
-      // Convert radio button string values to booleans
       const processedData = {
         ...data,
-        isFreeDelivery: data.isFreeDelivery === "true",
-        isFastShipping: data.isFastShipping === "true",
-        ableToGift: data.ableToGift === "true",
-        isActive: data.isActive === "true",
+        isFreeDelivery: data.isFreeDelivery === true || data.isFreeDelivery === "true",
+        isFastShipping: data.isFastShipping === true || data.isFastShipping === "true",
+        ableToGift: data.ableToGift === true || data.ableToGift === "true",
+        isActive: data.isActive === true || data.isActive === "true",
       };
 
       // Prepare filter values

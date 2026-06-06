@@ -1543,13 +1543,12 @@ export default function CreateProductPage() {
   const handleSubmit = async (data: any) => {
     setIsLoading(true);
 
-    // Convert radio button string values to booleans
     const processedData = {
       ...data,
-      isFreeDelivery: data.isFreeDelivery === "true",
-      isFastShipping: data.isFastShipping === "true",
-      ableToGift: data.ableToGift === "true",
-      isActive: data.isActive === "true",
+      isFreeDelivery: data.isFreeDelivery === true || data.isFreeDelivery === "true",
+      isFastShipping: data.isFastShipping === true || data.isFastShipping === "true",
+      ableToGift: data.ableToGift === true || data.ableToGift === "true",
+      isActive: data.isActive === true || data.isActive === "true",
     };
 
     const loadingToast = toast.loading(t("products.messages.creating"));
